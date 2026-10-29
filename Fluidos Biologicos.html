@@ -1,0 +1,2163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Urinálise e Fluídos Biológicos — Grau Técnico (Turma ANC06-N)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,600;0,700;1,600&family=Orbitron:wght@500;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <style>
+    :root {
+      --grau-dark-green: #113818;
+      --grau-bar-green: #346739;
+      --grau-bright-green: #00B050;
+      --grau-lime: #8BC53F;
+      --grau-yellow: #FDB913;
+      --hud-glow: rgba(0, 176, 80, 0.28);
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: none;
+    }
+
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: radial-gradient(circle at 50% 20%, #132a19 0%, #07120a 100%);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: #1e293b;
+    }
+
+    /* Futuristic Stage Wrapper */
+    #app-stage {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+       flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* 16:9 Slide Viewport with Responsive Scaling */
+    #slide-deck-viewport {
+      position: relative;
+      width: 1280px;
+      height: 720px;
+      background: #ffffff;
+      border-radius: 14px;
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(139, 197, 63, 0.35), 0 0 35px rgba(0, 176, 80, 0.2);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transform-origin: center center;
+      transition: box-shadow 0.4s ease;
+    }
+
+    /* Subtle Futuristic Bio-Grid Overlay inside White Template */
+    .futuristic-bg-grid {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(to right, rgba(17, 56, 24, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(17, 56, 24, 0.03) 1px, transparent 1px);
+      background-size: 36px 36px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .futuristic-corner-hud {
+      position: absolute;
+      top: 16px;
+      right: 24px;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      pointer-events: none;
+    }
+
+    /* Particle Canvas inside slide */
+    #bio-particles {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 2;
+      opacity: 0.65;
+    }
+
+    /* Slide Content Layer */
+    #slide-stage-content {
+      position: relative;
+      z-index: 10;
+      flex: 1;
+      width: 100%;
+      height: calc(100% - 52px);
+      padding: 36px 58px 18px 58px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Slide Animations */
+    .slide-enter {
+      animation: futuristicSlideIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes futuristicSlideIn {
+      0% {
+        opacity: 0;
+        transform: translateY(18px) scale(0.985);
+        filter: blur(4px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+      }
+    }
+
+    .stagger-item {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: staggerFadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes staggerFadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Cover Title Exact Style with Futuristic Polish */
+    .cover-title-text {
+      font-family: 'Lora', Georgia, serif;
+      font-weight: 700;
+      color: #0d3b14;
+      text-shadow: 2px 3px 6px rgba(0, 0, 0, 0.22), 0 0 25px rgba(0, 176, 80, 0.12);
+      letter-spacing: -0.5px;
+    }
+
+    .slide-heading-serif {
+      font-family: 'Lora', Georgia, serif;
+      font-weight: 700;
+      color: #0d3b14;
+    }
+
+    .font-hud {
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    /* Futuristic Cards on Clean White Template */
+    .holo-card {
+      position: relative;
+      background: rgba(248, 251, 249, 0.88);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(52, 103, 57, 0.18);
+      border-radius: 14px;
+      box-shadow: 0 8px 24px -6px rgba(17, 56, 24, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow: hidden;
+    }
+
+    .holo-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(180deg, #00B050, #346739);
+      opacity: 0.85;
+    }
+
+    .holo-card.gold-accent::before {
+      background: linear-gradient(180deg, #FDB913, #d97706);
+    }
+
+    .holo-card.red-accent::before {
+      background: linear-gradient(180deg, #ef4444, #991b1b);
+    }
+
+    .holo-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(0, 176, 80, 0.55);
+      box-shadow: 0 14px 30px -6px rgba(0, 176, 80, 0.16);
+    }
+
+    /* Futuristic Scanline Effect on Diagrams */
+    .scan-box {
+      position: relative;
+      overflow: hidden;
+    }
+    .scan-box::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, rgba(0, 176, 80, 0.6), rgba(253, 185, 19, 0.8), rgba(0, 176, 80, 0.6), transparent);
+      box-shadow: 0 0 12px rgba(0, 176, 80, 0.6);
+      animation: verticalScan 4.5s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes verticalScan {
+      0%, 100% { top: 2%; opacity: 0.2; }
+      50% { top: 96%; opacity: 0.85; }
+    }
+
+    /* EXACT GRAU TÉCNICO TEMPLATE FOOTER BAR */
+    .grau-template-footer {
+      position: relative;
+      z-index: 20;
+      width: 100%;
+      height: 52px;
+      background: #ffffff;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      flex-shrink: 0;
+      padding: 0;
+    }
+
+    .footer-bars-track {
+      display: flex;
+      align-items: flex-end;
+      width: 82.5%;
+      height: 36px;
+    }
+
+    .f-seg-1 { width: 7.5%; height: 100%; background-color: #346739; }
+    .f-seg-2 { width: 31.5%; height: 100%; background-color: #FDB913; }
+    .f-gap-1 { width: 4.2%; height: 100%; background-color: #ffffff; }
+    .f-seg-3 { width: 17.0%; height: 100%; background-color: #00B050; }
+    .f-seg-4 { width: 24.3%; height: 100%; background-color: #346739; }
+    .f-gap-2 { width: 4.5%; height: 100%; background-color: #ffffff; }
+    .f-seg-5 { width: 15.5%; height: 100%; background-color: #FDB913; }
+
+    .footer-logo-zone {
+      width: 17.5%;
+      height: 52px;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-right: 12px;
+      padding-bottom: 2px;
+    }
+
+    /* Custom Table Styling */
+    .futuristic-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(52, 103, 57, 0.2);
+      box-shadow: 0 6px 20px rgba(17, 56, 24, 0.05);
+    }
+    .futuristic-table th {
+      background: linear-gradient(90deg, #113818 0%, #24582c 100%);
+      color: #ffffff;
+      font-weight: 700;
+      text-align: left;
+      padding: 13px 18px;
+      font-size: 16px;
+      letter-spacing: 0.3px;
+    }
+    .futuristic-table td {
+      padding: 12px 18px;
+      font-size: 16px;
+      border-bottom: 1px solid #e2e8f0;
+      background: #ffffff;
+      color: #1e293b;
+      transition: background 0.2s;
+    }
+    .futuristic-table tr:nth-child(even) td {
+      background: #f4f9f5;
+    }
+    .futuristic-table tr:hover td {
+      background: #e6f4ea;
+    }
+
+    /* Laser Pointer Trail */
+    #laser-dot {
+      position: fixed;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #00ff66;
+      box-shadow: 0 0 12px 4px #00ff66, 0 0 24px 8px #00B050;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      display: none;
+    }
+
+    /* Scrollbar for Slide Drawer */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0f2415; }
+    ::-webkit-scrollbar-thumb { background: #00B050; border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+  <!-- Laser Pointer Dot -->
+  <div id="laser-dot"></div>
+
+  <!-- Reusable SVG Defs (Exact Grau Técnico Logo) -->
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <g id="grau-tecnico-logo">
+        <!-- "grau" bold geometric rounded black letters -->
+        <text x="4" y="34" font-family="'Plus Jakarta Sans', 'Arial Rounded MT Bold', sans-serif" font-weight="800" font-size="37" letter-spacing="-2.2" fill="#0a0a0a">grau</text>
+        <!-- White halo + Lime Green Ring + Black T at top right of 'u' -->
+        <circle cx="93" cy="12" r="10.5" fill="#ffffff" />
+        <circle cx="93" cy="12" r="8.2" fill="#ffffff" stroke="#8BC53F" stroke-width="2.6" />
+        <text x="93" y="16.2" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="11.5" fill="#0a0a0a">T</text>
+        <!-- "TÉCNICO" in lime green underneath 'au' -->
+        <text x="89" y="45" text-anchor="end" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="9.5" letter-spacing="1.4" fill="#8BC53F">TÉCNICO</text>
+      </g>
+    </defs>
+  </svg>
+
+  <!-- Main Stage -->
+  <div id="app-stage">
+
+    <!-- Top Futuristic Floating Control HUD -->
+    <header class="fixed top-3 z-40 flex items-center justify-between gap-4 px-5 py-2 rounded-full bg-neutral-950/85 backdrop-blur-md border border-emerald-500/30 text-white shadow-2xl transition-all duration-300" style="width: min(1240px, 95vw);">
+      <div class="flex items-center gap-3">
+        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-400">
+          <i class="fa-solid fa-microscope text-sm"></i>
+        </span>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-hud uppercase tracking-wider text-emerald-400" id="hud-module-badge">MÓDULO 01</span>
+            <span class="text-xs text-slate-400">|</span>
+            <span class="text-xs font-semibold text-amber-400">TURMA ANC06-N</span>
+          </div>
+          <p class="text-xs text-slate-300 truncate max-w-[280px] sm:max-w-[420px]" id="hud-slide-title">Capa — Urinálise e Fluídos Biológicos</p>
+        </div>
+      </div>
+
+      <!-- Progress bar in center -->
+      <div class="hidden md:flex flex-col items-center flex-1 max-w-xs mx-4">
+        <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden border border-slate-700">
+          <div id="hud-progress-bar" class="h-full bg-gradient-to-r from-emerald-500 via-lime-400 to-amber-400 transition-all duration-300" style="width: 2.5%;"></div>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="flex items-center gap-2">
+        <button onclick="prevSlide()" title="Slide Anterior (Seta Esquerda)" class="w-8 h-8 rounded-full bg-slate-800/90 hover:bg-emerald-600 text-white flex items-center justify-center transition">
+          <i class="fa-solid fa-chevron-left text-xs"></i>
+        </button>
+
+        <div class="px-3 py-1 rounded-full bg-slate-900 border border-emerald-500/40 font-hud text-xs font-bold text-emerald-300 min-w-[78px] text-center" id="hud-counter">
+          01 / 40
+        </div>
+
+        <button onclick="nextSlide()" title="Próximo Slide (Seta Direita / Espaço)" class="w-8 h-8 rounded-full bg-slate-800/90 hover:bg-emerald-600 text-white flex items-center justify-center transition">
+          <i class="fa-solid fa-chevron-right text-xs"></i>
+        </button>
+
+        <div class="h-4 w-[1px] bg-slate-700 mx-1"></div>
+
+        <button onclick="toggleDrawer()" title="Mapa de Todos os 40 Slides (Tecla G)" class="px-3 py-1.5 rounded-full bg-emerald-600/20 hover:bg-emerald-600/40 border border-emerald-500/40 text-emerald-300 text-xs font-semibold flex items-center gap-1.5 transition">
+          <i class="fa-solid fa-table-cells-large"></i>
+          <span class="hidden sm:inline">40 Slides</span>
+        </button>
+
+        <button onclick="toggleLaser()" id="btn-laser" title="Apontador Laser de Aula (Tecla L)" class="w-8 h-8 rounded-full bg-slate-800/90 hover:bg-emerald-600 text-slate-300 flex items-center justify-center transition">
+          <i class="fa-solid fa-wand-magic-sparkles text-xs"></i>
+        </button>
+
+        <button onclick="toggleFullScreen()" title="Tela Cheia (Tecla F)" class="w-8 h-8 rounded-full bg-slate-800/90 hover:bg-emerald-600 text-slate-300 flex items-center justify-center transition">
+          <i class="fa-solid fa-expand text-xs"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- 16:9 Slide Deck Container -->
+    <main id="slide-deck-viewport">
+      <!-- Subtle Hex/Grid & Animated Bio-Particles -->
+      <div class="futuristic-bg-grid"></div>
+      <canvas id="bio-particles"></canvas>
+
+      <!-- Top-right subtle HUD telemetry inside slide -->
+      <div class="futuristic-corner-hud" id="slide-telemetry">
+        <span class="px-2.5 py-0.5 rounded-full text-[11px] font-hud font-bold tracking-wider bg-emerald-950/10 text-emerald-800 border border-emerald-700/20" id="internal-slide-num">SLIDE 01 // 40</span>
+      </div>
+
+      <!-- Dynamic Slide Content Target -->
+      <div id="slide-stage-content" class="slide-enter">
+        <!-- Rendered by JS -->
+      </div>
+
+      <!-- MANDATORY EXACT TEMPLATE FOOTER ON EVERY SLIDE -->
+      <footer class="grau-template-footer">
+        <div class="footer-bars-track">
+          <div class="f-seg-1"></div>
+          <div class="f-seg-2"></div>
+          <div class="f-gap-1"></div>
+          <div class="f-seg-3"></div>
+          <div class="f-seg-4"></div>
+          <div class="f-gap-2"></div>
+          <div class="f-seg-5"></div>
+        </div>
+        <div class="footer-logo-zone">
+          <svg viewBox="0 0 112 48" class="w-32 h-12 overflow-visible">
+            <use href="#grau-tecnico-logo"></use>
+          </svg>
+        </div>
+      </footer>
+    </main>
+
+    <!-- Slide Overview Drawer Modal (Jump to any of the 40 slides) -->
+    <div id="slide-drawer" class="fixed inset-0 z-50 bg-neutral-950/90 backdrop-blur-xl hidden flex-col p-6 md:p-10">
+      <div class="flex items-center justify-between max-w-7xl w-full mx-auto mb-6 pb-4 border-b border-emerald-500/30">
+        <div class="flex items-center gap-3">
+          <i class="fa-solid fa-layer-group text-2xl text-emerald-400"></i>
+          <div>
+            <h2 class="text-xl font-bold text-white font-hud">ÍNDICE INTERATIVO — 40 SLIDES</h2>
+            <p class="text-xs text-slate-400">Clique em qualquer slide para navegar diretamente • Turma ANC06-N</p>
+          </div>
+        </div>
+        <button onclick="toggleDrawer()" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-rose-600 text-white text-sm font-semibold flex items-center gap-2 transition">
+          <i class="fa-solid fa-xmark"></i> Fechar (ESC)
+        </button>
+      </div>
+      <div id="drawer-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 max-w-7xl w-full mx-auto overflow-y-auto pr-2">
+        <!-- Populated dynamically -->
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    /* ==========================================================================
+       COMPLETE 40-SLIDE DATASET & INTERACTIVE TEMPLATES
+       ========================================================================== */
+    const slidesData = [
+      // SLIDE 1 - CAPA EXATA DO TEMPLATE
+      {
+        id: 1,
+        module: "CAPA OFICIAL",
+        eyebrow: "CURSO TÉCNICO EM ANÁLISES CLÍNICAS",
+        title: "Urinálise e Fluídos Biológicos",
+        type: "cover"
+      },
+      // SLIDE 2 - OBJETIVOS E CRONOGRAMA
+      {
+        id: 2,
+        module: "PLANO DE CURSO",
+        eyebrow: "ESTRUTURA PROGRAMÁTICA • 40 TÓPICOS",
+        title: "Objetivos da Disciplina e Módulos",
+        type: "cards-grid",
+        subtitle: "Capacitação técnica para execução, interpretação microscópica e correlação clínica do EAS e líquidos cavitários.",
+        cards: [
+          { tag: "MÓDULO 01 • SLIDES 03–10", icon: "fa-kidneys", title: "Fisiologia Renal & Pré-Analítica", desc: "Anatomia do néfron, filtração glomerular, tipos de coleta, conservação e critérios de rejeição." },
+          { tag: "MÓDULO 02 • SLIDES 11–20", icon: "fa-vial-circle-check", title: "EAS: Exame Físico e Químico", desc: "Volume, cor, densidade, refratometria e bioquímica seca em tira reativa de 10 parâmetros." },
+          { tag: "MÓDULO 03 • SLIDES 21–29", icon: "fa-microscope", title: "Sedimentoscopia Urinária", desc: "Padronização da centrifugação, células epiteliais, piócitos, hemácias dismórficas, cilindros e cristais." },
+          { tag: "MÓDULO 04 • SLIDES 30–40", icon: "fa-brain", title: "Fluídos Cavitários e Qualidade", desc: "Líquor (LCR), derrames serosos (Light), líquido sinovial, espermograma (OMS), automação e controle." }
+        ]
+      },
+      // SLIDE 3 - HISTÓRIA E IMPORTÂNCIA
+      {
+        id: 3,
+        module: "MÓDULO 01 • INTRODUÇÃO",
+        eyebrow: "EVOLUÇÃO HISTÓRICA E VALOR DIAGNÓSTICO",
+        title: "Introdução à Urinálise: A 'Biópsia Líquida'",
+        type: "split-visual",
+        bullets: [
+          { icon: "fa-scroll", title: "Da Uroscopia Antiga à Ciência", text: "Praticada desde o Egito Antigo e Hipócrates (observação de cor, odor e formigas atraídas pela glicosúria) até a medicina laboratorial moderna." },
+          { icon: "fa-Bolt", title: "Revolução das Tiras Reativas", text: "Século XX introduziu a bioquímica seca (Dipstick) e a microscopia de contraste de fase/polarização." },
+          { icon: "fa-stethoscope", title: "Por que solicitar o EAS?", text: "Exame não invasivo, rápido e de baixo custo que detecta patologias renais, urinárias, hepáticas e metabólicas silenciosas." },
+          { icon: "fa-shield-halved", title: "Triagem Sistêmica Precisa", text: "Monitoramento essencial de Diabetes Mellitus, pré-eclâmpsia, infecções urinárias (ITU) e glomerulonefrites." }
+        ],
+        visualType: "timeline-uroscopia"
+      },
+      // SLIDE 4 - ANATOMIA DO SISTEMA URINÁRIO
+      {
+        id: 4,
+        module: "MÓDULO 01 • ANATOMIA",
+        eyebrow: "MORFOLOGIA MACROSCÓPICA",
+        title: "Anatomia do Sistema Urinário",
+        type: "split-visual",
+        bullets: [
+          { icon: "fa-kidneys", title: "Rins (Órgãos Retroperitoneais)", text: "Par de órgãos em forma de feijão (~150g cada), divididos em Córtex Renal (externo) e Medula Renal (pirâmides de Malpighi)." },
+          { icon: "fa-diagram-project", title: "Pelve Renal e Ureteres", text: "A urina formada nos cálices menores/maiores drena para a pelve renal e segue pelos ureteres por peristaltismo." },
+          { icon: "fa-droplet", title: "Bexiga Urinária", text: "Reservatório muscular (músculo detrusor) revestido por epitélio de transição (urotélio), com capacidade de 400 a 600 mL." },
+          { icon: "fa-arrow-down-up-across-line", title: "Uretra", text: "Conduto excretor final revestido em sua porção distal por epitélio escamoso estratificado." }
+        ],
+        visualType: "svg-urinary-system"
+      },
+      // SLIDE 5 - O NÉFRON
+      {
+        id: 5,
+        module: "MÓDULO 01 • MICROANATOMIA",
+        eyebrow: "UNIDADE FUNCIONAL DO RIM",
+        title: "O Néfron: Arquitetura Microscópica",
+        type: "split-visual",
+        bullets: [
+          { icon: "fa-circle-nodes", title: "1 a 1,2 Milhão por Rim", text: "Classificados em néfrons corticais (~85%) e néfrons justamedulares (~15%, responsáveis pela concentração urinária)." },
+          { icon: "fa-filter", title: "Corpúsculo Renal (Malpighi)", text: "Formado pelo Glomérulo (novelo capilar fenestrado) envolvido pela Cápsula de Bowman (podócitos)." },
+          { icon: "fa-worm", title: "Túbulo Contorcido Proximal (TCP)", text: "Epitélio cúbico com borda em escova; reabsorve 65% da água, 100% da glicose e aminoácidos." },
+          { icon: "fa-arrows-spin", title: "Alça de Henle, TCD e Ducto Coletor", text: "Mecanismo contracorrente medular e ajuste fino hormonal por Aldosterona e ADH (Vasopressina)." }
+        ],
+        visualType: "svg-nephron"
+      },
+      // SLIDE 6 - FISIOLOGIA DA FORMAÇÃO DA URINA
+      {
+        id: 6,
+        module: "MÓDULO 01 • FISIOLOGIA",
+        eyebrow: "PROCESSAMENTO DO ULTRAFILTRADO PLASMÁTICO",
+        title: "Fisiologia da Formação da Urina",
+        type: "process-kpis",
+        steps: [
+          { step: "ETAPA 01", title: "Filtração Glomerular", desc: "Barreira seletiva por tamanho e carga elétrica impede passagem de células e albumina.", metric: "125 mL/min (TFG)" },
+          { step: "ETAPA 02", title: "Reabsorção Tubular", desc: "Retorno ativo e passivo de água, glicose, aminoácidos e sais para os capilares peritubulares.", metric: "99% Reabsorvido" },
+          { step: "ETAPA 03", title: "Secreção Tubular", desc: "Eliminação ativa de íons H+, K+, amônia, creatinina e metabólitos de fármacos no lúmen.", metric: "Equilíbrio Ácido-Base" }
+        ],
+        kpis: [
+          { value: "180 L/dia", label: "Volume de Plasma Filtrado nos Glomérulos", color: "emerald" },
+          { value: "1,5 L/dia", label: "Volume Médio de Urina Excretada Final", color: "amber" },
+          { value: "1.200 mL/min", label: "Fluxo Sanguíneo Renal (~20% Débito Cardíaco)", color: "emerald" }
+        ]
+      },
+      // SLIDE 7 - COMPOSIÇÃO NORMAL DA URINA
+      {
+        id: 7,
+        module: "MÓDULO 01 • BIOQUÍMICA",
+        eyebrow: "SOLUTOS ORGÂNICOS E INORGÂNICOS",
+        title: "Composição Química Normal da Urina",
+        type: "split-visual",
+        bullets: [
+          { icon: "fa-glass-water", title: "95% Água + 5% Solutos Dissolvidos", text: "A concentração de solutos varia amplamente conforme a dieta, atividade física e estado de hidratação." },
+          { icon: "fa-atom", title: "Ureia (~50% dos sólidos orgânicos)", text: "Principal produto nitrogenado do catabolismo de proteínas e aminoácidos no fígado (25 a 35 g/dia)." },
+          { icon: "fa-dumbbell", title: "Creatinina e Ácido Úrico", text: "Creatinina deriva da creatina muscular (excreção constante); Ácido úrico deriva da degradação das purinas." },
+          { icon: "fa-bolt-lightning", title: "Eletrólitos Inorgânicos", text: "Cloreto (Cl⁻), Sódio (Na⁺) e Potássio (K⁺) são os principais íons, acompanhados de fosfatos, sulfatos e cálcio." }
+        ],
+        visualType: "composition-chart"
+      },
+      // SLIDE 8 - FASE PRÉ-ANALÍTICA: PREPARO DO PACIENTE
+      {
+        id: 8,
+        module: "MÓDULO 01 • PRÉ-ANALÍTICA",
+        eyebrow: "QUALIDADE E ORIENTAÇÃO TÉCNICA",
+        title: "Fase Pré-Analítica: Preparo do Paciente",
+        type: "cards-grid",
+        subtitle: "Mais de 65% dos erros laboratoriais em urinálise ocorrem na fase pré-analítica.",
+        cards: [
+          { tag: "PASSO 01", icon: "fa-hands-bubbles", title: "Higiene Íntima Rigorosa", desc: "Lavar a genitália externa com água e sabão neutro; secar com gaze ou toalha limpa antes da coleta." },
+          { tag: "PASSO 02", icon: "fa-Toilet", title: "Técnica do Jato Médio", desc: "Desprezar o primeiro jato no vaso sanitário (limpa a uretra), coletar o jato intermediário e desprezar o final." },
+          { tag: "PASSO 03", icon: "fa-prescription-bottle", title: "Frasco Estéril Adequado", desc: "Boca larga, tampa de rosca hermética, identificado com nome completo, data, hora da coleta e nascimento." },
+          { tag: "PASSO 04", icon: "fa-triangle-exclamation", title: "Evitar Interferentes", desc: "Informar uso de Vitamina C, antibióticos, Pyridium, período menstrual e exercício físico extenuante." }
+        ]
+      },
+      // SLIDE 9 - TIPOS DE AMOSTRAS DE URINA
+      {
+        id: 9,
+        module: "MÓDULO 01 • AMOSTRAGEM",
+        eyebrow: "PROTOCOLOS CLÍNICOS DE COLETA",
+        title: "Tipos de Amostras de Urina",
+        type: "table-slide",
+        headers: ["Tipo de Amostra", "Procedimento de Coleta", "Finalidade Diagnóstica Principal"],
+        rows: [
+          ["<b>1ª Urina da Manhã (Jato Médio)</b>", "Retenção vesical mínima de 4 a 8 horas noturnas", "Padrão-ouro para EAS (Tipo I) e Urocultura (mais concentrada)"],
+          ["<b>Amostra Aleatória (Acaso)</b>", "Coletada a qualquer momento do dia sem retenção fixa", "Triagem rápida em pronto-socorro e urgências clínicas"],
+          ["<b>Urina de 24 Horas</b>", "Esvaziar bexiga ao acordar (desprezar) e colher tudo por 24h", "Clearance de creatinina, proteinúria e calciúria quantitativa"],
+          ["<b>Primeiro Jato Urinário</b>", "Coleta exclusiva dos primeiros 10 a 15 mL da micção", "Pesquisa de uretrites e PCR para <i>Chlamydia</i> e <i>Neisseria</i>"],
+          ["<b>Cateterismo / Suprapúbica</b>", "Coleta invasiva por sonda ou punção direta da bexiga", "Cultura livre de contaminação vaginal/uretral (recém-nascidos)"]
+        ]
+      },
+      // SLIDE 10 - CONSERVAÇÃO E ALTERAÇÕES IN VITRO
+      {
+        id: 10,
+        module: "MÓDULO 01 • ESTABILIDADE",
+        eyebrow: "DEGRADAÇÃO FÍSICO-QUÍMICA E MICROBIOLÓGICA",
+        title: "Conservação e Alterações na Urina Não Preservada",
+        type: "split-columns",
+        leftTitle: "ELEVAÇÃO IN VITRO (Amostra > 2h em Temp. Ambiente)",
+        leftIcon: "fa-arrow-trend-up",
+        leftAccent: "red-accent",
+        leftItems: [
+          "<b>pH Urinário Sobe:</b> Bactérias produtoras de urease convertem ureia em amônia (alcalinização).",
+          "<b>Bactérias e Nitrito Sobem:</b> Proliferação bacteriana exponencial reduz nitrato em nitrito.",
+          "<b>Turvação e Odor Aumentam:</b> Precipitação de fosfatos amorfos e cheiro amoniacal fétido.",
+          "<b>Cor Escurece:</b> Oxidação do urobilinogênio em urobilina (alaranjado/castanho)."
+        ],
+        rightTitle: "REDUÇÃO IN VITRO (Falsos-Negativos)",
+        rightIcon: "fa-arrow-trend-down",
+        rightAccent: "gold-accent",
+        rightItems: [
+          "<b>Glicose Diminui:</b> Consumo rápido por glicólise bacteriana e celular.",
+          "<b>Cetonas Diminuem:</b> Volatilização da acetona para o ar.",
+          "<b>Bilirrubina e Urobilinogênio Caem:</b> Fotodegradação rápida quando expostos à luz.",
+          "<b>Lise Celular e de Cilindros:</b> Hemácias, leucócitos e cilindros hialinos se dissolvem em meio alcalino/hipotônico."
+        ]
+      },
+      // SLIDE 11 - VISÃO GERAL DO EAS
+      {
+        id: 11,
+        module: "MÓDULO 02 • EXAME DE ROTINA",
+        eyebrow: "ESTRUTURA DO SUMÁRIO DE URINA (TIPO I)",
+        title: "O Exame de Rotina (EAS): As 3 Fases Analíticas",
+        type: "process-kpis",
+        steps: [
+          { step: "FASE 01", title: "Exame Físico (Macroscópico)", desc: "Avaliação visual direta da cor, aspecto/transparência, volume, odor e densidade específica.", metric: "Observação Direta" },
+          { step: "FASE 02", title: "Exame Químico (Dipstick)", desc: "Imersão da tira reativa multiparamétrica para leitura colorimétrica ou por refletância em 60–120s.", metric: "10 Parâmetros" },
+          { step: "FASE 03", title: "Exame Microscópico", desc: "Centrifugação padronizada e análise do sedimento em objetivas de 10x (100x) e 40x (400x).", metric: "Sedimentoscopia" }
+        ],
+        kpis: [
+          { value: "2 Horas", label: "Tempo Máximo Ideal entre Coleta e Análise", color: "emerald" },
+          { value: "2°C a 8°C", label: "Refrigeração se houver atraso (Retornar à Temp. Ambiente)", color: "amber" },
+          { value: "10 mL", label: "Alíquota Padrão para Centrifugação", color: "emerald" }
+        ]
+      },
+      // SLIDE 12 - EXAME FÍSICO: VOLUME E ASPECTO
+      {
+        id: 12,
+        module: "MÓDULO 02 • EXAME FÍSICO",
+        eyebrow: "DIURESE E TRANSPARÊNCIA",
+        title: "Exame Físico: Volume Urinário e Aspecto",
+        type: "split-columns",
+        leftTitle: "Alterações do Volume Urinário (Diurese 24h)",
+        leftIcon: "fa-beaker",
+        leftAccent: "",
+        leftItems: [
+          "<b>Normúria (800 a 2.000 mL/24h):</b> Balanço hídrico fisiológico normal no adulto.",
+          "<b>Poliúria (> 2.500 mL/24h):</b> Diabetes Mellitus (diurese osmótica), Diabetes Insipidus (déficit de ADH) ou diuréticos.",
+          "<b>Oligúria (< 400 mL/24h):</b> Desidratação severa, choque hipovolêmico, queimaduras ou insuficiência renal aguda.",
+          "<b>Anúria (< 100 mL/24h):</b> Obstrução bilateral das vias urinárias ou necrose cortical grave."
+        ],
+        rightTitle: "Aspecto / Turvação da Amostra",
+        rightIcon: "fa-eye",
+        rightAccent: "gold-accent",
+        rightItems: [
+          "<b>Límpido (Transparente):</b> Padrão normal da urina recém-emitida.",
+          "<b>Ligeiramente Turvo / Opalescente:</b> Presença moderada de células epiteliais, muco ou cristais.",
+          "<b>Turvo / Leitoso:</b> Piúria intensa (leucócitos), bacteriúria, hematúria, lipidúria ou precipitação de fosfatos/uratos amorfos.",
+          "<b>Quilúria:</b> Aspecto leitoso por linfa (comum na filariose)."
+        ]
+      },
+      // SLIDE 13 - SIMULADOR INTERATIVO DE COR DA URINA
+      {
+        id: 13,
+        module: "MÓDULO 02 • SIMULADOR CLÍNICO",
+        eyebrow: "INTERATIVO • CLIQUE NAS AMOSTRAS PARA INSPECIONAR",
+        title: "Exame Físico: Coloração e Correlação Clínica",
+        type: "interactive-urine-colors"
+      },
+      // SLIDE 14 - DENSIDADE E ODOR
+      {
+        id: 14,
+        module: "MÓDULO 02 • EXAME FÍSICO",
+        eyebrow: "PODER DE CONCENTRAÇÃO TUBULAR",
+        title: "Exame Físico: Densidade Específica e Odor",
+        type: "split-columns",
+        leftTitle: "Densidade Urinária (Ref: 1.015 a 1.025)",
+        leftIcon: "fa-gauge-high",
+        leftAccent: "",
+        leftItems: [
+          "<b>Definição:</b> Avalia a capacidade dos túbulos renais de reabsorver água e concentrar solutos.",
+          "<b>Hipostenúria (< 1.007):</b> Urina muito diluída (hiper-hidratação ou Diabetes Insipidus).",
+          "<b>Isostenúria (Fixa em 1.010):</b> Idêntica ao plasma ultrafiltrado; indica perda grave da função tubular renal.",
+          "<b>Hiperestenúria (> 1.030):</b> Desidratação, glicosúria intensa, proteinúria ou contrastes radiológicos."
+        ],
+        rightTitle: "Odor Urinário e Correlações Metabólicas",
+        rightIcon: "fa-wind",
+        rightAccent: "gold-accent",
+        rightItems: [
+          "<b>Sui generis (Aromático):</b> Odor normal causado por ácidos orgânicos voláteis.",
+          "<b>Amoniacal / Fétido:</b> Degradação bacteriana da ureia em infecções urinárias (ITU) ou amostra envelhecida.",
+          "<b>Frutado / Adocicado:</b> Presença de corpos cetônicos (Cetoacidose Diabética).",
+          "<b>Odor de Rato / Xarope de Bordo:</b> Erros inatos do metabolismo (Fenilcetonúria e Doença da Urina em Xarope de Bordo)."
+        ]
+      },
+      // SLIDE 15 - EXAME QUÍMICO: TIRA REATIVA INTERATIVA
+      {
+        id: 15,
+        module: "MÓDULO 02 • BIOQUÍMICA SECA",
+        eyebrow: "INTERATIVO • CLIQUE NAS ALMOFADAS DA TIRA REATIVA",
+        title: "Exame Químico: Princípio e Técnica da Tira Reativa",
+        type: "interactive-dipstick"
+      },
+      // SLIDE 16 - EXAME QUÍMICO: pH E DENSIDADE QUÍMICA
+      {
+        id: 16,
+        module: "MÓDULO 02 • EXAME QUÍMICO",
+        eyebrow: "EQUILÍBRIO ÁCIDO-BÁSICO E FORÇA IÔNICA",
+        title: "Exame Químico: pH Urinário e Densidade em Tira",
+        type: "split-columns",
+        leftTitle: "pH Urinário (Faixa: 4,5 a 8,0 | Normal: 5,5–6,5)",
+        leftIcon: "fa-scale-balanced",
+        leftAccent: "",
+        leftItems: [
+          "<b>Princípio Químico:</b> Sistema duplo indicador (Vermelho de Metila + Azul de Bromotimol) variando do laranja ao azul.",
+          "<b>Urina Ácida (pH < 5,5):</b> Dieta rica em proteínas/carnes, cetoacidose diabética, jejum e febre.",
+          "<b>Urina Alcalina (pH > 7,0):</b> Dieta vegetariana, alcalose metabólica, vômitos ou ITU por <i>Proteus mirabilis</i> (produtor de urease).",
+          "<b>Alerta Técnico:</b> pH > 8,5 sugere amostra velha mal conservada (solicitar nova coleta)."
+        ],
+        rightTitle: "Densidade por Tira Reativa (Polieletrólitos)",
+        rightIcon: "fa-cubes-stacked",
+        rightAccent: "gold-accent",
+        rightItems: [
+          "<b>Princípio Químico:</b> Alteração do pKa de um polieletrólito conforme a concentração iônica da urina (azul -> verde -> amarelo).",
+          "<b>Vantagem sobre o Refratômetro:</b> Não sofre interferência de moléculas não-iônicas grandes como glicose ou contrastes radiológicos.",
+          "<b>Interferência:</b> Urinas com pH ≥ 6,5 subestimam a leitura (leitores automatizados somam +0,005 automaticamente)."
+        ]
+      },
+      // SLIDE 17 - PROTEÍNAS E GLICOSE
+      {
+        id: 17,
+        module: "MÓDULO 02 • EXAME QUÍMICO",
+        eyebrow: "MARCADORES DE LESÃO GLOMERULAR E DIABETES",
+        title: "Exame Químico: Proteínas e Glicose",
+        type: "split-columns",
+        leftTitle: "Proteínas (Proteinúria) — Ref: Ausente / < 10 mg/dL",
+        leftIcon: "fa-dna",
+        leftAccent: "red-accent",
+        leftItems: [
+          "<b>Princípio:</b> 'Erro proteico dos indicadores' (Azul de Tetrabromofenol) em tampão pH 3,0. Altamente sensível à <b>Albumina</b>.",
+          "<b>Limitação:</b> Baixa sensibilidade para globulinas e proteína de Bence-Jones (Mieloma Múltiplo requer precipitação ácida/eletroforese).",
+          "<b>Significado:</b> Principal indicador de nefropatia diabética, síndrome nefrótica e pré-eclâmpsia.",
+          "<b>Falso-Positivo:</b> Urina muito alcalina (pH > 8,0) ou amônio quaternário."
+        ],
+        rightTitle: "Glicose (Glicosúria) — Limiar Renal: ~180 mg/dL",
+        rightIcon: "fa-candy-cane",
+        rightAccent: "",
+        rightItems: [
+          "<b>Princípio:</b> Reação enzimática dupla (Glicose Oxidase + Peroxidase + Cromógeno).",
+          "<b>Hiperglicemia com Glicosúria:</b> Diabetes Mellitus descompensado, síndrome de Cushing e pancreatite.",
+          "<b>Glicosúria Renal Normoglicêmica:</b> Defeito na reabsorção do túbulo contorcido proximal (Síndrome de Fanconi, gestação ou uso de inibidores SGLT2/gliflozinas)."
+        ]
+      },
+      // SLIDE 18 - CORPOS CETÔNICOS E SANGUE/HEMOGLOBINA
+      {
+        id: 18,
+        module: "MÓDULO 02 • EXAME QUÍMICO",
+        eyebrow: "LIPÓLISE E SANGRAMENTO DO TRATO URINÁRIO",
+        title: "Exame Químico: Corpos Cetônicos e Sangue",
+        type: "split-columns",
+        leftTitle: "Corpos Cetônicos (Cetonúria)",
+        leftIcon: "fa-fire-flame-curved",
+        leftAccent: "gold-accent",
+        leftItems: [
+          "<b>Os 3 Compostos:</b> Ácido Beta-hidroxibutírico (78%), Ácido Acetoacético (20%) e Acetona (2%).",
+          "<b>Princípio (Reação de Legal):</b> Nitroprussiato de sódio reage com o <b>ácido acetoacético</b> produzindo cor violeta.",
+          "<b>Clínica:</b> Cetoacidose diabética, jejum prolongado, dietas cetogênicas, vômitos incoercíveis (hiperêmese gravídica) e febre infantil."
+        ],
+        rightTitle: "Sangue / Hemoglobina / Mioglobina",
+        rightIcon: "fa-droplet",
+        rightAccent: "red-accent",
+        rightItems: [
+          "<b>Princípio:</b> Atividade pseudoperoxidásica do grupo Heme catalisa a oxidação do cromógeno tetrametilbenzidina.",
+          "<b>Hematúria:</b> Hemácias íntegras (pontilhado verde na tira + eritrócitos no sedimento). Causas: cálculos, tumores, glomerulonefrite.",
+          "<b>Hemoglobinúria / Mioglobinúria:</b> Reação uniforme na tira + sedimento sem hemácias (hemólise intravascular ou rabdomiólise)."
+        ]
+      },
+      // SLIDE 19 - BILIRRUBINA E UROBILINOGÊNIO
+      {
+        id: 19,
+        module: "MÓDULO 02 • EXAME QUÍMICO",
+        eyebrow: "FUNÇÃO HEPATOBILIAR E HEMÓLISE",
+        title: "Exame Químico: Bilirrubina e Urobilinogênio",
+        type: "table-slide",
+        headers: ["Parâmetro / Condição", "Bilirrubina (Direta/Conjugada)", "Urobilinogênio (< 1,0 mg/dL)", "Fisiopatologia Clínica"],
+        rows: [
+          ["<b>Princípio na Tira</b>", "Reação de Diazo em meio ácido", "Reação de Ehrlich (p-dimetilaminobenzaldeído)", "Bilirrubina indireta NÃO passa no glomérulo (ligada à albumina)"],
+          ["<b>Indivíduo Normal</b>", "Negativo (Ausente)", "Normal (Traços fisiológicos)", "Ciclo êntero-hepático preservado"],
+          ["<b>Icterícia Hemolítica (Pré-Hepática)</b>", "Negativo (alta bilirrubina indireta no sangue)", "Fortemente Aumentado (+++)", "Excesso de hemólise gera mais urobilinogênio intestinal"],
+          ["<b>Hepatite / Cirrose (Hepática)</b>", "Positivo (+ a ++)", "Moderadamente Aumentado (++)", "Falha hepatocelular na captação e excreção biliar"],
+          ["<b>Obstrução Biliar / Colestase</b>", "Fortemente Positivo (+++ / Colúria)", "Ausente / Reduzido (Fezes acólicas)", "Cálculo ou tumor impede chegada da bile ao intestino"]
+        ]
+      },
+      // SLIDE 20 - NITRITO E ESTERASE LEUCOCITÁRIA
+      {
+        id: 20,
+        module: "MÓDULO 02 • TRIAGEM DE ITU",
+        eyebrow: "DIAGNÓSTICO RÁPIDO DE INFECÇÃO URINÁRIA",
+        title: "Exame Químico: Nitrito e Esterase Leucocitária",
+        type: "split-columns",
+        leftTitle: "Nitrito (Reação de Griess)",
+        leftIcon: "fa-bacterium",
+        leftAccent: "",
+        leftItems: [
+          "<b>Mecanismo:</b> Bactérias Gram-negativas (<i>Escherichia coli, Proteus, Klebsiella</i>) possuem a enzima nitrato redutase, que converte o nitrato da dieta em nitrito.",
+          "<b>Requisitos Obrigatórios:</b> Dieta contendo vegetais (nitrato) e permanência da urina na bexiga por no mínimo <b>4 horas</b>.",
+          "<b>Falso-Negativo:</b> Infecções por Gram-positivos (<i>Enterococcus, Staphylococcus saprophyticus</i>), leveduras ou micções frequentes."
+        ],
+        rightTitle: "Esterase Leucocitária (Piúria Química)",
+        rightIcon: "fa-shield-virus",
+        rightAccent: "gold-accent",
+        rightItems: [
+          "<b>Mecanismo:</b> Detecta enzimas esterases presentes nos grânulos azurófilos de leucócitos granulócitos (neutrófilos, eosinófilos, basófilos) e monócitos.",
+          "<b>Grande Vantagem:</b> Positiva mesmo quando os leucócitos sofreram lise (estouraram) em urinas hipotônicas ou alcalinas!",
+          "<b>Tempo de Leitura:</b> Reação mais lenta da tira — aguardar <b>120 segundos</b>."
+        ]
+      },
+      // SLIDE 21 - SEDIMENTOSCOPIA: PADRONIZAÇÃO TÉCNICA
+      {
+        id: 21,
+        module: "MÓDULO 03 • SEDIMENTOSCOPIA",
+        eyebrow: "NORMA ABNT NBR 15268 / CLSI GP16",
+        title: "Exame Microscópico: Padronização do Sedimento",
+        type: "process-kpis",
+        steps: [
+          { step: "PASSO 01", title: "Homogeneização e Alíquota", desc: "Homogeneizar a urina suavemente e transferir exatamente 10 mL para tubo cônico graduado.", metric: "10,0 mL" },
+          { step: "PASSO 02", title: "Centrifugação Controlada", desc: "Centrifugar por 5 minutos a Força Centrífuga Relativa (FCR) de 400 g (~1.500 a 2.000 rpm).", metric: "400 g / 5 min" },
+          { step: "PASSO 03", title: "Decantação e Microscopia", desc: "Deixar 0,5 mL ou 1,0 mL de sedimento, ressuspender suavemente, colocar 20 µL em lâmina/câmara (Kcell).", metric: "100x e 400x" }
+        ],
+        kpis: [
+          { value: "Objetiva 10x", label: "Menor Aumento (100x): Pesquisa panorâmica de Cilindros nas bordas", color: "emerald" },
+          { value: "Objetiva 40x", label: "Maior Aumento (400x): Contagem de Hemácias, Leucócitos, Epitélio e Cristais", color: "amber" },
+          { value: "10 Campos", label: "Média mínima de campos microscópicos avaliados para laudo", color: "emerald" }
+        ]
+      },
+      // SLIDE 22 - CÉLULAS EPITELIAIS NO SEDIMENTO
+      {
+        id: 22,
+        module: "MÓDULO 03 • ELEMENTOS EPITELIAIS",
+        eyebrow: "ORIGEM ANATÔMICA DO REVESTIMENTO",
+        title: "Sedimentoscopia: As 3 Linhagens Epiteliais",
+        type: "cards-grid",
+        subtitle: "A morfologia da célula epitelial revela exatamente de qual altura do trato urinário ela descamou.",
+        cards: [
+          { tag: "URETRA DISTAL E VAGINA", icon: "fa-layer-group", title: "1. Células Escamosas", desc: "Grandes (40–60 µm), achatadas, poligonais, citoplasma amplo e núcleo central pequeno. Indicam descamação normal ou coleta sem higiene." },
+          { tag: "BEXIGA, URETER E PELVE", icon: "fa-circle-dot", title: "2. Transicionais (Uroteliais)", desc: "Tamanho médio (20–40 µm), esféricas, poliédricas ou caudadas com núcleo central bem definido. Aumentam em cistites e cateterismos." },
+          { tag: "NÉFRONS (ALERTA CLÍNICO)", icon: "fa-triangle-exclamation", title: "3. Tubulares Renais (RTE)", desc: "Pequenas/colunares (15–25 µm), citoplasma granuloso e núcleo excêntrico com halo. Mais de 2/campo indica Necrose Tubular Aguda!" },
+          { tag: "SÍNDROME NEFRÓTICA", icon: "fa-droplet", title: "Corpos Ovalados Gordurosos", desc: "Células tubulares renais engorgitadas de lipídios; exibem 'Cruz de Malta' sob luz polarizada na síndrome nefrótica." }
+        ]
+      },
+      // SLIDE 23 - LEUCÓCITOS E HEMÁCIAS (DISMORFISMO)
+      {
+        id: 23,
+        module: "MÓDULO 03 • CÉLULAS SANGUÍNEAS",
+        eyebrow: "PIÚRIA E HEMATÚRIA GLOMERULAR VS NÃO-GLOMERULAR",
+        title: "Sedimentoscopia: Leucócitos e Hemácias",
+        type: "split-visual",
+        bullets: [
+          { icon: "fa-shield-halved", title: "Leucócitos / Piócitos (Ref: < 5/campo ou < 10.000/mL)", text: "Predomínio de neutrófilos (~12 µm) com grânulos brilhantes (células de Sternheimer-Malbin). Agrupamentos de piócitos indicam infecção aguda." },
+          { icon: "fa-allergies", title: "Eosinofilúria (Coloração de Hansel)", text: "Presença de > 1% de eosinófilos urinários é marcador clássico de Nefrite Intersticial Aguda induzida por fármacos." },
+          { icon: "fa-circle", title: "Hemácias Isomórficas (Ref: < 3 a 5/campo)", text: "Eritrócitos uniformes (~7 µm), bicôncavos: sangramento pós-glomerular (litíase, cistite hemorrágica, tumores)." },
+          { icon: "fa-burst", title: "Hemácias Dismórficas (Acantócitos / Codócitos)", text: "Hemácias deformadas com projeções vesiculares ('orelhas de Mickey') ao atravessar a membrana basal glomerular lesada (Glomerulonefrite)." }
+        ],
+        visualType: "svg-rbc-dysmorphic"
+      },
+      // SLIDE 24 - CILINDROS URINÁRIOS: FORMAÇÃO
+      {
+        id: 24,
+        module: "MÓDULO 03 • CILINDROS (PARTE 1)",
+        eyebrow: "PROTEÍNA DE TAMM-HORSFALL (UROMODULINA)",
+        title: "Cilindros Urinários: Fisiopatologia e Matriz",
+        type: "split-visual",
+        bullets: [
+          { icon: "fa-industry", title: "Exclusivos dos Rins", text: "São os únicos elementos encontrados no sedimento urinário que são formados exclusivamente dentro do parênquima renal (TCD e Ducto Coletor)." },
+          { icon: "fa-link", title: "Glicoproteína de Tamm-Horsfall", text: "Secretada pelas células tubulares da porção espessa da Alça de Henle e TCD; polimeriza em fibrilas formando um molde gelatinoso da luz tubular." },
+          { icon: "fa-flask-vial", title: "Fatores que Favorecem a Formação", text: "Baixo fluxo urinário (estase), pH ácido, alta concentração de sais e presença de proteinúria." },
+          { icon: "fa-feather", title: "Cilindro Hialino (0 a 2 por campo 100x)", text: "Transparente, baixo índice de refração (fechar condensador!). Normal após exercício intenso, febre ou desidratação." }
+        ],
+        visualType: "svg-casts-formation"
+      },
+      // SLIDE 25 - CILINDROS PATOLÓGICOS
+      {
+        id: 25,
+        module: "MÓDULO 03 • CILINDROS (PARTE 2)",
+        eyebrow: "INCLUSÕES CELULARES E DEGENERAÇÃO",
+        title: "Sedimentoscopia: Cilindros Patológicos",
+        type: "table-slide",
+        headers: ["Tipo de Cilindro", "Aspecto Microscópico (400x)", "Correlação Clínica Patológica"],
+        rows: [
+          ["<b>Cilindro Hemático</b>", "Hemácias alaranjadas/vermelhas incrustadas na matriz proteica", "<b>Glomerulonefrite Aguda</b>, nefrite lúpica e síndrome nefrítica"],
+          ["<b>Cilindro Leucocitário</b>", "Leucócitos visíveis dentro do molde (diferenciar de grumos)", "<b>Pielonefrite Aguda</b> (diferencia infecção alta de cistite baixa!)"],
+          ["<b>Cilindro Epitelial (RTE)</b>", "Células tubulares renais alinhadas na matriz", "<b>Necrose Tubular Aguda</b> (nefrotoxicidade, metais pesados, isquemia)"],
+          ["<b>Cilindro Granuloso</b>", "Grânulos finos ou grossos de desintegração celular/lisossomal", "Doença renal crônica, estase tubular ou pós-exercício vigoroso"],
+          ["<b>Cilindro Céreo (Largo)</b>", "Amarelado, alto índice de refração, bordas serrilhadas/quebradiças", "<b>Insuficiência Renal Crônica Avançada</b> (dilatação e atrofia tubular)"]
+        ]
+      },
+      // SLIDE 26 - CRISTAIS EM URINAS ÁCIDAS
+      {
+        id: 26,
+        module: "MÓDULO 03 • CRISTALÚRIA ÁCIDA",
+        eyebrow: "DEPENDÊNCIA DE pH (< 6,5) E TEMPERATURA",
+        title: "Sedimentoscopia: Cristais em Urinas Ácidas",
+        type: "split-visual",
+        bullets: [
+          { icon: "fa-envelope-open", title: "Oxalato de Cálcio Di-hidratado (Weddellita)", text: "Formato clássico de octaedro ('envelope de carta'). Ocorre em pH ácido e neutro; associado a cálculos renais, tomate, espinafre e vitamina C." },
+          { icon: "fa-dumbbell", title: "Oxalato de Cálcio Monohidratado (Whewellita)", text: "Formato oval ou de halteres; grande importância clínica na intoxicação aguda por etilenoglicol (anticongelante)." },
+          { icon: "fa-gem", title: "Cristais de Ácido Úrico (pH < 5,5)", text: "Cor amarelo-ouro a castanho-avermelhada; formatos de losango (pedra de amolar), rosetas ou barril. Comum na Gota e síndrome de lise tumoral." },
+          { icon: "fa-braille", title: "Uratos Amorfos", text: "Grânulos finos que dão cor rósea/tijolo ao sedimento refrigerado (uroeritrina). Dissolvem-se facilmente aquecendo a amostra a 60°C." }
+        ],
+        visualType: "svg-acid-crystals"
+      },
+      // SLIDE 27 - CRISTAIS EM URINAS ALCALINAS
+      {
+        id: 27,
+        module: "MÓDULO 03 • CRISTALÚRIA ALCALINA",
+        eyebrow: "PRECIPITAÇÃO EM pH > 7,0",
+        title: "Sedimentoscopia: Cristais em Urinas Alcalinas",
+        type: "split-visual",
+        bullets: [
+          { icon: "fa-cube", title: "Fosfato Triplo / Fosfato Amoníaco-Magnesiano (Estruvita)", text: "Prismas tridimensionais incolores em formato de 'tampa de caixão'. Muito associados a cálculos coraliformes e ITU por <i>Proteus</i>." },
+          { icon: "fa-grip", title: "Fosfatos Amorfos", text: "Grânulos microscópicos que produzem precipitado branco macroscópico após refrigeração; dissolvem-se com adição de ácido acético diluído." },
+          { icon: "fa-sun", title: "Biurato de Amônio", text: "Esferas amarelo-acastanhadas com espículas radiais ('maçã espinhosa'). Tipicamente encontrados em amostras envelhecidas com amônia livre." },
+          { icon: "fa-Infinity", title: "Fosfato de Cálcio e Carbonato de Cálcio", text: "Placas prismáticas em roseta ou pequenas esferas em halteres que produzem efervescência (CO₂) com ácido acético." }
+        ],
+        visualType: "svg-alkaline-crystals"
+      },
+      // SLIDE 28 - CRISTAIS PATOLÓGICOS E MEDICAMENTOSOS
+      {
+        id: 28,
+        module: "MÓDULO 03 • CRISTALÚRIA ANORMAL",
+        eyebrow: "SEMPRE REPORTAR • ORIGEM METABÓLICA OU HEPÁTICA",
+        title: "Sedimentoscopia: Cristais Patológicos e Raros",
+        type: "cards-grid",
+        subtitle: "Encontrados exclusivamente em urinas ácidas; sua presença exige confirmação bioquímica imediata.",
+        cards: [
+          { tag: "CISTINÚRIA CONGÊNITA", icon: "fa-hexagon-nodes", title: "Cristais de Cistina", desc: "Placas hexagonais perfeitas, incolores e refringentes (6 lados). Causam nefrolitíase hereditária precoce." },
+          { tag: "INSUFICIÊNCIA HEPÁTICA GRAVE", icon: "fa-lines-leaning", title: "Tirosina e Leucina", desc: "Tirosina forma feixes de agulhas escuras; Leucina forma esferas amareladas com estrias radiais e concêntricas." },
+          { tag: "SÍNDROME NEFRÓTICA", icon: "fa-vector-square", title: "Cristais de Colesterol", desc: "Placas retangulares transparentes com um entalhe característico (degrau) em um dos cantos; birrefringentes." },
+          { tag: "COLESTASE E FÁRMACOS", icon: "fa-pills", title: "Bilirrubina e Sulfonamidas", desc: "Agulhas amarelo-rubi (bilirrubina) ou feixes de trigo (sulfadiazina, aciclovir, indinavir, amoxicilina em altas doses)." }
+        ]
+      },
+      // SLIDE 29 - MICRORGANISMOS E ARTEFATOS
+      {
+        id: 29,
+        module: "MÓDULO 03 • MICROBIOLOGIA E ARTEFATOS",
+        eyebrow: "DIAGNÓSTICO DIFERENCIAL NO MICROSCÓPIO",
+        title: "Microrganismos, Parasitas e Artefatos Técnicos",
+        type: "split-columns",
+        leftTitle: "Agentes Infecciosos no Sedimento",
+        leftIcon: "fa-bug",
+        leftAccent: "",
+        leftItems: [
+          "<b>Bactérias:</b> Bastonetes (bacilos) ou cocos; reportados em cruzes (+ a +++). Relevante quando acompanhado de leucocitúria.",
+          "<b>Leveduras (<i>Candida albicans</i>):</b> Células ovaladas refringentes (~5 µm) com <b>brotamento (gemulação)</b> e pseudo-hifas. Cuidado: não confundir com hemácias!",
+          "<b><i>Trichomonas vaginalis</i>:</b> Protozoário piriforme flagelado com membrana ondulante e motilidade rápida em urina fresca.",
+          "<b>Parasitas:</b> Ovos de <i>Schistosoma haematobium</i> (esporão terminal) ou contaminação fecal por <i>Enterobius vermicularis</i>."
+        ],
+        rightTitle: "Muco e Artefatos (Evitar Falso-Positivo)",
+        rightIcon: "fa-ban",
+        rightAccent: "gold-accent",
+        rightItems: [
+          "<b>Filamentos de Muco:</b> Fitas longas, onduladas e tênues de proteína de Tamm-Horsfall (fisiológico).",
+          "<b>Grânulos de Amido (Talco de Luvas):</b> Esferas facetadas com depressão central em 'Y'; exibem Cruz de Malta na luz polarizada.",
+          "<b>Gotículas de Óleo e Bolhas de Ar:</b> Altamente refringentes e perfeitamente circulares.",
+          "<b>Fibras de Algodão/Fralda e Pólen:</b> Fibras longas com bordas escuras que não devem ser confundidas com cilindros."
+        ]
+      },
+      // SLIDE 30 - INTRODUÇÃO AOS FLUÍDOS BIOLÓGICOS CAVITÁRIOS
+      {
+        id: 30,
+        module: "MÓDULO 04 • LÍQUIDOS CAVITÁRIOS",
+        eyebrow: "PUNÇÕES MÉDICAS E URGÊNCIA ANALÍTICA",
+        title: "Introdução aos Fluídos Biológicos Extravasculares",
+        type: "table-slide",
+        headers: ["Fluído Biológico", "Cavidade / Origem Anatômica", "Procedimento de Coleta", "Caráter Laboratorial"],
+        rows: [
+          ["<b>Líquor (LCR)</b>", "Espaço subaracnóideo e ventrículos cerebrais", "Punção Lombar (L3–L4) ou Cisternal", "<b>Emergência Absoluta (STAT)</b> — lise em < 1h"],
+          ["<b>Líquido Pleural</b>", "Cavidade pleural (entre pleura visceral e parietal)", "Toracocentese", "Diferenciação Transudato vs Exsudato"],
+          ["<b>Líquido Peritoneal (Ascítico)</b>", "Cavidade abdominal / peritoneal", "Paracentese", "Avaliação de hipertensão portal e peritonite"],
+          ["<b>Líquido Pericárdico</b>", "Saco pericárdico ao redor do coração", "Pericardiocentese", "Investigação de tamponamento e pericardites"],
+          ["<b>Líquido Sinovial</b>", "Cavidades articulares móveis (diartroses)", "Artrocentese", "Diagnóstico de Gota, Pseudogota e Artrite Séptica"]
+        ]
+      },
+      // SLIDE 31 - LÍQUOR (LCR): PUNÇÃO E REGRA DOS 3 TUBOS INTERATIVA
+      {
+        id: 31,
+        module: "MÓDULO 04 • LÍQUOR (LCR)",
+        eyebrow: "INTERATIVO • SIMULADOR DOS 3 TUBOS DE COLETA LIQUÓRICA",
+        title: "Líquido Cefalorraquidiano: Coleta e Punção Traumática",
+        type: "interactive-csf-tubes"
+      },
+      // SLIDE 32 - ANÁLISE DO LCR: FÍSICO, BIOQUÍMICO E CITOMETRIA
+      {
+        id: 32,
+        module: "MÓDULO 04 • LÍQUOR (LCR)",
+        eyebrow: "CÂMARA DE FUCHS-ROSENTHAL / NEUBAUER",
+        title: "Análise do LCR: Exame Físico, Citometria e Bioquímica",
+        type: "process-kpis",
+        steps: [
+          { step: "EXAME FÍSICO", title: "Água de Rocha vs Xantocromia", desc: "LCR normal é límpido e incolor como cristal. Sobrenadante rosado/amarelo indica Xantocromia (bilirrubina/Hb).", metric: "Límpido / Incolor" },
+          { step: "CITOMETRIA", title: "Contagem Global e Diferencial", desc: "Contagem imediata em Câmara de Fuchs-Rosenthal ou Neubauer; citocentrifugação corada com May-Grünwald-Giemsa.", metric: "0 a 5 leuc/mm³" },
+          { step: "BIOQUÍMICA", title: "Glicorraquia, Proteína e Lactato", desc: "Glicose normal corresponde a 60–70% da glicemia plasmática (colher sangue junto!). Lactato > 35 mg/dL indica bactéria.", metric: "Prot: 15–45 mg/dL" }
+        ],
+        kpis: [
+          { value: "90–150 mL", label: "Volume Total de LCR no Adulto (Produção: 20 mL/hora)", color: "emerald" },
+          { value: "45–80 mg/dL", label: "Faixa Normal de Glicorraquia (padrão 2/3 da glicemia)", color: "amber" },
+          { value: "Até 30/mm³", label: "Limite Fisiológico de Leucócitos em Recém-Nascidos", color: "emerald" }
+        ]
+      },
+      // SLIDE 33 - DIAGNÓSTICO DIFERENCIAL DAS MENINGITES
+      {
+        id: 33,
+        module: "MÓDULO 04 • NEUROINFECÇÃO",
+        eyebrow: "CORRELAÇÃO CLÍNICO-LABORATORIAL CRÍTICA",
+        title: "Diagnóstico Diferencial das Meningites no LCR",
+        type: "table-slide",
+        headers: ["Parâmetro no LCR", "Meningite Bacteriana", "Meningite Viral (Asséptica)", "Meningite Tuberculosa", "Meningite Fúngica"],
+        rows: [
+          ["<b>Aspecto Macroscópico</b>", "<b>Turvo / Purulento</b>", "Límpido ou levemente opalescente", "Límpido / Coágulo em 'véu de noiva'", "Límpido a moderadamente turvo"],
+          ["<b>Contagem de Leucócitos</b>", "Muito Alta (500 a > 10.000/mm³)", "Discreta a Moderada (10 a 500/mm³)", "Moderada (50 a 500/mm³)", "Moderada (20 a 500/mm³)"],
+          ["<b>Célula Predominante</b>", "<b>Neutrófilos (> 85%)</b>", "<b>Linfócitos</b> (Neutrófilos nas 1ªs 24h)", "<b>Linfócitos e Monócitos</b>", "Linfócitos e Monócitos"],
+          ["<b>Proteínas (15–45 mg/dL)</b>", "Muito Elevada (> 100–500 mg/dL)", "Normal ou Levemente Aumentada", "Muito Elevada (100–300 mg/dL)", "Elevada (50–200 mg/dL)"],
+          ["<b>Glicose e Marcador Chave</b>", "<b>Muito Baixa (< 40)</b> | Lactato Alto / Gram", "<b>Normal</b> | PCR Viral", "<b>Baixa (< 45)</b> | ADA Alta e BAAR", "Normal a Baixa | <b>Tinta da China</b> (<i>Cryptococcus</i>)"]
+        ]
+      },
+      // SLIDE 34 - LÍQUIDOS SEROSOS E CRITÉRIOS DE LIGHT
+      {
+        id: 34,
+        module: "MÓDULO 04 • LÍQUIDOS SEROSOS",
+        eyebrow: "PLEURAL, PERITONEAL (ASCÍTICO) E PERICÁRDICO",
+        title: "Fisiopatologia dos Derrames: Transudato vs Exsudato",
+        type: "split-columns",
+        leftTitle: "Transudato (Causas Sistêmicas / Mecânicas)",
+        leftIcon: "fa-droplet-slash",
+        leftAccent: "",
+        leftItems: [
+          "<b>Mecanismo:</b> Aumento da pressão hidrostática capilar ou redução da pressão coloidosmótica plasmática (hipoalbuminemia), com <b>membrana serosa íntegra</b>.",
+          "<b>Causas Clínicas:</b> Insuficiência Cardíaca Congestiva (ICC), Cirrose Hepática e Síndrome Nefrótica.",
+          "<b>Padrão Laboratorial:</b> Líquido límpido, amarelo-claro, baixa proteína, baixo LDH, leucócitos < 1.000/mm³ e não coagula."
+        ],
+        rightTitle: "Exsudato — Critérios de Light (Basta 1 Positivo!)",
+        rightIcon: "fa-fire",
+        rightAccent: "red-accent",
+        rightItems: [
+          "<b>Mecanismo:</b> Lesão inflamatória, infecciosa ou neoplásica direta da membrana pleural/peritoneal (aumento da permeabilidade capilar).",
+          "<b>1º Critério de Light:</b> Relação Proteína Total (Líquido / Soro) <b>> 0,5</b>.",
+          "<b>2º Critério de Light:</b> Relação Desidrogenase Láctica - LDH (Líquido / Soro) <b>> 0,6</b>.",
+          "<b>3º Critério de Light:</b> LDH do Líquido > 2/3 do limite superior de referência do LDH sérico."
+        ]
+      },
+      // SLIDE 35 - ANÁLISE LABORATORIAL DOS LÍQUIDOS SEROSOS
+      {
+        id: 35,
+        module: "MÓDULO 04 • MARCADORES SEROSOS",
+        eyebrow: "BIOQUÍMICA ESPECIAL E CITOLOGIA DIFERENCIAL",
+        title: "Análise Avançada do Líquido Pleural e Ascítico",
+        type: "cards-grid",
+        subtitle: "Parâmetros bioquímicos decisivos para etiologia infecciosa, cirrótica, pancreática e oncológica.",
+        cards: [
+          { tag: "HIPERTENSÃO PORTAL", icon: "fa-liver", title: "GASA (Gradiente de Albumina)", desc: "Albumina Soro menos Albumina Ascite. Se GASA ≥ 1,1 g/dL confirma Transudato por Hipertensão Portal (Cirrose) com 97% de precisão." },
+          { tag: "PERITONite BACTERIANA (PBE)", icon: "fa-virus-covid", title: "Contagem de Neutrófilos (PMN)", desc: "No líquido ascítico, contagem absoluta de polimorfonucleares (neutrófilos) ≥ 250 células/mm³ fecha diagnóstico de PBE!" },
+          { tag: "TUBERCULOSE PLEURAL", icon: "fa-lungs-virus", title: "Adenosina Deaminase (ADA)", desc: "ADA > 40 U/L em derrame pleural com predomínio linfocitário possui altíssima sensibilidade para Tuberculose Pleural." },
+          { tag: "QUILOTÓRAX E EMPiEMA", icon: "fa-vials", title: "Triglicerídeos, pH e Amilase", desc: "Triglicerídeos > 110 mg/dL (aspecto leitoso = Quilotórax); pH pleural < 7,20 indica Empiema (drenagem torácica); Amilase alta = Pancreatite." }
+        ]
+      },
+      // SLIDE 36 - LÍQUIDO SINOVIAL
+      {
+        id: 36,
+        module: "MÓDULO 04 • LÍQUIDO SINOVIAL",
+        eyebrow: "ARTROCENTESE E LUZ POLARIZADA COMPENSADA",
+        title: "Líquido Sinovial: Viscosidade, Gota e Pseudogota",
+        type: "split-columns",
+        leftTitle: "Exame Físico, Ácido Hialurônico e Diluente",
+        leftIcon: "fa-bone",
+        leftAccent: "",
+        leftItems: [
+          "<b>Função:</b> Lubrificação e nutrição da cartilagem articular; rico em ácido hialurônico secretado pelos sinoviócitos.",
+          "<b>Teste da Filância e Coágulo de Mucina (Ropes):</b> Fio viscoso normal de 4 a 6 cm. Em artrites, enzimas bacterianas/leucocitárias quebram o hialuronato.",
+          "<b>ATENÇÃO TÉCNICA NA CITOMETRIA:</b> NUNCA usar Líquido de Turk comum (ácido acético precipita o ácido hialurônico!). Diluir sempre com <b>Salina 0,9%</b> ou usar hialuronidase."
+        ],
+        rightTitle: "Microscopia Polarizada: Gota vs Pseudogota",
+        rightIcon: "fa-gem",
+        rightAccent: "gold-accent",
+        rightItems: [
+          "<b>Gota Úrica (Urato Monossódico - MSU):</b> Cristais em formato de <b>agulhas finas</b> intra e extracelulares. Exibem <b>Birrefringência Forte Negativa</b> (amarelos quando paralelos ao eixo do compensador).",
+          "<b>Pseudogota (Pirofosfato de Cálcio - CPPD):</b> Cristais curtos romboides ou bastonetes. Exibem <b>Birrefringência Fraca Positiva</b> (azuis quando paralelos ao eixo).",
+          "<b>Artrite Séptica:</b> Leucócitos > 50.000/mm³ (> 90% neutrófilos) e glicose baixa."
+        ]
+      },
+      // SLIDE 37 - ESPERMOGRAMA (OMS)
+      {
+        id: 37,
+        module: "MÓDULO 04 • REPRODUÇÃO HUMANA",
+        eyebrow: "6ª EDIÇÃO DO MANUAL DA OMS (ORGANIZAÇÃO MUNDIAL DA SAÚDE)",
+        title: "Espermograma: Análise do Líquido Seminal",
+        type: "table-slide",
+        headers: ["Parâmetro Seminal", "Valor de Referência (OMS)", "Alteração / Nomenclatura Clínica"],
+        rows: [
+          ["<b>Coleta e Liquefação</b>", "Abstinência de 2 a 7 dias | Liquefação ≤ 60 min a 37°C", "Falha de liquefação sugere disfunção prostática (deficiência de PSA)"],
+          ["<b>Volume e pH Seminal</b>", "Volume <b>≥ 1,4 mL</b> | pH <b>≥ 7,2</b> (Alcalino)", "Hipospermia (< 1,4 mL) / Aspermia (ausência de ejaculado)"],
+          ["<b>Concentração Espermática</b>", "<b>≥ 16 milhões/mL</b> ou ≥ 39 milhões no ejaculado total", "<b>Oligozoospermia</b> (< 16 mi/mL) | <b>Azoospermia</b> (ausência total)"],
+          ["<b>Motilidade Total e Progressiva</b>", "Motilidade Total ≥ 42% | <b>Progressiva (PR) ≥ 30%</b>", "<b>Astenozoospermia</b> (redução da mobilidade espermática)"],
+          ["<b>Vitalidade e Morfologia (Kruger)</b>", "Vitalidade (Eosina-Nigrosina) <b>≥ 54%</b> | Morfologia <b>≥ 4%</b>", "<b>Necrozoospermia</b> (mortos) | <b>Teratozoospermia</b> (< 4% normais)"]
+        ]
+      },
+      // SLIDE 38 - LÍQUIDO AMNIÓTICO E LAVADO BRONCOALVEOLAR
+      {
+        id: 38,
+        module: "MÓDULO 04 • FLUIDOS ESPECIAIS",
+        eyebrow: "MEDICINA FETAL E PNEUMOLOGIA",
+        title: "Líquido Amniótico e Lavado Broncoalveolar (LBA)",
+        type: "split-columns",
+        leftTitle: "Líquido Amniótico (Amniocentese)",
+        leftIcon: "fa-baby",
+        leftAccent: "",
+        leftItems: [
+          "<b>Cuidados Pré-Analíticos:</b> Proteger rigorosamente da luz (tubo âmbar) para evitar fotodegradação da bilirrubina.",
+          "<b>Diferenciação de Urina Materna:</b> Líquido amniótico possui glicose e proteína altas, mas ureia/creatinina baixas (teste do Cristal de Samambaia positivo).",
+          "<b>Maturidade Pulmonar Fetal:</b> Relação <b>Lecitina / Esfingomielina (L/E) ≥ 2,0</b>, presença de Fosfatidilglicerol e contagem de corpos lamelares.",
+          "<b>Doença Hemolítica Perinatal:</b> Espectrofotometria a 450 nm (Gráfico de Liley)."
+        ],
+        rightTitle: "Escarro e Lavado Broncoalveolar (LBA)",
+        rightIcon: "fa-lungs",
+        rightAccent: "gold-accent",
+        rightItems: [
+          "<b>Triagem de Qualidade do Escarro (Gram 100x):</b> Amostra representativa do trato inferior deve ter <b>< 10 células epiteliais escamosas</b> e <b>> 25 leucócitos</b> por campo (Critério de Murray-Washington).",
+          "<b>Pesquisa de Tuberculose:</b> Baciloscopia direta por coloração de Ziehl-Neelsen (BAAR) e Teste Rápido Molecular (TRM-TB / GeneXpert).",
+          "<b>LBA em Imunossuprimidos:</b> Pesquisa de <i>Pneumocystis jirovecii</i>, fungos e contagem diferencial de macrófagos alveolares."
+        ]
+      },
+      // SLIDE 39 - AUTOMAÇÃO E QUIZ DE CASOS CLÍNICOS INTERATIVO
+      {
+        id: 39,
+        module: "MÓDULO 04 • PRÁTICA CLÍNICA",
+        eyebrow: "INTERATIVO • SIMULADOR DE DISCUSSÃO DE CASOS (TURMA ANC06-N)",
+        title: "Automação Moderna e Casos Clínicos Aplicados",
+        type: "interactive-cases"
+      },
+      // SLIDE 40 - CONTROLE DE QUALIDADE, BIOSSEGURANÇA E ENCERRAMENTO
+      {
+        id: 40,
+        module: "ENCERRAMENTO • QUALIDADE E NR-32",
+        eyebrow: "EXCELÊNCIA TÉCNICA EM ANÁLISES CLÍNICAS",
+        title: "Controle de Qualidade, Biossegurança e Conclusão",
+        type: "closing-slide"
+      }
+    ];
+
+    /* ==========================================================================
+       INTERACTIVE SIMULATORS DATA (SLIDES 13, 15, 31, 39)
+       ========================================================================== */
+    const urineColorSamples = [
+      {
+        name: "Amarelo-Citrino",
+        hex: "linear-gradient(180deg, #fef08a 0%, #eab308 100%)",
+        aspect: "Límpido",
+        pigment: "Urocromo (Fisiológico)",
+        clinical: "Amostra normal de paciente normo-hidratado. A intensidade varia com a concentração urinária e o hormônio antidiurético (ADH).",
+        action: "Seguir fluxo normal de tira reativa e sedimentoscopia."
+      },
+      {
+        name: "Incolor / Palha",
+        hex: "linear-gradient(180deg, #f8fafc 0%, #fef9c3 100%)",
+        aspect: "Límpido",
+        pigment: "Urocromo Diluído",
+        clinical: "Poliúria, hiper-hidratação, uso de diuréticos, ingestão alcoólica, Diabetes Insipidus (densidade baixa) ou Diabetes Mellitus (densidade alta com glicosúria).",
+        action: "Correlacionar imediatamente com a Densidade Específica e Glicose."
+      },
+      {
+        name: "Vermelho / Rosado",
+        hex: "linear-gradient(180deg, #fca5a5 0%, #dc2626 100%)",
+        aspect: "Turvo ou Límpido",
+        pigment: "Hemácias, Hb, Mioglobina ou Beterraba",
+        clinical: "Se TURVA com botão vermelho após centrifugar = Hematúria (litíase, tumor, GNDA). Se LÍMPIDA com tira positiva = Hemoglobinúria ou Mioglobinúria (rabdomiólise).",
+        action: "Centrifugar amostra e verificar presença de eritrócitos no microscópio."
+      },
+      {
+        name: "Castanho / Coca-Cola",
+        hex: "linear-gradient(180deg, #92400e 0%, #451a03 100%)",
+        aspect: "Espuma Amarela Persistente",
+        pigment: "Bilirrubina Direta (Colúria) ou Meta-hemoglobina",
+        clinical: "Colúria clássica das hepatites agudas e icterícia obstrutiva (colestase). Também ocorre em glomerulonefrite aguda (sangue oxidado em urina ácida).",
+        action: "Agitar tubo para observar espuma amarela e confirmar Bilirrubina na tira."
+      },
+      {
+        name: "Laranja Vibrante",
+        hex: "linear-gradient(180deg, #fdba74 0%, #ea580c 100%)",
+        aspect: "Límpido",
+        pigment: "Fenazopiridina (Pyridium) ou Rifampicina",
+        clinical: "Muito comum em pacientes com disúria em uso de analgésico urinário (Pyridium). Produz espuma alaranjada e interfere na leitura colorimétrica da tira!",
+        action: "Registrar interferência medicamentosa no laudo."
+      },
+      {
+        name: "Verde / Azulado",
+        hex: "linear-gradient(180deg, #6ee7b7 0%, #059669 100%)",
+        aspect: "Límpido ou Turvo",
+        pigment: "Piocianina, Azul de Metileno ou Amitriptilina",
+        clinical: "Infecção urinária grave por Pseudomonas aeruginosa, uso de contrastes/antissépticos com azul de metileno, propofol ou antidepressivos tricíclicos.",
+        action: "Avaliar bacteriúria no sedimento e histórico medicamentoso."
+      }
+    ];
+
+    const dipstickPads = [
+      { name: "Leucócitos", time: "120s", color: "#a855f7", ref: "Negativo", principle: "Esterase Leucocitária hidrolisa éster indoxil gerando cor violeta.", alert: "Detecta piócitos íntegros e lisados. Vitamina C e antibióticos (gentamicina) podem dar falso-negativo." },
+      { name: "Nitrito", time: "60s", color: "#f472b6", ref: "Negativo", principle: "Reação de Griess (conversão de nitrato em nitrito por Gram-negativos).", alert: "Exige 4h de retenção na bexiga. Qualquer tom de rosa uniforme é positivo para bacteriúria." },
+      { name: "Urobilinogênio", time: "60s", color: "#fb7185", ref: "< 1,0 mg/dL", principle: "Reação de aldeído de Ehrlich ou sal diazônio.", alert: "Aumenta fortemente nas anemias hemolíticas e hepatopatias; não detecta ausência total (obstrução)." },
+      { name: "Proteínas", time: "60s", color: "#22c55e", ref: "Negativo", principle: "Erro proteico dos indicadores em pH 3,0 (Azul de Tetrabromofenol).", alert: "Sensível à albumina. Urina com pH > 8,0 pode gerar resultado falso-positivo." },
+      { name: "pH", time: "60s", color: "#eab308", ref: "5,5 a 6,5", principle: "Duplo indicador: Vermelho de Metila + Azul de Bromotimol (pH 5,0 a 8,5).", alert: "Auxilia na identificação de cristais e distúrbios ácido-básicos." },
+      { name: "Sangue / Hb", time: "60s", color: "#15803d", ref: "Negativo", principle: "Atividade pseudoperoxidase do Heme com peróxido + TMB.", alert: "Pontilhado verde = hemácias íntegras; Verde homogêneo = hemoglobina livre ou mioglobina." },
+      { name: "Densidade", time: "45s", color: "#0d9488", ref: "1.015–1.025", principle: "Mudança de pKa de polieletrólitos sensíveis à concentração de íons.", alert: "Mede apenas solutos iônicos (glicose e contraste não interferem)." },
+      { name: "Cetonas", time: "40s", color: "#9333ea", ref: "Negativo", principle: "Reação de Legal (Nitroprussiato de Sódio + Ácido Acetoacético).", alert: "Não mede beta-hidroxibutirato. Positivo no jejum e Cetoacidose Diabética." },
+      { name: "Bilirrubina", time: "30s", color: "#d97706", ref: "Negativo", principle: "Acoplamento da bilirrubina direta com sal diazônio em meio ácido.", alert: "Muito sensível à luz; indica colestase ou lesão hepatocelular." },
+      { name: "Glicose", time: "30s", color: "#0284c7", ref: "Negativo", principle: "Reação enzimática dupla: Glicose Oxidase + Peroxidase.", alert: "Limiar renal ~180 mg/dL. Altas doses de Vitamina C causam falso-negativo." }
+    ];
+
+    const clinicalCases = [
+      {
+        badge: "CASO CLÍNICO 01 • NEFROLOGIA",
+        patient: "Mulher, 26 anos, gestante (32 semanas), chega ao PS com edema de membros inferiores (+++/4+) e PA = 160x110 mmHg.",
+        lab: "EAS: Cor amarelo-citrino, aspecto ligeiramente turvo, Densidade 1.025, pH 6,0, Proteínas +++ (300 mg/dL), Glicose Negativa, Nitrito Negativo. Sedimentoscopia: 4 cilindros hialinos e 3 cilindros granulosos/campo.",
+        question: "Qual é a principal suspeita clínica e qual o significado da proteinúria maciça?",
+        answer: "HIPÓTESE: Pré-Eclâmpsia Grave. A hipertensão gestacional associada à lesão endotelial glomerular provoca perda intensa de albumina (proteinúria significativa > 300 mg/24h) e formação de cilindros no túbulo distal."
+      },
+      {
+        badge: "CASO CLÍNICO 02 • UROLOGIA / INFECÇÃO ALTA",
+        patient: "Paciente masculino, 62 anos, febre alta (39,2°C), calafrios e dor lombar intensa à punho-percussão (Sinal de Giordano positivo).",
+        lab: "EAS: Aspecto turvo, odor fétido, pH 7,5, Nitrito POSITIVO, Esterase Leucocitária +++, Sangue ++. Sedimentoscopia: > 100 leucócitos/campo (piócitos agrupados), bacteriúria acentuada e presença de CILINDROS LEUCOCITÁRIOS.",
+        question: "Qual elemento do sedimento diferencia esta Pielonefrite Aguda (ITU Alta) de uma simples Cistite (ITU Baixa)?",
+        answer: "RESPOSTA: A presença de CILINDROS LEUCOCITÁRIOS! Como os cilindros se formam exclusivamente na luz dos túbulos renais (proteína de Tamm-Horsfall), encontrar leucócitos presos dentro de cilindros comprova que a infecção atingiu o parênquima renal."
+      },
+      {
+        badge: "CASO CLÍNICO 03 • EMERGÊNCIA EM LÍQUOR (LCR)",
+        patient: "Criança de 6 anos admitida com cefaleia intensa, vômitos em jato, rigidez de nuca e petéquias disseminadas.",
+        lab: "LCR (Punção Lombar): Aspecto purulento/leitoso; Citometria: 3.800 células/mm³ (94% Neutrófilos); Glicorraquia: 12 mg/dL (Glicemia: 95 mg/dL); Proteínas: 210 mg/dL; Lactato: 68 mg/dL.",
+        question: "Qual é o perfil liquórico observado e qual exame microbiológico imediato deve ser comunicado ao médico?",
+        answer: "RESPOSTA: Meningite Bacteriana Aguda (provável Meningococo - Neisseria meningitidis). Caracterizada por pleocitose neutrofílica maciça, hipoglicorraquia severa (consumo bacteriano), hiperproteinorraquia e lactato elevado. Realizar Bacterioscopia pelo Gram e Látex imediatamente (notificação crítica!)."
+      }
+    ];
+
+    /* ==========================================================================
+       STATE MANAGEMENT & RENDERING ENGINE
+       ========================================================================== */
+    let currentSlideIndex = 0;
+    let activeUrineColorIdx = 0;
+    let activeDipstickIdx = 0;
+    let activeCsfMode = "traumatic"; // 'traumatic' or 'hsa'
+    let activeCaseIdx = 0;
+    let caseRevealed = false;
+    let laserEnabled = false;
+
+    function renderSlide(index) {
+      const slide = slidesData[index];
+      const container = document.getElementById("slide-stage-content");
+      
+      // Trigger futuristic entrance animation
+      container.classList.remove("slide-enter");
+      void container.offsetWidth;
+      container.classList.add("slide-enter");
+
+      // Update Top HUD & Telemetry
+      const numStr = String(slide.id).padStart(2, "0");
+      document.getElementById("hud-counter").textContent = `${numStr} / 40`;
+      document.getElementById("internal-slide-num").textContent = `SLIDE ${numStr} // 40`;
+      document.getElementById("hud-module-badge").textContent = slide.module;
+      document.getElementById("hud-slide-title").textContent = `${numStr}. ${slide.title}`;
+      document.getElementById("hud-progress-bar").style.width = `${(slide.id / 40) * 100}%`;
+
+      // Hide top-right telemetry badge on Cover Slide so it matches template 100%
+      document.getElementById("slide-telemetry").style.display = slide.type === "cover" ? "none" : "flex";
+
+      let html = "";
+
+      // 1. COVER SLIDE (EXACT MATCH TO USER'S TEMPLATE + FUTURISTIC POLISH)
+      if (slide.type === "cover") {
+        html = `
+          <div class="w-full h-full flex flex-col items-center justify-center text-center relative px-8">
+            <!-- Subtle Futuristic Bio-Rings behind cover title -->
+            <div class="absolute w-[520px] h-[520px] rounded-full border border-emerald-500/10 pointer-events-none animate-pulse"></div>
+            <div class="absolute w-[680px] h-[680px] rounded-full border border-amber-400/15 pointer-events-none"></div>
+
+            <div class="stagger-item mb-3 inline-flex items-center gap-2 px-4 py-1 rounded-full bg-emerald-950/5 border border-emerald-800/20 text-emerald-900 text-xs font-hud tracking-widest uppercase" style="animation-delay: 0.05s;">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+              GRAU TÉCNICO • ANÁLISES CLÍNICAS
+            </div>
+
+            <h1 class="cover-title-text text-[54px] leading-tight mb-16 stagger-item" style="animation-delay: 0.12s;">
+              Urinálise e Fluídos Biológicos
+            </h1>
+
+            <div class="flex flex-col items-center gap-3 text-[29px] leading-snug text-[#0d3b14] stagger-item" style="animation-delay: 0.24s;">
+              <p><span class="font-bold">Turma:</span> <span class="font-normal">ANC06-N</span></p>
+              <p><span class="font-bold">Horário das Aulas:</span> <span class="font-normal">18h:30 às 22h:30</span></p>
+              <p><span class="font-bold">Dias da Semana:</span> <span class="font-normal">SEG/QUAR/SEX</span></p>
+            </div>
+
+            <div class="mt-12 flex items-center gap-4 text-xs font-semibold text-emerald-800/70 stagger-item" style="animation-delay: 0.36s;">
+              <span class="px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center gap-2">
+                <i class="fa-solid fa-keyboard text-emerald-600"></i> Use as Setas ◀ ▶ ou Espaço para navegar
+              </span>
+              <button onclick="nextSlide()" class="px-4 py-1.5 rounded-lg bg-[#113818] hover:bg-[#00B050] text-white font-bold flex items-center gap-2 shadow-md transition">
+                Iniciar Aula <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      }
+
+      // 2. CARDS GRID SLIDE
+      else if (slide.type === "cards-grid") {
+        html = `
+          ${renderSlideHeader(slide)}
+          ${slide.subtitle ? `<p class="text-slate-600 text-base -mt-2 mb-4 stagger-item" style="animation-delay:0.08s">${slide.subtitle}</p>` : ""}
+          <div class="grid grid-cols-2 gap-5 flex-1 items-stretch my-auto">
+            ${slide.cards.map((c, i) => `
+              <div class="holo-card p-6 flex flex-col justify-between stagger-item ${i % 2 === 1 ? 'gold-accent' : ''}" style="animation-delay: ${0.12 + i * 0.08}s">
+                <div>
+                  <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs font-hud font-bold tracking-wider px-2.5 py-1 rounded bg-emerald-900/10 text-emerald-800">${c.tag}</span>
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#113818] to-[#00B050] text-white flex items-center justify-center shadow-md">
+                      <i class="fa-solid ${c.icon} text-lg"></i>
+                    </div>
+                  </div>
+                  <h3 class="text-xl font-bold text-[#113818] mb-2">${c.title}</h3>
+                  <p class="text-[15.5px] text-slate-700 leading-relaxed">${c.desc}</p>
+                </div>
+                <div class="w-full h-1 bg-gradient-to-r from-emerald-500/30 via-amber-400/40 to-transparent rounded-full mt-4"></div>
+              </div>
+            `).join("")}
+          </div>
+        `;
+      }
+
+      // 3. SPLIT VISUAL (BULLETS + CUSTOM FUTURISTIC SVG DIAGRAM)
+      else if (slide.type === "split-visual") {
+        html = `
+          ${renderSlideHeader(slide)}
+          <div class="grid grid-cols-12 gap-7 flex-1 items-center my-auto">
+            <div class="col-span-7 flex flex-col gap-3.5">
+              ${slide.bullets.map((b, i) => `
+                <div class="holo-card p-4 flex items-start gap-4 stagger-item" style="animation-delay: ${0.1 + i * 0.08}s">
+                  <div class="w-10 h-10 rounded-xl bg-emerald-900 text-amber-400 flex items-center justify-center flex-shrink-0 mt-0.5 shadow">
+                    <i class="fa-solid ${b.icon} text-base"></i>
+                  </div>
+                  <div>
+                    <h4 class="text-[17px] font-bold text-[#113818] leading-snug">${b.title}</h4>
+                    <p class="text-[14.5px] text-slate-700 leading-relaxed mt-0.5">${b.text}</p>
+                  </div>
+                </div>
+              `).join("")}
+            </div>
+            <div class="col-span-5 h-[430px] holo-card scan-box p-4 flex flex-col items-center justify-center bg-gradient-to-b from-slate-50 to-emerald-50/40 stagger-item" style="animation-delay: 0.25s">
+              ${renderVisualDiagram(slide.visualType)}
+            </div>
+          </div>
+        `;
+      }
+
+      // 4. PROCESS + KPIs SLIDE
+      else if (slide.type === "process-kpis") {
+        html = `
+          ${renderSlideHeader(slide)}
+          <div class="flex flex-col justify-between flex-1 py-2">
+            <!-- 3 Process Steps -->
+            <div class="grid grid-cols-3 gap-5 items-stretch">
+              ${slide.steps.map((s, i) => `
+                <div class="holo-card p-5 flex flex-col justify-between relative stagger-item ${i === 1 ? 'gold-accent' : ''}" style="animation-delay: ${0.1 + i * 0.09}s">
+                  <div>
+                    <div class="flex items-center justify-between mb-2">
+                      <span class="text-xs font-hud font-bold text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded">${s.step}</span>
+                      <span class="text-xs font-bold text-amber-700 bg-amber-100 px-2.5 py-0.5 rounded-full">${s.metric}</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-[#113818] mb-2">${s.title}</h3>
+                    <p class="text-[15px] text-slate-700 leading-relaxed">${s.desc}</p>
+                  </div>
+                  <div class="mt-4 pt-2 border-t border-slate-200/80 flex items-center justify-between text-xs text-emerald-800 font-semibold">
+                    <span>FLUXO ANALÍTICO</span>
+                    <i class="fa-solid fa-circle-arrow-right text-emerald-600"></i>
+                  </div>
+                </div>
+              `).join("")}
+            </div>
+
+            <!-- 3 Big Futuristic Telemetry KPIs -->
+            <div class="grid grid-cols-3 gap-5 mt-4">
+              ${slide.kpis.map((k, i) => `
+                <div class="rounded-2xl p-5 text-center border stagger-item ${k.color === 'amber' ? 'bg-gradient-to-br from-amber-500/15 to-amber-500/5 border-amber-500/40' : 'bg-gradient-to-br from-[#113818] to-[#1e5227] text-white border-emerald-500/40 shadow-lg'}" style="animation-delay: ${0.32 + i * 0.08}s">
+                  <p class="font-hud text-3xl font-extrabold ${k.color === 'amber' ? 'text-amber-700' : 'text-[#FDB913]'} mb-1">${k.value}</p>
+                  <p class="text-xs font-semibold ${k.color === 'amber' ? 'text-slate-700' : 'text-emerald-100'}">${k.label}</p>
+                </div>
+              `).join("")}
+            </div>
+          </div>
+        `;
+      }
+
+      // 5. TABLE SLIDE
+      else if (slide.type === "table-slide") {
+        html = `
+          ${renderSlideHeader(slide)}
+          <div class="flex-1 flex items-center my-auto stagger-item" style="animation-delay: 0.12s">
+            <table class="futuristic-table">
+              <thead>
+                <tr>
+                  ${slide.headers.map(h => `<th>${h}</th>`).join("")}
+                </tr>
+              </thead>
+              <tbody>
+                ${slide.rows.map(row => `
+                  <tr>
+                    ${row.map(cell => `<td>${cell}</td>`).join("")}
+                  </tr>
+                `).join("")}
+              </tbody>
+            </table>
+          </div>
+        `;
+      }
+
+      // 6. SPLIT COLUMNS COMPARISON SLIDE
+      else if (slide.type === "split-columns") {
+        html = `
+          ${renderSlideHeader(slide)}
+          <div class="grid grid-cols-2 gap-6 flex-1 items-stretch my-auto">
+            <div class="holo-card ${slide.leftAccent} p-6 flex flex-col justify-between stagger-item" style="animation-delay: 0.12s">
+              <div>
+                <div class="flex items-center gap-3 mb-4 pb-3 border-b border-slate-200">
+                  <div class="w-10 h-10 rounded-xl bg-[#113818] text-white flex items-center justify-center">
+                    <i class="fa-solid ${slide.leftIcon}"></i>
+                  </div>
+                  <h3 class="text-xl font-bold text-[#113818]">${slide.leftTitle}</h3>
+                </div>
+                <ul class="space-y-3">
+                  ${slide.leftItems.map(item => `
+                    <li class="flex items-start gap-2.5 text-[15.5px] text-slate-700 leading-relaxed">
+                      <i class="fa-solid fa-caret-right text-emerald-600 mt-1.5"></i>
+                      <span>${item}</span>
+                    </li>
+                  `).join("")}
+                </ul>
+              </div>
+            </div>
+
+            <div class="holo-card ${slide.rightAccent} p-6 flex flex-col justify-between stagger-item" style="animation-delay: 0.22s">
+              <div>
+                <div class="flex items-center gap-3 mb-4 pb-3 border-b border-slate-200">
+                  <div class="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center">
+                    <i class="fa-solid ${slide.rightIcon}"></i>
+                  </div>
+                  <h3 class="text-xl font-bold text-[#113818]">${slide.rightTitle}</h3>
+                </div>
+                <ul class="space-y-3">
+                  ${slide.rightItems.map(item => `
+                    <li class="flex items-start gap-2.5 text-[15.5px] text-slate-700 leading-relaxed">
+                      <i class="fa-solid fa-caret-right text-amber-600 mt-1.5"></i>
+                      <span>${item}</span>
+                    </li>
+                  `).join("")}
+                </ul>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      // 7. INTERACTIVE URINE COLOR SIMULATOR (SLIDE 13)
+      else if (slide.type === "interactive-urine-colors") {
+        const current = urineColorSamples[activeUrineColorIdx];
+        html = `
+          ${renderSlideHeader(slide)}
+          <div class="grid grid-cols-12 gap-6 flex-1 items-center my-auto">
+            <!-- Tube Rack Selector -->
+            <div class="col-span-6 holo-card p-5 flex flex-col justify-between h-[430px]">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-hud font-bold text-emerald-800">ESTANTE DE TUBOS CÔNICOS • CLIQUE EM UMA COR</span>
+                <span class="text-xs px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-semibold">Simulador Óptico</span>
+              </div>
+              <div class="grid grid-cols-6 gap-3 my-auto pt-3">
+                ${urineColorSamples.map((s, idx) => `
+                  <button onclick="selectUrineColor(${idx})" class="flex flex-col items-center group focus:outline-none">
+                    <div class="w-12 h-44 rounded-b-full rounded-t-md border-2 transition-all duration-300 relative overflow-hidden p-1 flex flex-col justify-end ${idx === activeUrineColorIdx ? 'border-emerald-600 scale-105 shadow-lg ring-4 ring-emerald-500/20' : 'border-slate-300 opacity-80 hover:opacity-100'} bg-white">
+                      <!-- Tube cap -->
+                      <div class="absolute top-0 left-0 right-0 h-3 bg-emerald-800"></div>
+                      <!-- Liquid fill -->
+                      <div class="w-full h-36 rounded-b-full transition-all" style="background: ${s.hex};"></div>
+                    </div>
+                    <span class="text-[11px] font-bold text-center mt-2 leading-tight ${idx === activeUrineColorIdx ? 'text-emerald-800' : 'text-slate-500'}">${s.name}</span>
+                  </button>
+                `).join("")}
+              </div>
+              <p class="text-xs text-slate-500 text-center">Observe a relação entre pigmento, turvação e espuma ao agitar a amostra.</p>
+            </div>
+
+            <!-- Diagnostic Telemetry Panel -->
+            <div class="col-span-6 holo-card gold-accent p-6 h-[430px] flex flex-col justify-between bg-gradient-to-br from-white to-emerald-50/40">
+              <div>
+                <div class="flex items-center justify-between mb-4">
+                  <span class="px-3 py-1 rounded-full bg-[#113818] text-amber-400 font-hud text-xs font-bold">AMOSTRA SELECIONADA</span>
+                  <span class="text-sm font-bold text-slate-600">Aspecto: <b class="text-emerald-800">${current.aspect}</b></span>
+                </div>
+                <div class="flex items-center gap-4 mb-5">
+                  <div class="w-14 h-14 rounded-2xl border-2 border-slate-300 shadow-inner flex-shrink-0" style="background: ${current.hex};"></div>
+                  <div>
+                    <h3 class="text-2xl font-extrabold text-[#113818]">${current.name}</h3>
+                    <p class="text-sm font-semibold text-emerald-700">Pigmento Dominante: ${current.pigment}</p>
+                  </div>
+                </div>
+                <div class="p-4 rounded-xl bg-white border border-slate-200 shadow-sm mb-4">
+                  <h4 class="text-xs font-hud uppercase text-slate-500 mb-1">Correlação Fisiopatológica e Clínica</h4>
+                  <p class="text-[15.5px] text-slate-800 leading-relaxed">${current.clinical}</p>
+                </div>
+              </div>
+              <div class="p-3.5 rounded-xl bg-emerald-900 text-white flex items-center gap-3">
+                <i class="fa-solid fa-user-doctor text-amber-400 text-xl"></i>
+                <div class="text-xs leading-snug">
+                  <b class="text-amber-300 uppercase block">Conduta Técnica na Bancada:</b>
+                  ${current.action}
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      // 8. INTERACTIVE DIPSTICK INSPECTOR (SLIDE 15)
+      else if (slide.type === "interactive-dipstick") {
+        const pad = dipstickPads[activeDipstickIdx];
+        html = `
+          ${renderSlideHeader(slide)}
+          <div class="flex flex-col justify-between flex-1 my-auto gap-4">
+            <!-- Interactive Reagent Strip Visual -->
+            <div class="holo-card p-4 bg-slate-900 text-white">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-hud text-emerald-400">TIRA REATIVA DE 10 PARÂMETROS • CLIQUE EM CADA ÁREA REATIVA</span>
+                <span class="text-xs text-amber-300"><i class="fa-solid fa-stopwatch mr-1"></i>Leitura entre 30s e 120s</span>
+              </div>
+              <div class="w-full bg-slate-100 rounded-lg p-2.5 flex items-center justify-between gap-2 border-2 border-slate-300 shadow-inner">
+                ${dipstickPads.map((p, idx) => `
+                  <button onclick="selectDipstickPad(${idx})" class="flex-1 py-3 px-1 rounded-md transition-all flex flex-col items-center gap-1.5 ${idx === activeDipstickIdx ? 'ring-4 ring-emerald-500 scale-105 bg-white shadow-lg' : 'hover:bg-white/70'}">
+                    <span class="w-full h-7 rounded shadow-sm border border-black/15" style="background:${p.color}"></span>
+                    <span class="text-[11px] font-extrabold text-slate-800 truncate w-full text-center">${p.name}</span>
+                    <span class="text-[10px] font-hud text-slate-500">${p.time}</span>
+                  </button>
+                `).join("")}
+              </div>
+            </div>
+
+            <!-- Selected Pad Details + Good Practices -->
+            <div class="grid grid-cols-12 gap-5 flex-1 items-stretch">
+              <div class="col-span-7 holo-card p-5 flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center gap-3">
+                      <span class="w-6 h-6 rounded border border-black/20 inline-block" style="background:${pad.color}"></span>
+                      <h3 class="text-2xl font-bold text-[#113818]">Almofada: ${pad.name}</h3>
+                    </div>
+                    <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-900 font-hud text-xs font-bold">Tempo: ${pad.time}</span>
+                  </div>
+                  <p class="text-sm font-semibold text-slate-600 mb-3">Valor de Referência: <span class="text-emerald-700 font-bold">${pad.ref}</span></p>
+                  <div class="p-3.5 rounded-xl bg-white border border-slate-200 mb-3">
+                    <p class="text-xs font-hud text-slate-400 uppercase">Princípio da Reação Bioquímica</p>
+                    <p class="text-[15px] font-medium text-slate-800 mt-0.5">${pad.principle}</p>
+                  </div>
+                </div>
+                <div class="p-3 rounded-xl bg-amber-50 border border-amber-300 text-xs text-amber-950">
+                  <b><i class="fa-solid fa-circle-info mr-1"></i>Significado e Interferentes:</b> ${pad.alert}
+                </div>
+              </div>
+
+              <div class="col-span-5 holo-card gold-accent p-5 flex flex-col justify-between">
+                <h4 class="text-base font-bold text-[#113818] flex items-center gap-2">
+                  <i class="fa-solid fa-list-check text-emerald-600"></i> Técnica Correta de Imersão
+                </h4>
+                <ul class="space-y-2.5 text-sm text-slate-700">
+                  <li><b>1. Urina Homogeneizada:</b> Testar a amostra <u>antes</u> de centrifugar e em temperatura ambiente.</li>
+                  <li><b>2. Imersão Breve (1 seg):</b> Mergulhar rapidamente todas as zonas reativas sem deixar reagentes vazarem.</li>
+                  <li><b>3. Eliminar o Excesso:</b> Passar a borda lateral da tira em papel absorvente para evitar <i>run-over</i> (mistura entre almofadas).</li>
+                  <li><b>4. Conservação do Frasco:</b> Manter fechado com sílica dessecante ao abrigo da luz e umidade.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      // 9. INTERACTIVE CSF 3-TUBE SIMULATOR (SLIDE 31)
+      else if (slide.type === "interactive-csf-tubes") {
+        const isTrauma = activeCsfMode === "traumatic";
+        html = `
+          ${renderSlideHeader(slide)}
+          <div class="grid grid-cols-12 gap-6 flex-1 items-center my-auto">
+            <div class="col-span-6 holo-card p-6 h-[430px] flex flex-col justify-between">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-hud font-bold text-emerald-800">ALTERNE O CENÁRIO CLÍNICO ABAIXO:</span>
+                <div class="flex gap-2">
+                  <button onclick="setCsfMode('traumatic')" class="px-3 py-1 rounded-lg text-xs font-bold transition ${isTrauma ? 'bg-[#113818] text-white shadow' : 'bg-slate-200 text-slate-700'}">Acidente de Punção</button>
+                  <button onclick="setCsfMode('hsa')" class="px-3 py-1 rounded-lg text-xs font-bold transition ${!isTrauma ? 'bg-rose-700 text-white shadow' : 'bg-slate-200 text-slate-700'}">Hemorragia Subaracnóidea</button>
+                </div>
+              </div>
+
+              <!-- 3 CSF Tubes Visual -->
+              <div class="grid grid-cols-3 gap-4 my-auto py-2">
+                <div class="flex flex-col items-center">
+                  <span class="text-xs font-hud font-bold text-slate-700 mb-1">TUBO 01</span>
+                  <div class="w-14 h-36 rounded-b-full border-2 border-slate-300 p-1 flex items-end bg-white shadow-inner">
+                    <div class="w-full h-28 rounded-b-full transition-all duration-500" style="background: ${isTrauma ? '#dc2626' : '#dc2626'}"></div>
+                  </div>
+                  <span class="text-xs font-bold text-[#113818] mt-2">Bioquímica / Sorol.</span>
+                </div>
+                <div class="flex flex-col items-center">
+                  <span class="text-xs font-hud font-bold text-slate-700 mb-1">TUBO 02</span>
+                  <div class="w-14 h-36 rounded-b-full border-2 border-slate-300 p-1 flex items-end bg-white shadow-inner">
+                    <div class="w-full h-28 rounded-b-full transition-all duration-500" style="background: ${isTrauma ? '#fca5a5' : '#dc2626'}"></div>
+                  </div>
+                  <span class="text-xs font-bold text-[#113818] mt-2">Microbiologia</span>
+                </div>
+                <div class="flex flex-col items-center">
+                  <span class="text-xs font-hud font-bold text-slate-700 mb-1">TUBO 03</span>
+                  <div class="w-14 h-36 rounded-b-full border-2 border-slate-300 p-1 flex items-end bg-white shadow-inner">
+                    <div class="w-full h-28 rounded-b-full transition-all duration-500" style="background: ${isTrauma ? '#f8fafc' : '#dc2626'}"></div>
+                  </div>
+                  <span class="text-xs font-bold text-[#113818] mt-2">Citometria (Células)</span>
+                </div>
+              </div>
+
+              <p class="text-xs text-center text-slate-600 bg-slate-100 py-2 rounded-lg">
+                ${isTrauma ? "No Acidente de Punção, o sangue clareia progressivamente do 1º para o 3º tubo!" : "Na Hemorragia Subaracnóidea (HSA), todos os 3 tubos permanecem igualmente hemorrágicos!"}
+              </p>
+            </div>
+
+            <div class="col-span-6 holo-card ${isTrauma ? '' : 'red-accent'} p-6 h-[430px] flex flex-col justify-between">
+              <div>
+                <span class="text-xs font-hud font-bold px-3 py-1 rounded-full ${isTrauma ? 'bg-emerald-100 text-emerald-900' : 'bg-rose-100 text-rose-900'}">
+                  ${isTrauma ? "PUNÇÃO TRAUMÁTICA (LESÃO DE VASO NA AGULHA)" : "HEMORRAGIA SUBARACNÓIDEA (SANGRAMENTO NO SNC)"}
+                </span>
+                <h3 class="text-2xl font-bold text-[#113818] mt-3 mb-4">Diferenciação Laboratorial Crítica</h3>
+                <ul class="space-y-3 text-[15px] text-slate-700">
+                  <li><b>1. Prova dos 3 Tubos:</b> ${isTrauma ? "Clareamento visível nos tubos sequenciais (Tubo 1 > Tubo 2 > Tubo 3)." : "Aspecto hemorrágico homogêneo nos 3 tubos coletados."}</li>
+                  <li><b>2. Sobrenadante Pós-Centrifugação:</b> ${isTrauma ? "<b>Límpido e Incolor</b> (as hemácias ainda estão íntegras, sem hemólise prévia)." : "<b>Xantocrômico</b> (rosado/amarelado devido à lise de hemácias e formação de bilirrubina in vivo após 2h)."}</li>
+                  <li><b>3. Formação de Coágulo:</b> ${isTrauma ? "<b>Presente</b> (sangue periférico traz fibrinogênio plasmático)." : "<b>Ausente</b> (o sangue intraparenquimatoso sofre desfibrinação)."}</li>
+                  <li><b>4. Macrófagos no Sedimento:</b> ${isTrauma ? "Ausência de eritrofagocitose." : "Presença de macrófagos com hemácias fagocitadas (eritrofagocitose) e cristais de hemossiderina."}</li>
+                </ul>
+              </div>
+              <div class="p-3 rounded-xl bg-[#113818] text-white text-xs">
+                <b class="text-amber-400">Ordem dos Tubos:</b> O Tubo 3 é destinado à Citometria porque tem o menor risco de conter sangue periférico acidental, e o Tubo 2 vai para a Microbiologia para evitar contaminação de pele do Tubo 1.
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      // 10. INTERACTIVE CLINICAL CASES & AUTOMATION (SLIDE 39)
+      else if (slide.type === "interactive-cases") {
+        const c = clinicalCases[activeCaseIdx];
+        html = `
+          ${renderSlideHeader(slide)}
+          <div class="grid grid-cols-12 gap-6 flex-1 items-stretch my-auto">
+            <!-- Left: Automation Summary -->
+            <div class="col-span-4 holo-card p-5 flex flex-col justify-between">
+              <div>
+                <span class="text-xs font-hud font-bold text-emerald-700">TECNOLOGIA ATUAL</span>
+                <h3 class="text-xl font-bold text-[#113818] mt-1 mb-3">Automação em Urinálise</h3>
+                <ul class="space-y-3 text-sm text-slate-700">
+                  <li><i class="fa-solid fa-wave-square text-emerald-600 mr-1.5"></i><b>Fotometria de Refletância:</b> Leitores ópticos de LED que eliminam a subjetividade da leitura visual da tira.</li>
+                  <li><i class="fa-solid fa-laserPointer text-emerald-600 mr-1.5"></i><b>Citometria de Fluxo Fluorescente (Sysmex UF):</b> Classifica bactérias, hemácias, leucócitos e cilindros por laser sem centrifugar.</li>
+                  <li><i class="fa-solid fa-camera text-emerald-600 mr-1.5"></i><b>Microscopia Digital com IA (Iris / Cobas u701):</b> Captura fotos reais do sedimento para validação do analista clínico.</li>
+                </ul>
+              </div>
+              <div class="p-3 rounded-lg bg-emerald-50 border border-emerald-200 text-xs text-emerald-900">
+                <b>Nota:</b> Cristais patológicos, dismorfismo eritrocitário e líquidos cavitários ainda exigem revisão microscópica humana!
+              </div>
+            </div>
+
+            <!-- Right: Interactive Case Study Quiz -->
+            <div class="col-span-8 holo-card gold-accent p-6 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between mb-4">
+                  <span class="px-3 py-1 rounded-full bg-[#113818] text-amber-400 font-hud text-xs font-bold">${c.badge}</span>
+                  <div class="flex gap-2">
+                    ${clinicalCases.map((_, idx) => `
+                      <button onclick="selectCase(${idx})" class="px-3 py-1 rounded-lg text-xs font-bold transition ${idx === activeCaseIdx ? 'bg-emerald-600 text-white shadow' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'}">
+                        Caso 0${idx + 1}
+                      </button>
+                    `).join("")}
+                  </div>
+                </div>
+
+                <div class="p-3.5 rounded-xl bg-white border border-slate-200 mb-3">
+                  <p class="text-xs font-hud text-slate-400 uppercase">Histórico Clínico do Paciente</p>
+                  <p class="text-[15px] font-semibold text-slate-800 mt-0.5">${c.patient}</p>
+                </div>
+
+                <div class="p-3.5 rounded-xl bg-emerald-950/5 border border-emerald-900/20 mb-4">
+                  <p class="text-xs font-hud text-emerald-800 uppercase">Laudo Preliminar da Bancada</p>
+                  <p class="text-[14.5px] text-slate-800 mt-0.5">${c.lab}</p>
+                </div>
+
+                <p class="text-base font-bold text-[#113818] mb-3"><i class="fa-solid fa-circle-question text-amber-500 mr-1.5"></i>${c.question}</p>
+              </div>
+
+              <div>
+                ${caseRevealed ? `
+                  <div class="p-4 rounded-xl bg-[#113818] text-white text-sm leading-relaxed animate-fadeIn">
+                    <span class="text-amber-400 font-bold block mb-1"><i class="fa-solid fa-check-Double mr-1"></i>RESOLUÇÃO COMENTADA:</span>
+                    ${c.answer}
+                  </div>
+                ` : `
+                  <button onclick="revealCaseAnswer()" class="w-full py-3 rounded-xl bg-gradient-to-r from-[#113818] to-[#00B050] hover:opacity-95 text-white font-bold text-sm shadow-lg flex items-center justify-center gap-2 transition">
+                    <i class="fa-solid fa-eye"></i> Revelar Diagnóstico e Conduta Laboratorial
+                  </button>
+                `}
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      // 11. CLOSING & QUALITY CONTROL SLIDE (SLIDE 40)
+      else if (slide.type === "closing-slide") {
+        html = `
+          ${renderSlideHeader(slide)}
+          <div class="grid grid-cols-12 gap-6 flex-1 items-center my-auto">
+            <div class="col-span-7 flex flex-col gap-4">
+              <div class="holo-card p-5">
+                <h3 class="text-lg font-bold text-[#113818] mb-2"><i class="fa-solid fa-award text-emerald-600 mr-2"></i>Controle Interno (CIQ) e Externo (CEQ)</h3>
+                <p class="text-sm text-slate-700 leading-relaxed">
+                  Testar diariamente amostras controle comerciais de <b>Nível 1 (Normal)</b> e <b>Nível 2 (Patológico)</b> antes de liberar a rotina de tiras reativas e equipamentos, além da participação em ensaios de proficiência (PNCQ / ControlLab).
+                </p>
+              </div>
+              <div class="holo-card gold-accent p-5">
+                <h3 class="text-lg font-bold text-[#113818] mb-2"><i class="fa-solid fa-biohazard text-amber-600 mr-2"></i>Biossegurança Laboratorial (NR-32 / RDC 786)</h3>
+                <p class="text-sm text-slate-700 leading-relaxed">
+                  Uso obrigatório de EPIs (jaleco impermeável, luvas, óculos), centrifugação exclusiva com tubos tampados (prevenção de aerossóis) e descarte adequado de resíduos biológicos (Grupo A) e químicos (Grupo B).
+                </p>
+              </div>
+            </div>
+
+            <div class="col-span-5 holo-card p-7 h-full flex flex-col items-center justify-center text-center bg-gradient-to-br from-[#113818] to-[#1d5426] text-white">
+              <div class="w-16 h-16 rounded-2xl bg-amber-400 text-slate-950 flex items-center justify-center text-3xl mb-4 shadow-xl">
+                <i class="fa-solid fa-graduation-cap"></i>
+              </div>
+              <span class="text-xs font-hud tracking-widest text-emerald-300 uppercase">FIM DA APRESENTAÇÃO • 40 SLIDES</span>
+              <h3 class="text-3xl font-bold font-serif text-white mt-2 mb-3">Excelente Aula e Bons Estudos!</h3>
+              <p class="text-sm text-emerald-100 mb-5">
+                <b>Turma:</b> ANC06-N<br/>
+                <b>Horário:</b> 18h:30 às 22h:30 (SEG/QUAR/SEX)
+              </p>
+              <button onclick="goToSlide(0)" class="px-5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-xs font-hud tracking-wider transition shadow-lg">
+                <i class="fa-solid fa-rotate-left mr-1"></i> VOLTAR PARA A CAPA
+              </button>
+            </div>
+          </div>
+        `;
+      }
+
+      container.innerHTML = html;
+    }
+
+    function renderSlideHeader(slide) {
+      return `
+        <div class="mb-4 pb-2 border-b border-emerald-900/10 flex items-end justify-between stagger-item" style="animation-delay: 0.04s">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <span class="w-2 h-2 rounded-full bg-[#00B050]"></span>
+              <p class="text-xs font-hud font-bold tracking-wider text-[#00B050] uppercase">${slide.eyebrow}</p>
+            </div>
+            <h2 class="slide-heading-serif text-[32px] leading-tight">${slide.title}</h2>
+          </div>
+        </div>
+      `;
+    }
+
+    /* ==========================================================================
+       CUSTOM FUTURISTIC MEDICAL SVG DIAGRAMS
+       ========================================================================== */
+    function renderVisualDiagram(type) {
+      if (type === "timeline-uroscopia") {
+        return `
+          <div class="w-full h-full flex flex-col justify-between p-2 text-center">
+            <span class="text-xs font-hud font-bold text-emerald-800">LINHA DO TEMPO • EVOLUÇÃO DIAGNÓSTICA</span>
+            <div class="space-y-3 my-auto text-left">
+              <div class="p-3 rounded-xl bg-white border-l-4 border-amber-500 shadow-sm">
+                <span class="text-xs font-hud text-amber-700 font-bold">ANTIGUIDADE & IDADE MÉDIA</span>
+                <p class="text-xs text-slate-700 mt-0.5">Matula (frasco de vidro) e Roda de Cores da Uroscopia: inspeção visual empírica.</p>
+              </div>
+              <div class="p-3 rounded-xl bg-white border-l-4 border-emerald-600 shadow-sm">
+                <span class="text-xs font-hud text-emerald-700 font-bold">SÉCULO XIX (RICHARD BRIGHT)</span>
+                <p class="text-xs text-slate-700 mt-0.5">Descoberta da albuminúria fervendo urina em colher e introdução do microscópio.</p>
+              </div>
+              <div class="p-3 rounded-xl bg-white border-l-4 border-[#113818] shadow-sm">
+                <span class="text-xs font-hud text-[#113818] font-bold">ERA FUTURISTA ATUAL</span>
+                <p class="text-xs text-slate-700 mt-0.5">Tiras reativas multiparamétricas, citometria a laser e inteligência artificial.</p>
+              </div>
+            </div>
+            <span class="text-[11px] font-semibold text-emerald-800">Urinálise = Exame mais solicitado do laboratório</span>
+          </div>
+        `;
+      }
+      if (type === "svg-urinary-system") {
+        return `
+          <svg viewBox="0 0 280 320" class="w-full h-full">
+            <!-- Kidneys -->
+            <path d="M75,65 C45,60 40,125 75,130 C95,132 95,110 88,97 C95,85 95,68 75,65 Z" fill="#991b1b" stroke="#113818" stroke-width="3"/>
+            <path d="M205,65 C235,60 240,125 205,130 C185,132 185,110 192,97 C185,85 185,68 205,65 Z" fill="#991b1b" stroke="#113818" stroke-width="3"/>
+            <!-- Aorta & Vena Cava -->
+            <line x1="133" y1="25" x2="133" y2="160" stroke="#dc2626" stroke-width="7" stroke-linecap="round"/>
+            <line x1="147" y1="25" x2="147" y2="160" stroke="#2563eb" stroke-width="7" stroke-linecap="round"/>
+            <!-- Ureters -->
+            <path d="M88,105 Q105,175 122,235" fill="none" stroke="#FDB913" stroke-width="4"/>
+            <path d="M192,105 Q175,175 158,235" fill="none" stroke="#FDB913" stroke-width="4"/>
+            <!-- Bladder -->
+            <ellipse cx="140" cy="248" rx="34" ry="26" fill="#fef08a" stroke="#113818" stroke-width="3"/>
+            <!-- Urethra -->
+            <line x1="140" y1="274" x2="140" y2="305" stroke="#113818" stroke-width="5" stroke-linecap="round"/>
+            <!-- Labels -->
+            <text x="65" y="52" font-size="11" font-weight="bold" fill="#113818" text-anchor="middle">Rim Direito</text>
+            <text x="215" y="52" font-size="11" font-weight="bold" fill="#113818" text-anchor="middle">Rim Esquerdo</text>
+            <text x="68" y="185" font-size="11" font-weight="bold" fill="#b45309">Ureteres</text>
+            <text x="140" y="252" font-size="11" font-weight="bold" fill="#113818" text-anchor="middle">Bexiga</text>
+            <text x="175" y="298" font-size="11" font-weight="bold" fill="#00B050">Uretra</text>
+          </svg>
+        `;
+      }
+      if (type === "svg-nephron") {
+        return `
+          <svg viewBox="0 0 300 320" class="w-full h-full">
+            <!-- Glomerulus & Bowman -->
+            <circle cx="65" cy="75" r="28" fill="#dcfce7" stroke="#113818" stroke-width="3"/>
+            <circle cx="65" cy="75" r="16" fill="#ef4444" opacity="0.85"/>
+            <!-- PCT -->
+            <path d="M93,75 Q125,45 145,75 T185,75" fill="none" stroke="#00B050" stroke-width="8" stroke-linecap="round"/>
+            <!-- Loop of Henle -->
+            <path d="M185,75 L185,245 Q185,275 160,275 Q135,275 135,245 L135,95" fill="none" stroke="#FDB913" stroke-width="6"/>
+            <!-- DCT & Collecting Duct -->
+            <path d="M135,95 Q175,55 235,85 L235,290" fill="none" stroke="#346739" stroke-width="9" stroke-linecap="round"/>
+            <!-- Labels -->
+            <text x="65" y="35" font-size="11" font-weight="bold" fill="#113818" text-anchor="middle">Glomérulo + Bowman</text>
+            <text x="145" y="48" font-size="11" font-weight="bold" fill="#00B050" text-anchor="middle">TCP (65% Reabs.)</text>
+            <text x="115" y="295" font-size="11" font-weight="bold" fill="#b45309">Alça de Henle</text>
+            <text x="235" y="308" font-size="11" font-weight="bold" fill="#113818" text-anchor="middle">Ducto Coletor</text>
+          </svg>
+        `;
+      }
+      if (type === "composition-chart") {
+        return `
+          <div class="w-full h-full flex flex-col justify-between p-2">
+            <span class="text-xs font-hud font-bold text-emerald-800 text-center">FRAÇÕES BIOQUÍMICAS DA URINA</span>
+            <div class="my-auto space-y-4">
+              <div>
+                <div class="flex justify-between text-xs font-bold mb-1">
+                  <span class="text-[#113818]">Água (H₂O Ultrafiltrada)</span>
+                  <span class="text-emerald-700 font-hud">95%</span>
+                </div>
+                <div class="w-full h-5 bg-slate-200 rounded-full overflow-hidden">
+                  <div class="h-full bg-gradient-to-r from-[#113818] to-[#00B050]" style="width:95%"></div>
+                </div>
+              </div>
+              <div>
+                <div class="flex justify-between text-xs font-bold mb-1">
+                  <span class="text-amber-800">Solutos Totais (Orgânicos + Inorgânicos)</span>
+                  <span class="text-amber-700 font-hud">5%</span>
+                </div>
+                <div class="w-full h-5 bg-slate-200 rounded-full overflow-hidden">
+                  <div class="h-full bg-[#FDB913]" style="width:18%"></div>
+                </div>
+              </div>
+              <div class="p-3.5 rounded-xl bg-white border border-slate-200 space-y-2 text-xs">
+                <p class="font-bold text-[#113818] border-b pb-1">Principais Solutos em 24 Horas:</p>
+                <div class="flex justify-between"><span>• Ureia:</span><b>25 a 35 g/dia</b></div>
+                <div class="flex justify-between"><span>• Cloreto de Sódio (NaCl):</span><b>10 a 15 g/dia</b></div>
+                <div class="flex justify-between"><span>• Creatinina:</span><b>1,0 a 1,8 g/dia</b></div>
+                <div class="flex justify-between"><span>• Ácido Úrico:</span><b>0,4 a 0,8 g/dia</b></div>
+              </div>
+            </div>
+            <span class="text-[11px] text-center text-slate-500">Crescimento bacteriano altera rapidamente estes solutos.</span>
+          </div>
+        `;
+      }
+      if (type === "svg-rbc-dysmorphic") {
+        return `
+          <svg viewBox="0 0 280 300" class="w-full h-full">
+            <text x="140" y="24" font-size="12" font-weight="bold" fill="#113818" text-anchor="middle">CAMPO MICROSCÓPICO (400x)</text>
+            <circle cx="140" cy="155" r="112" fill="#f8fafc" stroke="#113818" stroke-width="4"/>
+            <!-- Isomorphic RBC -->
+            <circle cx="90" cy="110" r="18" fill="#fca5a5" stroke="#dc2626" stroke-width="3"/>
+            <circle cx="90" cy="110" r="8" fill="#fef2f2" stroke="#dc2626" stroke-width="1.5"/>
+            <text x="90" y="145" font-size="10" font-weight="bold" fill="#991b1b" text-anchor="middle">Hemácia Isomórfica</text>
+            <!-- Dysmorphic RBC (Acanthocyte) -->
+            <circle cx="190" cy="110" r="16" fill="none" stroke="#dc2626" stroke-width="4"/>
+            <circle cx="174" cy="96" r="5" fill="#dc2626"/>
+            <circle cx="206" cy="98" r="5" fill="#dc2626"/>
+            <circle cx="192" cy="128" r="5" fill="#dc2626"/>
+            <text x="190" y="145" font-size="10" font-weight="bold" fill="#991b1b" text-anchor="middle">Acantócito (Glomerular)</text>
+            <!-- Leukocyte (Piocyte) -->
+            <circle cx="140" cy="200" r="24" fill="#dcfce7" stroke="#113818" stroke-width="2.5"/>
+            <circle cx="134" cy="196" r="6" fill="#113818"/>
+            <circle cx="146" cy="198" r="6" fill="#113818"/>
+            <circle cx="139" cy="207" r="6" fill="#113818"/>
+            <text x="140" y="240" font-size="10" font-weight="bold" fill="#113818" text-anchor="middle">Leucócito Neutrófilo (Piócito)</text>
+          </svg>
+        `;
+      }
+      if (type === "svg-casts-formation") {
+        return `
+          <svg viewBox="0 0 280 300" class="w-full h-full">
+            <text x="140" y="24" font-size="11" font-weight="bold" fill="#113818" text-anchor="middle">MOLDES DE TAMM-HORSFALL</text>
+            <!-- Hyaline Cast -->
+            <rect x="35" y="45" width="210" height="44" rx="22" fill="#f1f5f9" stroke="#64748b" stroke-width="2" stroke-dasharray="5,3"/>
+            <text x="140" y="72" font-size="12" font-weight="bold" fill="#475569" text-anchor="middle">Cilindro Hialino (Transparente)</text>
+            <!-- Cellular Cast -->
+            <rect x="35" y="115" width="210" height="48" rx="24" fill="#fee2e2" stroke="#dc2626" stroke-width="2.5"/>
+            <circle cx="70" cy="139" r="11" fill="#dc2626"/><circle cx="105" cy="139" r="11" fill="#dc2626"/>
+            <circle cx="140" cy="139" r="11" fill="#dc2626"/><circle cx="175" cy="139" r="11" fill="#dc2626"/>
+            <text x="140" y="180" font-size="11" font-weight="bold" fill="#991b1b" text-anchor="middle">Cilindro Hemático (Glomerulonefrite)</text>
+            <!-- Waxy Cast -->
+            <rect x="35" y="205" width="210" height="52" rx="8" fill="#fef08a" stroke="#b45309" stroke-width="3"/>
+            <line x1="95" y1="205" x2="105" y2="225" stroke="#b45309" stroke-width="2.5"/>
+            <line x1="175" y1="257" x2="165" y2="235" stroke="#b45309" stroke-width="2.5"/>
+            <text x="140" y="236" font-size="12" font-weight="bold" fill="#78350f" text-anchor="middle">Cilindro Céreo (IRC Avançada)</text>
+          </svg>
+        `;
+      }
+      if (type === "svg-acid-crystals") {
+        return `
+          <svg viewBox="0 0 280 300" class="w-full h-full">
+            <text x="140" y="24" font-size="11" font-weight="bold" fill="#113818" text-anchor="middle">CRISTAIS DE URINA ÁCIDA</text>
+            <!-- Calcium Oxalate Dihydrate (Envelope) -->
+            <rect x="45" y="55" width="75" height="75" fill="#e2e8f0" stroke="#113818" stroke-width="2.5"/>
+            <line x1="45" y1="55" x2="120" y2="130" stroke="#113818" stroke-width="2"/>
+            <line x1="120" y1="55" x2="45" y2="130" stroke="#113818" stroke-width="2"/>
+            <text x="82" y="150" font-size="11" font-weight="bold" fill="#113818" text-anchor="middle">Oxalato de Cálcio</text>
+            <!-- Uric Acid (Diamond/Rhombus) -->
+            <polygon points="195,50 245,92 195,134 145,92" fill="#FDB913" stroke="#92400e" stroke-width="2.5"/>
+            <text x="195" y="150" font-size="11" font-weight="bold" fill="#92400e" text-anchor="middle">Ácido Úrico</text>
+            <!-- Cystine Hexagon -->
+            <polygon points="140,175 180,198 180,242 140,265 100,242 100,198" fill="#f8fafc" stroke="#00B050" stroke-width="3"/>
+            <text x="140" y="286" font-size="11" font-weight="bold" fill="#00B050" text-anchor="middle">Cistina Hexagonal (Patológico)</text>
+          </svg>
+        `;
+      }
+      if (type === "svg-alkaline-crystals") {
+        return `
+          <svg viewBox="0 0 280 300" class="w-full h-full">
+            <text x="140" y="24" font-size="11" font-weight="bold" fill="#113818" text-anchor="middle">CRISTAIS DE URINA ALCALINA</text>
+            <!-- Triple Phosphate (Coffin Lid) -->
+            <rect x="45" y="55" width="190" height="85" fill="#f1f5f9" stroke="#113818" stroke-width="2.5"/>
+            <rect x="75" y="75" width="130" height="45" fill="#e2e8f0" stroke="#113818" stroke-width="2"/>
+            <line x1="45" y1="55" x2="75" y2="75" stroke="#113818" stroke-width="2"/>
+            <line x1="235" y1="55" x2="205" y2="75" stroke="#113818" stroke-width="2"/>
+            <line x1="45" y1="140" x2="75" y2="120" stroke="#113818" stroke-width="2"/>
+            <line x1="235" y1="140" x2="205" y2="120" stroke="#113818" stroke-width="2"/>
+            <text x="140" y="162" font-size="11" font-weight="bold" fill="#113818" text-anchor="middle">Fosfato Triplo ("Tampa de Caixão")</text>
+            <!-- Ammonium Biurate -->
+            <circle cx="140" cy="225" r="28" fill="#d97706" stroke="#78350f" stroke-width="2.5"/>
+            <line x1="140" y1="185" x2="140" y2="265" stroke="#78350f" stroke-width="3"/>
+            <line x1="100" y1="225" x2="180" y2="225" stroke="#78350f" stroke-width="3"/>
+            <line x1="112" y1="197" x2="168" y2="253" stroke="#78350f" stroke-width="3"/>
+            <line x1="168" y1="197" x2="112" y2="253" stroke="#78350f" stroke-width="3"/>
+            <text x="140" y="284" font-size="11" font-weight="bold" fill="#92400e" text-anchor="middle">Biurato de Amônio</text>
+          </svg>
+        `;
+      }
+      return "";
+    }
+
+    /* ==========================================================================
+       INTERACTIVE HANDLERS & NAVIGATION CONTROLS
+       ========================================================================== */
+    function selectUrineColor(idx) {
+      activeUrineColorIdx = idx;
+      renderSlide(currentSlideIndex);
+    }
+
+    function selectDipstickPad(idx) {
+      activeDipstickIdx = idx;
+      renderSlide(currentSlideIndex);
+    }
+
+    function setCsfMode(mode) {
+      activeCsfMode = mode;
+      renderSlide(currentSlideIndex);
+    }
+
+    function selectCase(idx) {
+      activeCaseIdx = idx;
+      caseRevealed = false;
+      renderSlide(currentSlideIndex);
+    }
+
+    function revealCaseAnswer() {
+      caseRevealed = true;
+      renderSlide(currentSlideIndex);
+    }
+
+    function nextSlide() {
+      if (currentSlideIndex < slidesData.length - 1) {
+        currentSlideIndex++;
+        renderSlide(currentSlideIndex);
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlideIndex > 0) {
+        currentSlideIndex--;
+        renderSlide(currentSlideIndex);
+      }
+    }
+
+    function goToSlide(idx) {
+      currentSlideIndex = idx;
+      renderSlide(currentSlideIndex);
+      const drawer = document.getElementById("slide-drawer");
+      if (!drawer.classList.contains("hidden")) {
+        toggleDrawer();
+      }
+    }
+
+    function toggleDrawer() {
+      const drawer = document.getElementById("slide-drawer");
+      if (drawer.classList.contains("hidden")) {
+        populateDrawer();
+        drawer.classList.remove("hidden");
+        drawer.classList.add("flex");
+      } else {
+        drawer.classList.add("hidden");
+        drawer.classList.remove("flex");
+      }
+    }
+
+    function populateDrawer() {
+      const grid = document.getElementById("drawer-grid");
+      grid.innerHTML = slidesData.map((s, idx) => `
+        <button onclick="goToSlide(${idx})" class="text-left p-3.5 rounded-xl border transition-all flex flex-col justify-between ${idx === currentSlideIndex ? 'bg-emerald-900/60 border-emerald-400 ring-2 ring-emerald-400/40' : 'bg-slate-900/80 border-slate-800 hover:border-emerald-500/50 hover:bg-slate-800/70'}">
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <span class="font-hud text-xs font-bold ${idx === currentSlideIndex ? 'text-amber-400' : 'text-emerald-400'}">SLIDE ${String(s.id).padStart(2, '0')}</span>
+              <span class="text-[10px] text-slate-400 truncate max-w-[140px]">${s.module}</span>
+            </div>
+            <p class="text-sm font-bold text-white line-clamp-2 leading-snug">${s.title}</p>
+          </div>
+        </button>
+      `).join("");
+    }
+
+    function toggleLaser() {
+      laserEnabled = !laserEnabled;
+      const dot = document.getElementById("laser-dot");
+      const btn = document.getElementById("btn-laser");
+      dot.style.display = laserEnabled ? "block" : "none";
+      if (laserEnabled) {
+        btn.classList.add("bg-emerald-600", "text-white");
+      } else {
+        btn.classList.remove("bg-emerald-600", "text-white");
+      }
+    }
+
+    window.addEventListener("mousemove", (e) => {
+      if (laserEnabled) {
+        const dot = document.getElementById("laser-dot");
+        dot.style.left = `${e.clientX}px`;
+        dot.style.top = `${e.clientY}px`;
+      }
+    });
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    }
+
+    // Keyboard Shortcuts
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === "ArrowLeft" || e.key === "PageUp") {
+        e.preventDefault();
+        prevSlide();
+      } else if (e.key === "Home") {
+        goToSlide(0);
+      } else if (e.key === "End") {
+        goToSlide(slidesData.length - 1);
+      } else if (e.key.toLowerCase() === "g") {
+        toggleDrawer();
+      } else if (e.key.toLowerCase() === "l") {
+        toggleLaser();
+      } else if (e.key.toLowerCase() === "f") {
+        toggleFullScreen();
+      } else if (e.key === "Escape") {
+        const drawer = document.getElementById("slide-drawer");
+        if (!drawer.classList.contains("hidden")) toggleDrawer();
+      }
+    });
+
+    /* ==========================================================================
+       RESPONSIVE 16:9 VIEWPORT AUTO-SCALER
+       ========================================================================== */
+    function fitSlideViewport() {
+      const viewport = document.getElementById("slide-deck-viewport");
+      const availableW = window.innerWidth - 36;
+      const availableH = window.innerHeight - 84;
+      const scale = Math.min(availableW / 1280, availableH / 720, 1.15);
+      viewport.style.transform = `scale(${scale})`;
+    }
+
+    window.addEventListener("resize", fitSlideViewport);
+
+    /* ==========================================================================
+       FUTURISTIC BIO-PARTICLES CANVAS ANIMATION
+       ========================================================================== */
+    function initBioParticles() {
+      const canvas = document.getElementById("bio-particles");
+      const ctx = canvas.getContext("2d");
+      canvas.width = 1280;
+      canvas.height = 720;
+
+      const particles = Array.from({ length: 28 }, (_, i) => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 4 + 2,
+        vx: (Math.random() - 0.5) * 0.45,
+        vy: (Math.random() - 0.5) * 0.45,
+        color: i % 3 === 0 ? "rgba(253, 185, 19, 0.22)" : "rgba(0, 176, 80, 0.16)"
+      }));
+
+      function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let i = 0; i < particles.length; i++) {
+          const p = particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+          if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.fill();
+
+          // Subtle molecular links
+          for (let j = i + 1; j < particles.length; j++) {
+            const p2 = particles[j];
+            const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+            if (dist < 130) {
+              ctx.beginPath();
+              ctx.moveTo(p.x, p.y);
+              ctx.lineTo(p2.x, p2.y);
+              ctx.strokeStyle = `rgba(52, 103, 57, ${0.07 * (1 - dist / 130)})`;
+              ctx.lineWidth = 1;
+              ctx.stroke();
+            }
+          }
+        }
+        requestAnimationFrame(animateParticles);
+      }
+      animateParticles();
+    }
+
+    window.onload = function () {
+      fitSlideViewport();
+      initBioParticles();
+      renderSlide(0);
+    };
+  </script>
+</body>
+</html>

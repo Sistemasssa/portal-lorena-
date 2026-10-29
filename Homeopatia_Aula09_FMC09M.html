@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Homeopatia — Aula 09: Seminários Temáticos — Grau Técnico (Turma FMC09-M)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,600;0,700;1,600&family=Orbitron:wght@500;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <style>
+    :root {
+      --grau-dark-green: #113818;
+      --grau-bar-green: #346739;
+      --grau-bright-green: #00B050;
+      --grau-lime: #8BC53F;
+      --grau-yellow: #FDB913;
+      --hud-glow: rgba(0, 176, 80, 0.28);
+    }
+
+    * { box-sizing: border-box; user-select: none; }
+
+    body, html {
+      margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden;
+      background: radial-gradient(circle at 50% 20%, #132a19 0%, #07120a 100%);
+      font-family: 'Plus Jakarta Sans', sans-serif; color: #1e293b;
+    }
+
+    #app-stage {
+      position: relative; width: 100vw; height: 100vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden;
+    }
+
+    #slide-deck-viewport {
+      position: relative; width: 1280px; height: 720px; background: #ffffff;
+      border-radius: 14px;
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(139, 197, 63, 0.35), 0 0 35px rgba(0, 176, 80, 0.2);
+      overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;
+      transform-origin: center center; transition: box-shadow 0.4s ease;
+    }
+
+    .futuristic-bg-grid {
+      position: absolute; inset: 0;
+      background-image: linear-gradient(to right, rgba(17, 56, 24, 0.03) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(17, 56, 24, 0.03) 1px, transparent 1px);
+      background-size: 36px 36px; pointer-events: none; z-index: 1;
+    }
+
+    .futuristic-corner-hud {
+      position: absolute; top: 16px; right: 24px; z-index: 5;
+      display: flex; align-items: center; gap: 10px; pointer-events: none;
+    }
+
+    #bio-particles {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      pointer-events: none; z-index: 2; opacity: 0.65;
+    }
+
+    #slide-stage-content {
+      position: relative; z-index: 10; flex: 1; width: 100%; height: calc(100% - 52px);
+      padding: 36px 58px 18px 58px; display: flex; flex-direction: column; overflow: hidden;
+    }
+
+    .slide-enter { animation: futuristicSlideIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+    @keyframes futuristicSlideIn {
+      0% { opacity: 0; transform: translateY(18px) scale(0.985); filter: blur(4px); }
+      100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+    }
+
+    .stagger-item {
+      opacity: 0; transform: translateY(16px);
+      animation: staggerFadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes staggerFadeUp { to { opacity: 1; transform: translateY(0); } }
+
+    .cover-title-text {
+      font-family: 'Lora', Georgia, serif; font-weight: 700; color: #0d3b14;
+      text-shadow: 2px 3px 6px rgba(0, 0, 0, 0.22), 0 0 25px rgba(0, 176, 80, 0.12);
+      letter-spacing: -0.5px;
+    }
+
+    .slide-heading-serif { font-family: 'Lora', Georgia, serif; font-weight: 700; color: #0d3b14; }
+    .font-hud { font-family: 'Orbitron', sans-serif; }
+
+    .holo-card {
+      position: relative; background: rgba(248, 251, 249, 0.88); backdrop-filter: blur(8px);
+      border: 1px solid rgba(52, 103, 57, 0.18); border-radius: 14px;
+      box-shadow: 0 8px 24px -6px rgba(17, 56, 24, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1); overflow: hidden;
+    }
+
+    .holo-card::before {
+      content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
+      background: linear-gradient(180deg, #00B050, #346739); opacity: 0.85;
+    }
+
+    .holo-card.gold-accent::before { background: linear-gradient(180deg, #FDB913, #d97706); }
+    .holo-card.red-accent::before { background: linear-gradient(180deg, #ef4444, #991b1b); }
+
+    .holo-card:hover {
+      transform: translateY(-4px); border-color: rgba(0, 176, 80, 0.55);
+      box-shadow: 0 14px 30px -6px rgba(0, 176, 80, 0.16);
+    }
+
+    .scan-box { position: relative; overflow: hidden; }
+    .scan-box::after {
+      content: ''; position: absolute; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, transparent, rgba(0, 176, 80, 0.6), rgba(253, 185, 19, 0.8), rgba(0, 176, 80, 0.6), transparent);
+      box-shadow: 0 0 12px rgba(0, 176, 80, 0.6); animation: verticalScan 4.5s ease-in-out infinite; pointer-events: none;
+    }
+
+    @keyframes verticalScan { 0%, 100% { top: 2%; opacity: 0.2; } 50% { top: 96%; opacity: 0.85; } }
+
+    .grau-template-footer {
+      position: relative; z-index: 20; width: 100%; height: 52px; background: #ffffff;
+      display: flex; align-items: flex-end; justify-content: space-between; flex-shrink: 0; padding: 0;
+    }
+
+    .footer-bars-track { display: flex; align-items: flex-end; width: 82.5%; height: 36px; }
+    .f-seg-1 { width: 7.5%; height: 100%; background-color: #346739; }
+    .f-seg-2 { width: 31.5%; height: 100%; background-color: #FDB913; }
+    .f-gap-1 { width: 4.2%; height: 100%; background-color: #ffffff; }
+    .f-seg-3 { width: 17.0%; height: 100%; background-color: #00B050; }
+    .f-seg-4 { width: 24.3%; height: 100%; background-color: #346739; }
+    .f-gap-2 { width: 4.5%; height: 100%; background-color: #ffffff; }
+    .f-seg-5 { width: 15.5%; height: 100%; background-color: #FDB913; }
+
+    .footer-logo-zone {
+      width: 17.5%; height: 52px; background: #ffffff;
+      display: flex; align-items: center; justify-content: center; padding-right: 12px; padding-bottom: 2px;
+    }
+
+    .futuristic-table {
+      width: 100%; border-collapse: separate; border-spacing: 0; border-radius: 12px;
+      overflow: hidden; border: 1px solid rgba(52, 103, 57, 0.2); box-shadow: 0 6px 20px rgba(17, 56, 24, 0.05);
+    }
+    .futuristic-table th {
+      background: linear-gradient(90deg, #113818 0%, #24582c 100%); color: #ffffff;
+      font-weight: 700; text-align: left; padding: 12px 16px; font-size: 15px; letter-spacing: 0.3px;
+    }
+    .futuristic-table td {
+      padding: 11px 16px; font-size: 14.5px; border-bottom: 1px solid #e2e8f0;
+      background: #ffffff; color: #1e293b; transition: background 0.2s;
+    }
+    .futuristic-table tr:nth-child(even) td { background: #f4f9f5; }
+    .futuristic-table tr:hover td { background: #e6f4ea; }
+
+    #laser-dot {
+      position: fixed; width: 14px; height: 14px; border-radius: 50%; background: #00ff66;
+      box-shadow: 0 0 12px 4px #00ff66, 0 0 24px 8px #00B050; pointer-events: none;
+      z-index: 9999; transform: translate(-50%, -50%); display: none;
+    }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0f2415; }
+    ::-webkit-scrollbar-thumb { background: #00B050; border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+  <div id="laser-dot"></div>
+
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <g id="grau-tecnico-logo">
+        <text x="4" y="34" font-family="'Plus Jakarta Sans', 'Arial Rounded MT Bold', sans-serif" font-weight="800" font-size="37" letter-spacing="-2.2" fill="#0a0a0a">grau</text>
+        <circle cx="93" cy="12" r="10.5" fill="#ffffff" />
+        <circle cx="93" cy="12" r="8.2" fill="#ffffff" stroke="#8BC53F" stroke-width="2.6" />
+        <text x="93" y="16.2" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="11.5" fill="#0a0a0a">T</text>
+        <text x="89" y="45" text-anchor="end" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="9.5" letter-spacing="1.4" fill="#8BC53F">TÉCNICO</text>
+      </g>
+    </defs>
+  </svg>
+
+  <div id="app-stage">
+    <header class="fixed top-3 z-40 flex items-center justify-between gap-4 px-5 py-2 rounded-full bg-neutral-950/85 backdrop-blur-md border border-emerald-500/30 text-white shadow-2xl transition-all duration-300" style="width: min(1240px, 95vw);">
+      <div class="flex items-center gap-3">
+        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-400">
+          <i class="fa-solid fa-users-rectangle text-sm"></i>
+        </span>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-hud uppercase tracking-wider text-emerald-400" id="hud-module-badge">AULA 09</span>
+            <span class="text-xs text-slate-400">|</span>
+            <span class="text-xs font-semibold text-amber-400">TURMA FMC09-M</span>
+          </div>
+          <p class="text-xs text-slate-300 truncate max-w-[280px] sm:max-w-[420px]" id="hud-slide-title">Capa — Seminários Temáticos em Homeopatia</p>
+        </div>
+      </div>
+
+      <div class="hidden md:flex flex-col items-center flex-1 max-w-xs mx-4">
+        <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden border border-slate-700">
+          <div id="hud-progress-bar" class="h-full bg-gradient-to-r from-emerald-500 via-lime-400 to-amber-400 transition-all duration-300" style="width: 6.6%;"></div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button onclick="prevSlide()" title="Slide Anterior" class="w-8 h-8 rounded-full bg-slate-800/90 hover:bg-emerald-600 text-white flex items-center justify-center transition">
+          <i class="fa-solid fa-chevron-left text-xs"></i>
+        </button>
+        <div class="px-3 py-1 rounded-full bg-slate-900 border border-emerald-500/40 font-hud text-xs font-bold text-emerald-300 min-w-[78px] text-center" id="hud-counter">
+          01 / 15
+        </div>
+        <button onclick="nextSlide()" title="Próximo Slide" class="w-8 h-8 rounded-full bg-slate-800/90 hover:bg-emerald-600 text-white flex items-center justify-center transition">
+          <i class="fa-solid fa-chevron-right text-xs"></i>
+        </button>
+        <div class="h-4 w-[1px] bg-slate-700 mx-1"></div>
+        <button onclick="toggleDrawer()" title="Mapa dos 15 Slides (Tecla G)" class="px-3 py-1.5 rounded-full bg-emerald-600/20 hover:bg-emerald-600/40 border border-emerald-500/40 text-emerald-300 text-xs font-semibold flex items-center gap-1.5 transition">
+          <i class="fa-solid fa-table-cells-large"></i>
+          <span class="hidden sm:inline">15 Slides</span>
+        </button>
+        <button onclick="toggleLaser()" id="btn-laser" title="Apontador Laser (Tecla L)" class="w-8 h-8 rounded-full bg-slate-800/90 hover:bg-emerald-600 text-slate-300 flex items-center justify-center transition">
+          <i class="fa-solid fa-wand-magic-sparkles text-xs"></i>
+        </button>
+        <button onclick="toggleFullScreen()" title="Tela Cheia (Tecla F)" class="w-8 h-8 rounded-full bg-slate-800/90 hover:bg-emerald-600 text-slate-300 flex items-center justify-center transition">
+          <i class="fa-solid fa-expand text-xs"></i>
+        </button>
+      </div>
+    </header>
+
+    <main id="slide-deck-viewport">
+      <div class="futuristic-bg-grid"></div>
+      <canvas id="bio-particles"></canvas>
+
+      <div class="futuristic-corner-hud" id="slide-telemetry">
+        <span class="px-2.5 py-0.5 rounded-full text-[11px] font-hud font-bold tracking-wider bg-emerald-950/10 text-emerald-800 border border-emerald-700/20" id="internal-slide-num">SLIDE 01 // 15</span>
+      </div>
+
+      <div id="slide-stage-content" class="slide-enter"></div>
+
+      <footer class="grau-template-footer">
+        <div class="footer-bars-track">
+          <div class="f-seg-1"></div>
+          <div class="f-seg-2"></div>
+          <div class="f-gap-1"></div>
+          <div class="f-seg-3"></div>
+          <div class="f-seg-4"></div>
+          <div class="f-gap-2"></div>
+          <div class="f-seg-5"></div>
+        </div>
+        <div class="footer-logo-zone">
+          <svg viewBox="0 0 112 48" class="w-32 h-12 overflow-visible">
+            <use href="#grau-tecnico-logo"></use>
+          </svg>
+        </div>
+      </footer>
+    </main>
+
+    <div id="slide-drawer" class="fixed inset-0 z-50 bg-neutral-950/90 backdrop-blur-xl hidden flex-col p-6 md:p-10">
+      <div class="flex items-center justify-between max-w-7xl w-full mx-auto mb-6 pb-4 border-b border-emerald-500/30">
+        <div class="flex items-center gap-3">
+          <i class="fa-solid fa-layer-group text-2xl text-emerald-400"></i>
+          <div>
+            <h2 class="text-xl font-bold text-white font-hud">ÍNDICE INTERATIVO — AULA 09 (15 SLIDES)</h2>
+            <p class="text-xs text-slate-400">Seminários Temáticos e Avaliação em Grupo • Turma FMC09-M</p>
+          </div>
+        </div>
+        <button onclick="toggleDrawer()" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-rose-600 text-white text-sm font-semibold flex items-center gap-2 transition">
+          <i class="fa-solid fa-xmark"></i> Fechar (ESC)
+        </button>
+      </div>
+      <div id="drawer-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 max-w-7xl w-full mx-auto overflow-y-auto pr-2"></div>
+    </div>
+  </div>
+
+  <script>
+    const slidesData = [
+      {
+        id: 1,
+        module: "AULA 09 • CAPA OFICIAL",
+        eyebrow: "CURSO TÉCNICO EM FARMÁCIA • GRAU TÉCNICO",
+        title: "Seminários Temáticos em Farmacotécnica Homeopática",
+        type: "cover"
+      },
+      {
+        id: 2,
+        module: "AULA 09 • DIRETRIZES DOS SEMINÁRIOS",
+        eyebrow: "AVALIAÇÃO INTEGRADA • TURMA FMC09-M",
+        title: "Objetivos e Estrutura dos Seminários Temáticos",
+        type: "cards-grid",
+        subtitle: "Consolidação das Aulas 01 a 08 através de pesquisa técnico-científica, apresentação oral e resolução de casos de bancada.",
+        cards: [
+          { tag: "PROTAGONISMO TÉCNICO", icon: "fa-chalkboard-user", title: "Comunicação e Postura Profissional", desc: "Desenvolver a capacidade do futuro Técnico em Farmácia de explicar conceitos homeopáticos com embasamento na FHB 3ª Edição e RDC 67/2007." },
+          { tag: "DIVISÃO EM 5 GRUPOS", icon: "fa-people-group", title: "5 Eixos Temáticos Estratégicos", desc: "Cada equipe aprofunda um grande eixo: (1) Policrestos Vegetais, (2) Minerais e Trituração, (3) Reino Animal e Bioterápicos, (4) Escalas e Métodos, (5) BPMH e SUS." },
+          { tag: "CRITÉRIOS DE AVALIAÇÃO", icon: "fa-clipboard-check", title: "Rubrica Técnica Transparente", desc: "Avaliação estruturada: Domínio Científico (4,0 pts), Correlação Farmacotécnica (3,0 pts), Clareza/Tempo (1,5 pt) e Arguição/Debate (1,5 pt)." },
+          { tag: "SIMULAÇÃO DE BALCÃO", icon: "fa-comments", title: "Defesa de Caso Prático", desc: "Ao final de cada apresentação (15–20 min), a banca docente apresenta uma situação-problema real de laboratório ou dispensação para a equipe resolver." }
+        ]
+      },
+      {
+        id: 3,
+        module: "AULA 09 • METODOLOGIA E RUBRICA",
+        eyebrow: "REGRAS DE APRESENTAÇÃO E AVALIAÇÃO",
+        title: "Critérios de Avaliação e Tempo de Apresentação",
+        type: "process-kpis",
+        steps: [
+          { step: "FASE 01 (15 MIN)", title: "Exposição Técnica do Grupo", desc: "Apresentação estruturada contendo: Introdução, Monografia na FHB 3ª Ed., Fluxograma de Preparo na Bancada e Orientações de Dispensação.", metric: "15 a 20 Minutos" },
+          { step: "FASE 02 (5 MIN)", title: "Arguição e Caso de Bancada", desc: "O professor e a turma formulam 2 perguntas técnicas sobre cálculos de diluição, conservação, controle de qualidade ou legislação.", metric: "Debate Técnico" },
+          { step: "FASE 03", title: "Entrega de Resumo Executivo", desc: "Cada grupo disponibiliza uma ficha técnica resumida (1 página) com os pontos-chave do seu tema para estudo coletivo da turma FMC09-M.", metric: "Material de Apoio" }
+        ],
+        kpis: [
+          { value: "4,0 Pontos", label: "Rigor Técnico-Científico e Fidelidade à FHB 3ª Edição", color: "emerald" },
+          { value: "3,0 Pontos", label: "Domínio do Processo Farmacotécnico e Cálculos", color: "amber" },
+          { value: "3,0 Pontos", label: "Postura Profissional, Recursos Visuais e Resposta à Arguição", color: "emerald" }
+        ]
+      },
+      {
+        id: 4,
+        module: "AULA 09 • PAINEL INTERATIVO DOS GRUPOS",
+        eyebrow: "INTERATIVO • CLIQUE EM CADA GRUPO PARA VER O ROTEIRO E PERGUNTAS DA BANCA",
+        title: "Painel Diretor dos 5 Seminários da Turma FMC09-M",
+        type: "interactive-seminars"
+      },
+      {
+        id: 5,
+        module: "AULA 09 • SEMINÁRIO GRUPO 01",
+        eyebrow: "EIXO 01 • MATRIZES VEGETAIS E CONTROLE DA TINTURA-MÃE",
+        title: "Grupo 01: Da Planta Fresca à Tintura-Mãe (Arnica, Belladonna e Chamomilla)",
+        type: "split-columns",
+        leftTitle: "Tópicos Obrigatórios da Apresentação",
+        leftIcon: "fa-leaf",
+        leftAccent: "",
+        leftItems: [
+          "<b>Botânica e Colheita:</b> Parte utilizada de <i>Arnica montana</i>, <i>Atropa belladonna</i> e <i>Matricaria chamomilla</i>.",
+          "<b>Cálculo do Resíduo Seco:</b> Como determinar a umidade em estufa a 105°C e ajustar o veículo hidroalcoólico para a relação 1:10 (peso seco).",
+          "<b>Maceração vs Percolação:</b> Diferenças operacionais, tempo de contato (15–21 dias), prensagem e filtração.",
+          "<b>Ensaios de Qualidade da TM:</b> Densidade relativa, pH, grau alcoólico, resíduo seco e cromatografia (CCD)."
+        ],
+        rightTitle: "Perguntas Norteadoras do Professor para o Grupo 01",
+        rightIcon: "fa-circle-question",
+        rightAccent: "gold-accent",
+        rightItems: [
+          "<b>Pergunta 1:</b> Por que a Homeopatia dá preferência à planta fresca recém-colhida em vez da planta dessecada usada na fitoterapia comum?",
+          "<b>Pergunta 2:</b> Se a Tintura-Mãe de Arnica for aplicada pura sobre uma ferida aberta (escoriação sangrante), o que ocorre? Qual a diferença para a Calendula?",
+          "<b>Gabarito Chave:</b> A Arnica TM é excelente para contusões com pele íntegra, mas é irritante em feridas abertas; já a <i>Calendula officinalis</i> é cicatrizante e antisséptica para lesões abertas!"
+        ]
+      },
+      {
+        id: 6,
+        module: "AULA 09 • SEMINÁRIO GRUPO 02",
+        eyebrow: "EIXO 02 • REINO MINERAL, TRITURAÇÃO E TRANSIÇÃO 4CH",
+        title: "Grupo 02: Substâncias Insolúveis, Trituração e Sais de Schüssler",
+        type: "split-columns",
+        leftTitle: "Tópicos Obrigatórios da Apresentação",
+        leftIcon: "fa-gem",
+        leftAccent: "",
+        leftItems: [
+          "<b>Solúveis vs Insolúveis:</b> Diferença de ponto de partida entre <i>Natrum muriaticum</i> (solúvel) e <i>Sulphur / Silicea / Calcarea carbonica</i> (insolúveis).",
+          "<b>Protocolo dos 60 Minutos:</b> Divisão das 99 partes de lactose em 3 terços (33 + 33 + 33) e ciclos de 6 min triturando + 4 min raspando.",
+          "<b>A Fase Crítica 4CH (e 7DH):</b> Solubilização da 3CH em água purificada + álcool (etanol 20%) antes de passar para o etanol 70% na 5CH.",
+          "<b>Os 12 Sais Bioquímicos de Schüssler:</b> Preparo na escala Decimal (6DH) e indicações celulares."
+        ],
+        rightTitle: "Perguntas Norteadoras do Professor para o Grupo 02",
+        rightIcon: "fa-circle-question",
+        rightAccent: "gold-accent",
+        rightItems: [
+          "<b>Pergunta 1:</b> Por que é obrigatório raspar as paredes do gral e o pistilo de porcelana durante 4 minutos a cada 6 minutos de trituração?",
+          "<b>Pergunta 2:</b> Por que a potência 4CH líquida (preparada em álcool 20%) não pode ser guardada nas prateleiras do estoque da farmácia?",
+          "<b>Gabarito Chave:</b> O baixo teor alcoólico (20%) não garante conservação microbiológica de longo prazo; a 4CH serve apenas como ponte imediata para fazer a 5CH em álcool 70%."
+        ]
+      },
+      {
+        id: 7,
+        module: "AULA 09 • SEMINÁRIO GRUPO 03",
+        eyebrow: "EIXO 03 • REINO ANIMAL, BIOTERÁPICOS E ISOTERÁPICOS",
+        title: "Grupo 03: Matrizes Animais, Nosódios e Biossegurança",
+        type: "split-columns",
+        leftTitle: "Tópicos Obrigatórios da Apresentação",
+        leftIcon: "fa-vial-virus",
+        leftAccent: "",
+        leftItems: [
+          "<b>Reino Animal:</b> Preparo por TM (1:20 em <i>Cantharis</i>; <i>Apis mellifica</i>) vs Preparo por trituração de venenos (<i>Lachesis muta</i>) e secreções (<i>Sepia</i>).",
+          "<b>Bioterápicos de Estoque vs Códex:</b> Diferença entre <i>Psorinum/Tuberculinum</i> e <i>Influenzinum/Oscillococcinum</i>.",
+          "<b>Isoterápicos:</b> Hetero-isoterápicos (alérgenos externos: poeira, ácaros, pólen) vs Auto-isoterápicos (sangue, urina, secreção do próprio paciente).",
+          "<b>Biossegurança (RDC 67/2007):</b> Esterilização e dispensação segura acima do limite de Avogadro (≥ 12CH)."
+        ],
+        rightTitle: "Perguntas Norteadoras do Professor para o Grupo 03",
+        rightIcon: "fa-circle-question",
+        rightAccent: "red-accent",
+        rightItems: [
+          "<b>Pergunta 1:</b> Uma farmácia homeopática comum pode coletar pus ou sangue de um paciente na sala de manipulação geral para fazer um auto-isoterápico?",
+          "<b>Pergunta 2:</b> Se sobrar matriz 6CH de um auto-isoterápico feito com sangue do Paciente João, ela pode ser usada para manipular a receita da esposa dele?",
+          "<b>Gabarito Chave:</b> Jamais! O auto-isoterápico exige infraestrutura de biossegurança e é de uso estritamente individual e intransferível do próprio doador."
+        ]
+      },
+      {
+        id: 8,
+        module: "AULA 09 • SEMINÁRIO GRUPO 04",
+        eyebrow: "EIXO 04 • ESCALAS CH, DH, LM E MÉTODO KORSAKOVIANO",
+        title: "Grupo 04: Comparativo Farmacotécnico das Escalas e Métodos",
+        type: "split-columns",
+        leftTitle: "Tópicos Obrigatórios da Apresentação",
+        leftIcon: "fa-scale-balanced",
+        leftAccent: "",
+        leftItems: [
+          "<b>Método Hahnemanniano (Frascos Múltiplos):</b> Escalas CH (1:100) e DH (1:10) — cálculos volumétricos e 100 sucussões.",
+          "<b>Método Cinquenta Milesimal (LM / Q):</b> Passo a passo desde a trituração 3CH, solução mãe 1:500 e impregnação de microglóbulos (1:50.000).",
+          "<b>Método Korsakoviano (K) e Fluxo Contínuo (FC):</b> Funcionamento do frasco único (a partir de 30CH) e aparelhos de altas potências.",
+          "<b>Formas de Dispensação:</b> Impregnação simples vs tríplice de glóbulos, papéis e tabletes."
+        ],
+        rightTitle: "Perguntas Norteadoras do Professor para o Grupo 04",
+        rightIcon: "fa-circle-question",
+        rightAccent: "gold-accent",
+        rightItems: [
+          "<b>Pergunta 1:</b> Como o paciente deve tomar um medicamento prescrito na escala Cinquenta Milesimal (ex: <i>Sulphur 1 LM</i>) em casa?",
+          "<b>Pergunta 2:</b> Por que 3CH não pode ser substituída por 6DH no balcão se ambas têm concentração matemática de 10⁻⁶?",
+          "<b>Gabarito Chave:</b> A 6DH passou por 6 etapas (600 sucussões) e a 3CH por apenas 3 etapas (300 sucussões). Não há intercambialidade entre escalas!"
+        ]
+      },
+      {
+        id: 9,
+        module: "AULA 09 • SEMINÁRIO GRUPO 05",
+        eyebrow: "EIXO 05 • BOAS PRÁTICAS (RDC 67), ATENÇÃO FARMACÊUTICA E SUS",
+        title: "Grupo 05: Qualidade na Bancada, Legislação e PNPIC/SUS",
+        type: "split-columns",
+        leftTitle: "Tópicos Obrigatórios da Apresentação",
+        leftIcon: "fa-hospital-user",
+        leftAccent: "",
+        leftItems: [
+          "<b>RDC ANVISA nº 67/2007 (Anexo V):</b> Infraestrutura da sala exclusiva, paramentação sem talco/perfume e inativação térmica (140°C–180°C).",
+          "<b>Qualidade da Água Purificada:</b> Ensaios diários (pH e condutividade ≤ 1,3 µS/cm) e mensais (físico-químicos e microbiológicos).",
+          "<b>Política Nacional (PNPIC — Portaria 971/2006):</b> O papel da Homeopatia no SUS e as atribuições do Conselho Federal de Farmácia (CFF).",
+          "<b>Orientação no Balcão:</b> Proteção contra radiação/odores, administração sublingual e conservação."
+        ],
+        rightTitle: "Perguntas Norteadoras do Professor para o Grupo 05",
+        rightIcon: "fa-circle-question",
+        rightAccent: "gold-accent",
+        rightItems: [
+          "<b>Pergunta 1:</b> Quais informações são obrigatórias no rótulo de um medicamento homeopático manipulado segundo o Anexo V da RDC 67/2007?",
+          "<b>Pergunta 2:</b> Como orientar um paciente idoso polimedicado (que usa anti-hipertensivo e insulina) ao iniciar um tratamento homeopático no SUS?",
+          "<b>Gabarito Chave:</b> Orientar a NUNCA suspender os medicamentos alopáticos vitais sem ordem médica, mantendo apenas intervalo de 15–30 min na tomada sublingual."
+        ]
+      },
+      {
+        id: 10,
+        module: "AULA 09 • ESTUDO COMPARATIVO DE MATÉRIA MÉDICA",
+        eyebrow: "REVISÃO CLÍNICA APLICADA AOS SEMINÁRIOS",
+        title: "Tríades Clássicas da Farmácia Homeopática: Febre e Inflamação",
+        type: "table-slide",
+        headers: ["Medicamento Agudo", "Gatilho / Instalação", "Quadro Físico e Térmico", "Sintoma Mental e Sede"],
+        rows: [
+          ["<b><i>Aconitum napellus</i></b>", "Súbita e violenta após exposição a <b>vento frio e seco</b> ou susto agudo.", "Febre alta com pele <b>seca e ardente</b>, pulso duro, face vermelha que empalidece ao sentar.", "<b>Agitação extrema com pavor iminente da morte</b>; sede intensa de grandes volumes de água fria."],
+          ["<b><i>Atropa belladonna</i></b>", "Súbita e intensa, com forte congestão cefálica.", "Febre alta (39°C–40°C), <b>face escarlate brilhante</b>, calor radiante, <b>suor nas partes cobertas</b>, pupilas dilatadas (midríase) e dores pulsáteis.", "Abatimento com delírios visuais, hipersensibilidade à luz/ruído/choque; pouca sede ou desejo de limonada."],
+          ["<b><i>Gelsemium sempervirens</i></b>", "Lenta e progressiva (clássica de quadros gripais e viroses).", "Febre com <b>calafrios na coluna</b>, rosto vermelho-escuro congesto, <b>pálpebras pesadas caídas</b> e tremores musculares.", "<b>Prostração intensa (torpor/sonolência)</b>, desejo de ficar quieto e <b>ausência total de sede</b>."],
+          ["<b><i>Ferrum phosphoricum</i></b>", "Início gradual, sem sintomas mentais exuberantes.", "Febre moderada, tendência a epistaxe (sangramento nasal) e otite média aguda inicial (tímpano congesto).", "Estado mental calmo/lúcido; muito usado em 6DH (Sal de Schüssler para 1ª fase inflamatória)."]
+        ]
+      },
+      {
+        id: 11,
+        module: "AULA 09 • TRÍADE DOS TRAUMATISMOS",
+        eyebrow: "FARMÁCIA DE EMERGÊNCIA HOMEOPÁTICA",
+        title: "Diferenciação Técnica nos Traumatismos e Ferimentos",
+        type: "cards-grid",
+        subtitle: "Domínio essencial para orientação farmacêutica e compreensão de prescrições pós-cirúrgicas e odontológicas.",
+        cards: [
+          { tag: "MÚSCULOS E CAPILARES", icon: "fa-person-falling-burst", title: "1. Arnica montana", desc: "Traumatismos contusos de partes moles, quedas, pancadas, hematomas/equimoses, fadiga muscular extrema e pré/pós-operatório (reduz sangramento). Sensação de corpo moído." },
+          { tag: "TERMINAÇÕES NERVOSAS", icon: "fa-bolt-lightning", title: "2. Hypericum perforatum", desc: "A 'Arnica dos Nervos'! Traumatismos em regiões ricamente inervadas: esmagamento de pontas dos dedos (porta/martelo), queda sobre o cóccix, extração dentária e dores lancinantes que irradiam pelo nervo." },
+          { tag: "TENDÕES E LIGAMENTOS", icon: "fa-person-running", title: "3. Ruta graveolens & Rhus tox", desc: "Entorses articulares, distensões de tendões/ligamentos, lesões do periósteo e esforço ocular. Rhus tox melhora pelo movimento contínuo e calor; Ruta atua na inserção tendínea." },
+          { tag: "PERFURAÇÕES E OSSOS", icon: "fa-bone", title: "4. Ledum palustre & Symphytum", desc: "Ledum: ferimentos perfurantes (prego, agulha, picadas de insetos) com local frio que melhora com gelo. Symphytum officinale ('Confrei'): acelera a formação do calo ósseo em fraturas!" }
+        ]
+      },
+      {
+        id: 12,
+        module: "AULA 09 • TRÍADE GASTROINTESTINAL E HEPÁTICA",
+        eyebrow: "POLICRESTOS DIGESTIVOS NO BALCÃO",
+        title: "Diferenciação nos Distúrbios Digestivos e Metabólicos",
+        type: "table-slide",
+        headers: ["Policresto Digestivo", "Perfil do Paciente e Gatilho", "Quadro Gastrointestinal Característico", "Horário e Modalidades"],
+        rows: [
+          ["<b><i>Nux vomica</i></b>", "Sedentário, irritável, impaciente; abuso de café, álcool, fumo, noitadas e excesso de remédios alopáticos.", "Peso no estômago 1h a 2h após comer, náusea que alivia se vomitar, ressaca e constipação com desejo frequente mas ineficaz.", "Agrava pela manhã ao acordar (4h–5h), pelo frio e pelo esforço mental."],
+          ["<b><i>Lycopodium clavatum</i></b>", "Intelectual, autoritário mas inseguro; insuficiência hepatobiliar e ácido úrico elevado.", "<b>Distensão abdominal imediata após comer pouco</b> (precisa abrir o cinto!), muitos gases no baixo ventre e desejo de doces.", "<b>Agrava fortemente entre 16h e 20h</b>; predomínio do lado direito."],
+          ["<b><i>Pulsatilla nigricans</i></b>", "Temperamento dócil, emotivo, choro fácil; piora ao ingerir <b>gorduras, frituras, sorvetes e carne de porco</b>.", "Digestão lenta, gosto amargo de alimentos na boca por horas, ausência total de sede (boca seca sem sede).", "Piora em ambiente fechado/quente; melhora caminhando ao ar livre fresco."],
+          ["<b><i>Carbo vegetabilis</i></b>", "Pacientes debilitados, idosos ou pós-cirúrgicos com má oxigenação e hipofunção digestiva.", "Estufamento gástrico alto severo (tudo vira gás), eructações que aliviam temporariamente, extremidades frias.", "Necessidade urgente de ser abanado (desejo de vento no rosto)."]
+        ]
+      },
+      {
+        id: 13,
+        module: "AULA 09 • ERROS DE INTERPRETAÇÃO EM RECEITAS",
+        eyebrow: "TREINAMENTO DE SEGURANÇA DO PACIENTE",
+        title: "Pares de Nomes Semelhantes (Look-Alike / Sound-Alike)",
+        type: "split-columns",
+        leftTitle: "Pares Críticos que NUNCA Devem ser Confundidos",
+        leftIcon: "fa-triangle-exclamation",
+        leftAccent: "red-accent",
+        leftItems: [
+          "<b>1. <i>Calcarea carbonica</i> vs <i>Kali carbonicum</i>:</b> Carbonato de cálcio da ostra vs Carbonato de potássio.",
+          "<b>2. <i>Mercurius solubilis</i> vs <i>Mercurius corrosivus</i>:</b> Nitrato amidomercurioso de Hahnemann vs Cloreto mercúrico (muito mais agressivo em baixas potências).",
+          "<b>3. <i>Natrum muriaticum</i> vs <i>Muriaticum acidum</i>:</b> Cloreto de sódio vs Ácido clorídrico.",
+          "<b>4. <i>Kali bichromicum</i> vs <i>Kali bromatum</i>:</b> Dicromato de potássio (sinusites/úlceras) vs Brometo de potássio."
+        ],
+        rightTitle: "Protocolo de Segurança na Bancada",
+        rightIcon: "fa-check-double",
+        rightAccent: "",
+        rightItems: [
+          "<b>Leitura do Nome Completo em Latim:</b> Evitar organizar o estoque apenas por abreviaturas de 3 letras quando existirem matrizes homônimas.",
+          "<b>Alerta Visual (Caixa Alta / Destaque):</b> Destacar nos rótulos das matrizes do estoque a segunda palavra diferenciadora (ex: <i>Mercurius <b>SOLUBILIS</b></i> vs <i>Mercurius <b>CORROSIVUS</b></i>).",
+          "<b>Dupla Conferência com a Receita Física:</b> O operador separa a matriz e confere com a Ordem de Manipulação E com a receita original."
+        ]
+      },
+      {
+        id: 14,
+        module: "AULA 09 • SÍNTESE INTEGRADORA (AULAS 01 A 09)",
+        eyebrow: "REVISÃO GERAL ANTES DAS AULAS PRÁTICAS DE LABORATÓRIO",
+        title: "Mapa Mental Integrado do Módulo até a Aula 09",
+        type: "split-visual",
+        bullets: [
+          { icon: "fa-compass", title: "Fundamentos e Ciência (Aulas 01 e 02)", text: "Similitude, Patogenesia no Sadio, Doses Dinamizadas, Medicamento Único, Força Vital, Leis de Hering e Miasmas (Psora, Sicose, Sífilis)." },
+          { icon: "fa-flask", title: "Farmacologia e Matrizes (Aulas 03 e 04)", text: "FHB 3ª Edição, Escalas CH (1:100), DH (1:10), LM (1:50.000), Método K, Reinos da Natureza, Bioterápicos e Isoterápicos." },
+          { icon: "fa-gears", title: "Operações e Manipulação (Aulas 05, 06 e 08)", text: "Tintura-Mãe (1:10 peso seco), Sucussão (100x), Trituração (60 min), Fase 4CH (álcool 20%), Impregnação (álcool ≥ 70%), Alcoolometria e Picnometria." },
+          { icon: "fa-shield-halved", title: "Qualidade e Legislação (Aula 07)", text: "RDC 67/2007 (Anexo V), sala exclusiva sem odores, estufa de inativação (140°C–180°C) e controle diário da Água Purificada." }
+        ],
+        visualType: "svg-seminar-synthesis"
+      },
+      {
+        id: 15,
+        module: "AULA 09 • PRÁTICA E FIXAÇÃO",
+        eyebrow: "INTERATIVO • SIMULADOR DE BANCA AVALIADORA (TURMA FMC09-M)",
+        title: "Perguntas de Arguição Final dos Seminários (Aula 09)",
+        type: "interactive-cases"
+      }
+    ];
+
+    const seminarsGroupsData = [
+      {
+        id: "GRUPO 01 • REINO VEGETAL & TM",
+        title: "Extração Vegetal, Resíduo Seco e Controle de Qualidade da Tintura-Mãe",
+        focus: "Arnica montana, Atropa belladonna, Matricaria chamomilla e Calendula officinalis.",
+        deliverables: "Explicar o cálculo de umidade da planta fresca em estufa a 105°C, a regra 1:10 sobre o resíduo seco da FHB 3ª Ed., a diferença entre maceração e percolação, e os testes de densidade, pH e alcoolometria.",
+        boardQuestion: "Se 20 g de planta fresca deixam 5 g de resíduo seco na estufa, qual é a umidade da planta e quanto de água natural já existe em 400 g dessa planta fresca? (Resposta: 75% de umidade; 300 mL de água natural!)."
+      },
+      {
+        id: "GRUPO 02 • REINO MINERAL & TRITURAÇÃO",
+        title: "Drogas Insolúveis, Trituração em Lactose (60 min) e Transição 4CH",
+        focus: "Sulphur, Silicea, Calcarea carbonica, Aurum metallicum e Sais de Schüssler (DH).",
+        deliverables: "Demonstrar o protocolo cronometrado de 60 minutos no gral de porcelana (3 terços de 20 min: 6+4+6+4) e explicar detalhadamente como passar da 3CH sólida para a 4CH líquida (etanol 20%) e 5CH (etanol 70%).",
+        boardQuestion: "Por que metais nobres como o Ouro (Aurum metallicum), que são quimicamente inertes em estado bruto, adquirem profunda ação biológica após a trituração até a 3CH?"
+      },
+      {
+        id: "GRUPO 03 • REINO ANIMAL & BIOTERÁPICOS",
+        title: "Matrizes Zoológicas, Venenos, Nosódios e Biossegurança em Isoterápicos",
+        focus: "Apis mellifica, Lachesis muta, Cantharis, Influenzinum, Psorinum e Auto-isoterápicos.",
+        deliverables: "Diferenciar Bioterápicos de Estoque, Códex, Hetero-isoterápicos e Auto-isoterápicos. Apresentar as normas de biossegurança (esterilização e dispensação a partir de 12CH).",
+        boardQuestion: "Qual é a diferença entre a proporção da Tintura-Mãe vegetal (1:10) e a proporção clássica da Tintura-Mãe animal na FHB (1:20)? Como é iniciada a dinamização do veneno seco da Lachesis?"
+      },
+      {
+        id: "GRUPO 04 • ESCALAS, MÉTODOS E SÓLIDOS",
+        title: "Escalas CH, DH, LM, Método Korsakoviano e Impregnação de Formas Sólidas",
+        focus: "Frascos múltiplos vs Frasco único (K), Escala LM (1:50.000) e Impregnação Tríplice.",
+        deliverables: "Comparar CH, DH, LM e K; demonstrar o cálculo de impregnação simples e tríplice em glóbulos (álcool ≥ 70%), preparo de papéis e moldagem de tabletes no tableteiro.",
+        boardQuestion: "Por que o paciente que utiliza um medicamento na escala LM (ex: 2 LM) precisa sucussionar o frasco cerca de 10 vezes na mão e diluir em água antes de cada dose diária?"
+      },
+      {
+        id: "GRUPO 05 • BPMH (RDC 67), SUS E DISPENSAÇÃO",
+        title: "Anexo V da RDC 67/2007, Controle da Água, Rotulagem e Atenção Farmacêutica",
+        focus: "Infraestrutura, inativação de vidrarias (140°C–180°C), PNPIC/SUS e orientação no balcão.",
+        deliverables: "Apresentar os requisitos da sala exclusiva, paramentação do técnico, ensaios diários/mensais da água purificada, itens obrigatórios do rótulo e cuidados de conservação domiciliar.",
+        boardQuestion: "Quais são os 4 principais fatores físicos/químicos que podem inativar um medicamento homeopático na casa do paciente e como preveni-los na orientação de balcão?"
+      }
+    ];
+
+    const aula09Cases = [
+      {
+        badge: "ARGUIÇÃO 01 • DIFERENCIAÇÃO CLÍNICA NA FEBRE AGUDA",
+        patient: "Caso de Seminário: Duas crianças chegam com febre alta de 39,5°C após um passeio noturno no inverno. A Criança 1 apresenta pele totalmente seca, muita agitação, sede insaciável de água fria e medo intenso. A Criança 2 apresenta rosto vermelho brilhante, suor quente sob o cobertor, pupilas dilatadas e dores latejantes.",
+        lab: "Repertorização rápida das Tríades de Febre da Matéria Médica Homeopática.",
+        question: "Qual medicamento corresponde ao quadro da Criança 1 e qual corresponde ao quadro da Criança 2?",
+        answer: "RESPOSTA DA BANCA: A Criança 1 apresenta o quadro clássico de ACONITUM NAPELLUS (febre súbita após vento frio e seco, pele seca sem suor, sede intensa e agitação com pavor). A Criança 2 apresenta o quadro típico de ATROPA BELLADONNA (congestão cefálica, rubor brilhante, suor nas partes cobertas, midríase e dores pulsáteis)."
+      },
+      {
+        badge: "ARGUIÇÃO 02 • ESCOLHA DO MEDICAMENTO NOS TRAUMATISMOS",
+        patient: "Caso Odontológico / Traumático: Um paciente sofreu esmagamento da ponta do dedo indicador na porta do carro, apresentando dor lancinante insuportável que irradia pelo braço (trajeto nervoso). Outro paciente bateu a coxa na mesa e ficou com um grande hematoma roxo dolorido ao toque.",
+        lab: "Diferenciação entre Arnica montana e Hypericum perforatum.",
+        question: "Qual dos dois pacientes tem indicação clássica de Hypericum perforatum e por quê?",
+        answer: "RESPOSTA DA BANCA: O primeiro paciente (esmagamento da ponta do dedo com dor irradiada pelo nervo) tem indicação específica de HYPERICUM PERFORATUM, conhecido como a 'Arnica dos nervos', por seu tropismo pelas terminações nervosas periféricas. O segundo paciente (hematoma muscular/capilar na coxa) tem indicação clássica de ARNICA MONTANA."
+      },
+      {
+        badge: "ARGUIÇÃO 03 • RASTREABILIDADE E SEGURANÇA NA ORDEM DE MANIPULAÇÃO",
+        patient: "Auditoria de Bancada: Um paciente liga para a farmácia relatando que seu frasco de gotas de Mercurius solubilis 6CH parece estar com gosto de álcool muito forte (queimando a língua). O farmacêutico puxa a Ordem de Manipulação pelo número do lote.",
+        lab: "Ao verificar a Ordem de Manipulação, descobre-se que o operador usou o lote de Álcool 70% p/p em vez do Álcool 30% p/p para o frasco final de gotas.",
+        question: "O medicamento perdeu seu efeito homeopático ou trata-se de um desvio de veículo de dispensação? Qual a conduta?",
+        answer: "RESPOSTA DA BANCA: O medicamento está ativo homeopaticamente, porém houve uma NÃO-CONFORMIDADE DE VEÍCULO DE DISPENSAÇÃO (gotas orais diretas devem ser aviadas em etanol 30% p/p para não agredir a mucosa sublingual). A farmácia deve recolher o frasco, manipular um novo lote corretamente em etanol 30% sem custo ao cliente, ou orientar a diluição das gotas em 1 colher de sopa de água filtrada antes de tomar."
+      }
+    ];
+
+    let currentSlideIndex = 0;
+    let activeGroupIdx = 0;
+    let activeCaseIdx = 0;
+    let caseRevealed = false;
+    let laserEnabled = false;
+
+    function renderSlide(index) {
+      const slide = slidesData[index];
+      const container = document.getElementById("slide-stage-content");
+      
+      container.classList.remove("slide-enter");
+      void container.offsetWidth;
+      container.classList.add("slide-enter");
+
+      const total = slidesData.length;
+      const numStr = String(slide.id).padStart(2, "0");
+      const totalStr = String(total).padStart(2, "0");
+      document.getElementById("hud-counter").textContent = `${numStr} / ${totalStr}`;
+      document.getElementById("internal-slide-num").textContent = `SLIDE ${numStr} // ${totalStr}`;
+      document.getElementById("hud-module-badge").textContent = slide.module;
+      document.getElementById("hud-slide-title").textContent = `${numStr}. ${slide.title}`;
+      document.getElementById("hud-progress-bar").style.width = `${(slide.id / total) * 100}%`;
+
+      document.getElementById("slide-telemetry").style.display = slide.type === "cover" ? "none" : "flex";
+
+      let html = "";
+
+      if (slide.type === "cover") {
+        html = `
+          <div class="w-full h-full flex flex-col items-center justify-center text-center relative px-8">
+            <div class="absolute w-[520px] h-[520px] rounded-full border border-emerald-500/10 pointer-events-none animate-pulse"></div>
+            <div class="absolute w-[680px] h-[680px] rounded-full border border-amber-400/15 pointer-events-none"></div>
+
+            <div class="stagger-item mb-3 inline-flex items-center gap-2 px-4 py-1 rounded-full bg-emerald-950/5 border border-emerald-800/20 text-emerald-900 text-xs font-hud tracking-widest uppercase" style="animation-delay: 0.05s;">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+              GRAU TÉCNICO • FARMÁCIA • AULA 09
+            </div>
+
+            <h1 class="cover-title-text text-[46px] leading-tight mb-3 stagger-item" style="animation-delay: 0.12s;">
+              Homeopatia
+            </h1>
+            <p class="text-2xl font-serif font-semibold text-emerald-800 mb-12 stagger-item" style="animation-delay: 0.18s;">
+              Aula 09 — Seminários Temáticos e Integração Clínico-Farmacotécnica
+            </p>
+
+            <div class="flex flex-col items-center gap-3 text-[27px] leading-snug text-[#0d3b14] stagger-item" style="animation-delay: 0.24s;">
+              <p><span class="font-bold">Turma:</span> <span class="font-normal">FMC09-M</span></p>
+              <p><span class="font-bold">Período:</span> <span class="font-normal">23/10 a 30/11/2026</span></p>
+              <p><span class="font-bold">Atividade:</span> <span class="font-normal">Apresentação de Grupos, Arguição e Tríades Clínicas</span></p>
+            </div>
+
+            <div class="mt-10 flex items-center gap-4 text-xs font-semibold text-emerald-800/70 stagger-item" style="animation-delay: 0.36s;">
+              <span class="px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center gap-2">
+                <i class="fa-solid fa-keyboard text-emerald-600"></i> Use as Setas ◀ ▶ ou Espaço para navegar
+              </span>
+              <button onclick="nextSlide()" class="px-4 py-1.5 rounded-lg bg-[#113818] hover:bg-[#00B050] text-white font-bold flex items-center gap-2 shadow-md transition">
+                Iniciar Seminários <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      }
+      else if (slide.type === "cards-grid") {
+        html = `
+          ${renderSlideHeader(slide)}
+          ${slide.subtitle ? `<p class="text-slate-600 text-base -mt-2 mb-4 stagger-item" style="animation-delay:0.08s">${slide.subtitle}</p>` : ""}
+          <div class="grid grid-cols-2 gap-5 flex-1 items-stretch my-auto">
+            ${slide.cards.map((c, i) => `
+              <div class="holo-card p-6 flex flex-col justify-between stagger-item ${i % 2 === 1 ? 'gold-accent' : ''}" style="animation-delay: ${0.12 + i * 0.08}s">
+                <div>
+                  <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs font-hud font-bold tracking-wider px-2.5 py-1 rounded bg-emerald-900/10 text-emerald-800">${c.tag}</span>
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#113818] to-[#00B050] text-white flex items-center justify-center shadow-md">
+                      <i class="fa-solid ${c.icon} text-lg"></i>
+                    </div>
+                  </div>
+                  <h3 class="text-xl font-bold text-[#113818] mb-2">${c.title}</h3>
+                  <p class="text-[15.5px] text-slate-700 leading-relaxed">${c.desc}</p>
+                </div>
+                <div class="w-full h-1 bg-gradient-to-r from-emerald-500/30 via-amber-400/40 to-transparent rounded-full mt-4"></div>
+              </div>
+            `).join("")}
+          </div>
+        `;
+      }
+      else if (slide.type === "split-visual") {
+        html = `
+          ${renderSlideHeader(slide)}
+          <div class="grid grid-cols-12 gap-7 flex-1 items-center my-auto">
+            <div class="col-span-7 flex flex-col gap-3.5">
+              ${slide.bullets.map((b, i) => `
+                <div class="holo-card p-4 flex items-start gap-4 stagger-item" style="animation-delay: ${0.1 + i * 0.08}s">
+                  <div class="w-10 h-10 rounded-xl bg-emerald-900 text-amber-400 flex items-center justify-center flex-shrink-0 mt-0.5 shadow">
+                    <i class="fa-solid ${b.icon} text-base"></i>
+                  </div>
+                  <div>
+                    <h4 class="text-[17px] font-bold text-[#113818] leading-snug">${b.title}</h4>
+                    <p class="text-[14.5px] text-slate-700 leading-relaxed mt-0.5">${b.text}</p>
+                  </div>
+                </div>
+              `).join("")}
+            </div>
+            <div class="col-span-5 h-[430px] holo-card scan-box p-4 flex flex-col items-center justify-center bg-gradient-to-b from-slate-50 to-emerald-50/40 stagger-item" style="animation-delay: 0.25s">
+              ${renderVisualDiagram(slide.visualType)}
+            </div>
+          </div>
+        `;
+      }
+      else if (slide.type === "process-kpis") {
+        html = `
+          ${renderSlideHeader(slide)}
+          <div class="flex flex-col justify-between flex-1 py-2">
+            <div class="grid grid-cols-3 gap-5 items-stretch">
+              ${slide.steps.map((s, i) => `
+                <div class="holo-card p-5 flex flex-col justify-between relative stagger-item ${i === 1 ? 'gold-accent' : ''}" style="animation-delay: ${0.1 + i * 0.09}s">
+                  <div>
+                    <div class="flex items-center justify-between mb-2">
+                      <span class="text-xs font-hud font-bold text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded">${s.step}</span>
+                      <span class="text-xs font-bold text-amber-700 bg-amber-100 px-2.5 py-0.5 rounded-full">${s.metric}</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-[#113818] mb-2">${s.title}</h3>
+                    <p class="text-[15px] text-slate-700 leading-relaxed">${s.desc}</p>
+                  </div>
+                  <div class="mt-4 pt-2 border-t border-slate-200/80 flex items-center justify-between text-xs text-emerald-800 font-semibold">
+                    <span>AVALIAÇÃO DOCENTE</span>
+                    <i class="fa-solid fa-circle-arrow-right text-emerald-600"></i>
+                  </div>
+                </div>
+              `).join("")}
+            </div>
+
+            <div class="grid grid-cols-3 gap-5 mt-4">
+              ${slide.kpis.map((k, i) => `
+                <div class="rounded-2xl p-5 text-center border stagger-item ${k.color === 'amber' ? 'bg-gradient-to-br from-amber-500/15 to-amber-500/5 border-amber-500/40' : 'bg-gradient-to-br from-[#113818] to-[#1e5227] text-white border-emerald-500/40 shadow-lg'}" style="animation-delay: ${0.32 + i * 0.08}s">
+                  <p class="font-hud text-3xl font-extrabold ${k.color === 'amber' ? 'text-amber-700' : 'text-[#FDB913]'} mb-1">${k.value}</p>
+                  <p class="text-xs font-semibold ${k.color === 'amber' ? 'text-slate-700' : 'text-emerald-100'}">${k.label}</p>
+                </div>
+              `).join("")}
+            </div>
+          </div>
+        `;
+      }
+      else if (slide.type === "table-slide") {
+        html = `
+          ${renderSlideHeader(slide)}
+          <div class="flex-1 flex items-center my-auto stagger-item" style="animation-delay: 0.12s">
+            <table class="futuristic-table">
+              <thead>
+                <tr>${slide.headers.map(h => `<th>${h}</th>`).join("")}</tr>
+              </thead>
+              <tbody>
+                ${slide.rows.map(row => `<tr>${row.map(cell => `<td>${cell}</td>`).join("")}</tr>`).join("")}
+              </tbody>
+            </table>
+          </div>
+        `;
+      }
+      else if (slide.type === "split-columns") {
+        html = `
+          ${renderSlideHeader(slide)}
+          <div class="grid grid-cols-2 gap-6 flex-1 items-stretch my-auto">
+            <div class="holo-card ${slide.leftAccent} p-6 flex flex-col justify-between stagger-item" style="animation-delay: 0.12s">
+              <div>
+                <div class="flex items-center gap-3 mb-4 pb-3 border-b border-slate-200">
+                  <div class="w-10 h-10 rounded-xl bg-[#113818] text-white flex items-center justify-center">
+                    <i class="fa-solid ${slide.leftIcon}"></i>
+                  </div>
+                  <h3 class="text-xl font-bold text-[#113818]">${slide.leftTitle}</h3>
+                </div>
+                <ul class="space-y-3">
+                  ${slide.leftItems.map(item => `
+                    <li class="flex items-start gap-2.5 text-[15.5px] text-slate-700 leading-relaxed">
+                      <i class="fa-solid fa-caret-right text-emerald-600 mt-1.5"></i>
+                      <span>${item}</span>
+                    </li>
+                  `).join("")}
+                </ul>
+              </div>
+            </div>
+
+            <div class="holo-card ${slide.rightAccent} p-6 flex flex-col justify-between stagger-item" style="animation-delay: 0.22s">
+              <div>
+                <div class="flex items-center gap-3 mb-4 pb-3 border-b border-slate-200">
+                  <div class="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center">
+                    <i class="fa-solid ${slide.rightIcon}"></i>
+                  </div>
+                  <h3 class="text-xl font-bold text-[#113818]">${slide.rightTitle}</h3>
+                </div>
+                <ul class="space-y-3">
+                  ${slide.rightItems.map(item => `
+                    <li class="flex items-start gap-2.5 text-[15.5px] text-slate-700 leading-relaxed">
+                      <i class="fa-solid fa-caret-right text-amber-600 mt-1.5"></i>
+                      <span>${item}</span>
+                    </li>
+                  `).join("")}
+                </ul>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+      else if (slide.type === "interactive-seminars") {
+        const g = seminarsGroupsData[activeGroupIdx];
+        html = `
+          ${renderSlideHeader(slide)}
+          <div class="grid grid-cols-12 gap-6 flex-1 items-center my-auto">
+            <div class="col-span-5 flex flex-col gap-2.5">
+              ${seminarsGroupsData.map((item, idx) => `
+                <button onclick="selectGroup(${idx})" class="text-left p-3.5 rounded-xl border transition-all flex items-center justify-between ${idx === activeGroupIdx ? 'bg-[#113818] text-white border-emerald-500 shadow-lg scale-[1.02]' : 'bg-slate-50 hover:bg-emerald-50/70 text-slate-800 border-slate-200'}">
+                  <div>
+                    <span class="text-[10px] font-hud uppercase tracking-wider ${idx === activeGroupIdx ? 'text-amber-300' : 'text-emerald-700'}">TEMA DE SEMINÁRIO</span>
+                    <h4 class="text-sm font-bold leading-snug">${item.id}</h4>
+                  </div>
+                  <i class="fa-solid fa-chevron-right text-xs ${idx === activeGroupIdx ? 'text-amber-400' : 'text-slate-400'}"></i>
+                </button>
+              `).join("")}
+            </div>
+
+            <div class="col-span-7 holo-card gold-accent p-6 h-[430px] flex flex-col justify-between bg-gradient-to-br from-white to-emerald-50/40">
+              <div>
+                <div class="flex items-center justify-between mb-3">
+                  <span class="px-3 py-1 rounded-full bg-[#113818] text-amber-400 font-hud text-xs font-bold">${g.id}</span>
+                  <span class="text-xs font-bold text-emerald-900 bg-emerald-100 px-3 py-1 rounded-full">Apresentação + Arguição</span>
+                </div>
+                <h3 class="text-xl font-extrabold text-[#113818] mb-2">${g.title}</h3>
+                <p class="text-xs font-semibold text-emerald-700 mb-3">Matrizes Foco: <i>${g.focus}</i></p>
+                <div class="p-3.5 rounded-xl bg-white border border-slate-200 shadow-sm mb-3">
+                  <h4 class="text-xs font-hud uppercase text-emerald-800 mb-1">Roteiro Técnico Exigido do Grupo</h4>
+                  <p class="text-[14.5px] text-slate-800 leading-relaxed">${g.deliverables}</p>
+                </div>
+              </div>
+              <div class="p-3.5 rounded-xl bg-[#113818] text-white flex items-center gap-3">
+                <i class="fa-solid fa-gavel text-amber-400 text-xl"></i>
+                <div class="text-xs leading-snug">
+                  <b class="text-amber-300 uppercase block">Questão Desafio da Banca Avaliadora:</b>
+                  ${g.boardQuestion}
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+      else if (slide.type === "interactive-cases") {
+        const c = aula09Cases[activeCaseIdx];
+        html = `
+          ${renderSlideHeader(slide)}
+          <div class="grid grid-cols-12 gap-6 flex-1 items-stretch my-auto">
+            <div class="col-span-4 holo-card p-5 flex flex-col justify-between bg-gradient-to-br from-[#113818] to-[#1d5426] text-white">
+              <div>
+                <span class="text-xs font-hud font-bold text-amber-400">SÍNTESE DOS SEMINÁRIOS</span>
+                <h3 class="text-2xl font-bold font-serif mt-1 mb-3">Tríades Clínicas</h3>
+                <ul class="space-y-3 text-sm text-emerald-50">
+                  <li><i class="fa-solid fa-circle-check text-amber-400 mr-2"></i><b>Febres:</b> Aconitum (seco/susto), Belladonna (rubor/suor), Gelsemium (torpor).</li>
+                  <li><i class="fa-solid fa-circle-check text-amber-400 mr-2"></i><b>Traumas:</b> Arnica (músculo), Hypericum (nervo), Ruta (tendão), Symphytum (osso).</li>
+                  <li><i class="fa-solid fa-circle-check text-amber-400 mr-2"></i><b>Digestivos:</b> Nux vomica, Lycopodium (16h–20h) e Pulsatilla.</li>
+                </ul>
+              </div>
+              <div class="p-3 rounded-xl bg-black/25 border border-white/10 text-xs text-emerald-200">
+                <b>Próxima Aula (Aula 10):</b> Medicamentos Homeopáticos X Medicamentos Não-Homeopáticos.
+              </div>
+            </div>
+
+            <div class="col-span-8 holo-card gold-accent p-6 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between mb-4">
+                  <span class="px-3 py-1 rounded-full bg-[#113818] text-amber-400 font-hud text-xs font-bold">${c.badge}</span>
+                  <div class="flex gap-2">
+                    ${aula09Cases.map((_, idx) => `
+                      <button onclick="selectCase(${idx})" class="px-3 py-1 rounded-lg text-xs font-bold transition ${idx === activeCaseIdx ? 'bg-emerald-600 text-white shadow' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'}">
+                        Arguição 0${idx + 1}
+                      </button>
+                    `).join("")}
+                  </div>
+                </div>
+                <div class="p-3.5 rounded-xl bg-white border border-slate-200 mb-3">
+                  <p class="text-xs font-hud text-slate-400 uppercase">Caso Apresentado à Equipe</p>
+                  <p class="text-[15px] font-semibold text-slate-800 mt-0.5">${c.patient}</p>
+                </div>
+                <div class="p-3.5 rounded-xl bg-emerald-950/5 border border-emerald-900/20 mb-4">
+                  <p class="text-xs font-hud text-emerald-800 uppercase">Referência Técnica</p>
+                  <p class="text-[14.5px] text-slate-800 mt-0.5">${c.lab}</p>
+                </div>
+                <p class="text-base font-bold text-[#113818] mb-3"><i class="fa-solid fa-circle-question text-amber-500 mr-1.5"></i>${c.question}</p>
+              </div>
+              <div>
+                ${caseRevealed ? `
+                  <div class="p-4 rounded-xl bg-[#113818] text-white text-sm leading-relaxed">
+                    <span class="text-amber-400 font-bold block mb-1"><i class="fa-solid fa-check-double mr-1"></i>RESPOSTA OFICIAL DA BANCA:</span>
+                    ${c.answer}
+                  </div>
+                ` : `
+                  <button onclick="revealCaseAnswer()" class="w-full py-3 rounded-xl bg-gradient-to-r from-[#113818] to-[#00B050] hover:opacity-95 text-white font-bold text-sm shadow-lg flex items-center justify-center gap-2 transition">
+                    <i class="fa-solid fa-eye"></i> Revelar Resposta Oficial da Banca
+                  </button>
+                `}
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      container.innerHTML = html;
+    }
+
+    function renderSlideHeader(slide) {
+      return `
+        <div class="mb-4 pb-2 border-b border-emerald-900/10 flex items-end justify-between stagger-item" style="animation-delay: 0.04s">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <span class="w-2 h-2 rounded-full bg-[#00B050]"></span>
+              <p class="text-xs font-hud font-bold tracking-wider text-[#00B050] uppercase">${slide.eyebrow}</p>
+            </div>
+            <h2 class="slide-heading-serif text-[31px] leading-tight">${slide.title}</h2>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderVisualDiagram(type) {
+      if (type === "svg-seminar-synthesis") {
+        return `
+          <svg viewBox="0 0 280 310" class="w-full h-full">
+            <text x="140" y="22" font-size="11" font-weight="bold" fill="#113818" text-anchor="middle">INTEGRAÇÃO TEÓRICO-PRÁTICA</text>
+            <circle cx="140" cy="150" r="38" fill="#113818" stroke="#FDB913" stroke-width="3"/>
+            <text x="140" y="146" font-size="9.5" font-weight="bold" fill="#FDB913" text-anchor="middle">TÉCNICO EM</text>
+            <text x="140" y="160" font-size="9.5" font-weight="bold" fill="#ffffff" text-anchor="middle">FARMÁCIA</text>
+
+            <rect x="75" y="38" width="130" height="32" rx="8" fill="#00B050"/>
+            <text x="140" y="58" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle">1. Doutrina & FHB 3ª Ed.</text>
+
+            <rect x="75" y="232" width="130" height="32" rx="8" fill="#346739"/>
+            <text x="140" y="252" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle">2. BPMH (RDC 67/2007)</text>
+
+            <rect x="6" y="134" width="84" height="32" rx="8" fill="#FDB913"/>
+            <text x="48" y="154" font-size="9.5" font-weight="bold" fill="#113818" text-anchor="middle">3. Bancada</text>
+
+            <rect x="190" y="134" width="84" height="32" rx="8" fill="#FDB913"/>
+            <text x="232" y="154" font-size="9.5" font-weight="bold" fill="#113818" text-anchor="middle">4. Dispensação</text>
+
+            <text x="140" y="292" font-size="10" font-weight="bold" fill="#113818" text-anchor="middle">Preparação para as Aulas Práticas de Laboratório</text>
+          </svg>
+        `;
+      }
+      return "";
+    }
+
+    function selectGroup(idx) { activeGroupIdx = idx; renderSlide(currentSlideIndex); }
+    function selectCase(idx) { activeCaseIdx = idx; caseRevealed = false; renderSlide(currentSlideIndex); }
+    function revealCaseAnswer() { caseRevealed = true; renderSlide(currentSlideIndex); }
+    function nextSlide() { if (currentSlideIndex < slidesData.length - 1) { currentSlideIndex++; renderSlide(currentSlideIndex); } }
+    function prevSlide() { if (currentSlideIndex > 0) { currentSlideIndex--; renderSlide(currentSlideIndex); } }
+
+    function goToSlide(idx) {
+      currentSlideIndex = idx;
+      renderSlide(currentSlideIndex);
+      const drawer = document.getElementById("slide-drawer");
+      if (!drawer.classList.contains("hidden")) toggleDrawer();
+    }
+
+    function toggleDrawer() {
+      const drawer = document.getElementById("slide-drawer");
+      if (drawer.classList.contains("hidden")) {
+        populateDrawer();
+        drawer.classList.remove("hidden");
+        drawer.classList.add("flex");
+      } else {
+        drawer.classList.add("hidden");
+        drawer.classList.remove("flex");
+      }
+    }
+
+    function populateDrawer() {
+      const grid = document.getElementById("drawer-grid");
+      grid.innerHTML = slidesData.map((s, idx) => `
+        <button onclick="goToSlide(${idx})" class="text-left p-3.5 rounded-xl border transition-all flex flex-col justify-between ${idx === currentSlideIndex ? 'bg-emerald-900/60 border-emerald-400 ring-2 ring-emerald-400/40' : 'bg-slate-900/80 border-slate-800 hover:border-emerald-500/50 hover:bg-slate-800/70'}">
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <span class="font-hud text-xs font-bold ${idx === currentSlideIndex ? 'text-amber-400' : 'text-emerald-400'}">SLIDE ${String(s.id).padStart(2, '0')}</span>
+              <span class="text-[10px] text-slate-400 truncate max-w-[140px]">${s.module}</span>
+            </div>
+            <p class="text-sm font-bold text-white line-clamp-2 leading-snug">${s.title}</p>
+          </div>
+        </button>
+      `).join("");
+    }
+
+    function toggleLaser() {
+      laserEnabled = !laserEnabled;
+      const dot = document.getElementById("laser-dot");
+      const btn = document.getElementById("btn-laser");
+      dot.style.display = laserEnabled ? "block" : "none";
+      btn.classList.toggle("bg-emerald-600", laserEnabled);
+      btn.classList.toggle("text-white", laserEnabled);
+    }
+
+    window.addEventListener("mousemove", (e) => {
+      if (laserEnabled) {
+        const dot = document.getElementById("laser-dot");
+        dot.style.left = `${e.clientX}px`;
+        dot.style.top = `${e.clientY}px`;
+      }
+    });
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {});
+      else document.exitFullscreen().catch(() => {});
+    }
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") { e.preventDefault(); nextSlide(); }
+      else if (e.key === "ArrowLeft" || e.key === "PageUp") { e.preventDefault(); prevSlide(); }
+      else if (e.key === "Home") goToSlide(0);
+      else if (e.key === "End") goToSlide(slidesData.length - 1);
+      else if (e.key.toLowerCase() === "g") toggleDrawer();
+      else if (e.key.toLowerCase() === "l") toggleLaser();
+      else if (e.key.toLowerCase() === "f") toggleFullScreen();
+      else if (e.key === "Escape") {
+        const drawer = document.getElementById("slide-drawer");
+        if (!drawer.classList.contains("hidden")) toggleDrawer();
+      }
+    });
+
+    function fitSlideViewport() {
+      const viewport = document.getElementById("slide-deck-viewport");
+      const availableW = window.innerWidth - 36;
+      const availableH = window.innerHeight - 84;
+      const scale = Math.min(availableW / 1280, availableH / 720, 1.15);
+      viewport.style.transform = `scale(${scale})`;
+    }
+
+    window.addEventListener("resize", fitSlideViewport);
+
+    function initBioParticles() {
+      const canvas = document.getElementById("bio-particles");
+      const ctx = canvas.getContext("2d");
+      canvas.width = 1280; canvas.height = 720;
+      const particles = Array.from({ length: 28 }, (_, i) => ({
+        x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+        r: Math.random() * 4 + 2, vx: (Math.random() - 0.5) * 0.45, vy: (Math.random() - 0.5) * 0.45,
+        color: i % 3 === 0 ? "rgba(253, 185, 19, 0.22)" : "rgba(0, 176, 80, 0.16)"
+      }));
+
+      function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let i = 0; i < particles.length; i++) {
+          const p = particles[i];
+          p.x += p.vx; p.y += p.vy;
+          if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+          if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+          ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fillStyle = p.color; ctx.fill();
+          for (let j = i + 1; j < particles.length; j++) {
+            const p2 = particles[j];
+            const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+            if (dist < 130) {
+              ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y);
+              ctx.strokeStyle = `rgba(52, 103, 57, ${0.07 * (1 - dist / 130)})`; ctx.lineWidth = 1; ctx.stroke();
+            }
+          }
+        }
+        requestAnimationFrame(animateParticles);
+      }
+      animateParticles();
+    }
+
+    window.onload = function () {
+      fitSlideViewport();
+      initBioParticles();
+      renderSlide(0);
+    };
+  </script>
+</body>
+</html>

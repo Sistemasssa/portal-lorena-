@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Homeopatia — Aula 08: Técnicas Procedimentais de Manipulação I — Grau Técnico (Turma FMC09-M)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,600;0,700;1,600&family=Orbitron:wght@500;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <style>
+    :root {
+      --grau-dark-green: #113818;
+      --grau-bar-green: #346739;
+      --grau-bright-green: #00B050;
+      --grau-lime: #8BC53F;
+      --grau-yellow: #FDB913;
+      --hud-glow: rgba(0, 176, 80, 0.28);
+    }
+
+    * { box-sizing: border-box; user-select: none; }
+
+    body, html {
+      margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden;
+      background: radial-gradient(circle at 50% 20%, #132a19 0%, #07120a 100%);
+      font-family: 'Plus Jakarta Sans', sans-serif; color: #1e293b;
+    }
+
+    #app-stage {
+      position: relative; width: 100vw; height: 100vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden;
+    }
+
+    #slide-deck-viewport {
+      position: relative; width: 1280px; height: 720px; background: #ffffff;
+      border-radius: 14px;
+      box-shadow: 0 25px 70px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(139, 197, 63, 0.35), 0 0 35px rgba(0, 176, 80, 0.2);
+      overflow: hidden; display: flex; flex-direction: column; justify-content: space-between;
+      transform-origin: center center; transition: box-shadow 0.4s ease;
+    }
+
+    .futuristic-bg-grid {
+      position: absolute; inset: 0;
+      background-image: linear-gradient(to right, rgba(17, 56, 24, 0.03) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(17, 56, 24, 0.03) 1px, transparent 1px);
+      background-size: 36px 36px; pointer-events: none; z-index: 1;
+    }
+
+    .futuristic-corner-hud {
+      position: absolute; top: 16px; right: 24px; z-index: 5;
+      display: flex; align-items: center; gap: 10px; pointer-events: none;
+    }
+
+    #bio-particles {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      pointer-events: none; z-index: 2; opacity: 0.65;
+    }
+
+    #slide-stage-content {
+      position: relative; z-index: 10; flex: 1; width: 100%; height: calc(100% - 52px);
+      padding: 36px 58px 18px 58px; display: flex; flex-direction: column; overflow: hidden;
+    }
+
+    .slide-enter { animation: futuristicSlideIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+    @keyframes futuristicSlideIn {
+      0% { opacity: 0; transform: translateY(18px) scale(0.985); filter: blur(4px); }
+      100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+    }
+
+    .stagger-item {
+      opacity: 0; transform: translateY(16px);
+      animation: staggerFadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes staggerFadeUp { to { opacity: 1; transform: translateY(0); } }
+
+    .cover-title-text {
+      font-family: 'Lora', Georgia, serif; font-weight: 700; color: #0d3b14;
+      text-shadow: 2px 3px 6px rgba(0, 0, 0, 0.22), 0 0 25px rgba(0, 176, 80, 0.12);
+      letter-spacing: -0.5px;
+    }
+
+    .slide-heading-serif { font-family: 'Lora', Georgia, serif; font-weight: 700; color: #0d3b14; }
+    .font-hud { font-family: 'Orbitron', sans-serif; }
+
+    .holo-card {
+      position: relative; background: rgba(248, 251, 249, 0.88); backdrop-filter: blur(8px);
+      border: 1px solid rgba(52, 103, 57, 0.18); border-radius: 14px;
+      box-shadow: 0 8px 24px -6px rgba(17, 56, 24, 0.07), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1); overflow: hidden;
+    }
+
+    .holo-card::before {
+      content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
+      background: linear-gradient(180deg, #00B050, #346739); opacity: 0.85;
+    }
+
+    .holo-card.gold-accent::before { background: linear-gradient(180deg, #FDB913, #d97706); }
+    .holo-card.red-accent::before { background: linear-gradient(180deg, #ef4444, #991b1b); }
+
+    .holo-card:hover {
+      transform: translateY(-4px); border-color: rgba(0, 176, 80, 0.55);
+      box-shadow: 0 14px 30px -6px rgba(0, 176, 80, 0.16);
+    }
+
+    .scan-box { position: relative; overflow: hidden; }
+    .scan-box::after {
+      content: ''; position: absolute; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, transparent, rgba(0, 176, 80, 0.6), rgba(253, 185, 19, 0.8), rgba(0, 176, 80, 0.6), transparent);
+      box-shadow: 0 0 12px rgba(0, 176, 80, 0.6); animation: verticalScan 4.5s ease-in-out infinite; pointer-events: none;
+    }
+
+    @keyframes verticalScan { 0%, 100% { top: 2%; opacity: 0.2; } 50% { top: 96%; opacity: 0.85; } }
+
+    .grau-template-footer {
+      position: relative; z-index: 20; width: 100%; height: 52px; background: #ffffff;
+      display: flex; align-items: flex-end; justify-content: space-between; flex-shrink: 0; padding: 0;
+    }
+
+    .footer-bars-track { display: flex; align-items: flex-end; width: 82.5%; height: 36px; }
+    .f-seg-1 { width: 7.5%; height: 100%; background-color: #346739; }
+    .f-seg-2 { width: 31.5%; height: 100%; background-color: #FDB913; }
+    .f-gap-1 { width: 4.2%; height: 100%; background-color: #ffffff; }
+    .f-seg-3 { width: 17.0%; height: 100%; background-color: #00B050; }
+    .f-seg-4 { width: 24.3%; height: 100%; background-color: #346739; }
+    .f-gap-2 { width: 4.5%; height: 100%; background-color: #ffffff; }
+    .f-seg-5 { width: 15.5%; height: 100%; background-color: #FDB913; }
+
+    .footer-logo-zone {
+      width: 17.5%; height: 52px; background: #ffffff;
+      display: flex; align-items: center; justify-content: center; padding-right: 12px; padding-bottom: 2px;
+    }
+
+    .futuristic-table {
+      width: 100%; border-collapse: separate; border-spacing: 0; border-radius: 12px;
+      overflow: hidden; border: 1px solid rgba(52, 103, 57, 0.2); box-shadow: 0 6px 20px rgba(17, 56, 24, 0.05);
+    }
+    .futuristic-table th {
+      background: linear-gradient(90deg, #113818 0%, #24582c 100%); color: #ffffff;
+      font-weight: 700; text-align: left; padding: 12px 16px; font-size: 15px; letter-spacing: 0.3px;
+    }
+    .futuristic-table td {
+      padding: 11px 16px; font-size: 14.5px; border-bottom: 1px solid #e2e8f0;
+      background: #ffffff; color: #1e293b; transition: background 0.2s;
+    }
+    .futuristic-table tr:nth-child(even) td { background: #f4f9f5; }
+    .futuristic-table tr:hover td { background: #e6f4ea; }
+
+    #laser-dot {
+      position: fixed; width: 14px; height: 14px; border-radius: 50%; background: #00ff66;
+      box-shadow: 0 0 12px 4px #00ff66, 0 0 24px 8px #00B050; pointer-events: none;
+      z-index: 9999; transform: translate(-50%, -50%); display: none;
+    }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0f2415; }
+    ::-webkit-scrollbar-thumb { background: #00B050; border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+  <div id="laser-dot"></div>
+
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <g id="grau-tecnico-logo">
+        <text x="4" y="34" font-family="'Plus Jakarta Sans', 'Arial Rounded MT Bold', sans-serif" font-weight="800" font-size="37" letter-spacing="-2.2" fill="#0a0a0a">grau</text>
+        <circle cx="93" cy="12" r="10.5" fill="#ffffff" />
+        <circle cx="93" cy="12" r="8.2" fill="#ffffff" stroke="#8BC53F" stroke-width="2.6" />
+        <text x="93" y="16.2" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="11.5" fill="#0a0a0a">T</text>
+        <text x="89" y="45" text-anchor="end" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="9.5" letter-spacing="1.4" fill="#8BC53F">TÉCNICO</text>
+      </g>
+    </defs>
+  </svg>
+
+  <div id="app-stage">
+    <header class="fixed top-3 z-40 flex items-center justify-between gap-4 px-5 py-2 rounded-full bg-neutral-950/85 backdrop-blur-md border border-emerald-500/30 text-white shadow-2xl transition-all duration-300" style="width: min(1240px, 95vw);">
+      <div class="flex items-center gap-3">
+        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-400">
+          <i class="fa-solid fa-sliders text-sm"></i>
+        </span>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-hud uppercase tracking-wider text-emerald-400" id="hud-module-badge">AULA 08</span>
+            <span class="text-xs text-slate-400">|</span>
+            <span class="text-xs font-semibold text-amber-400">TURMA FMC09-M</span>
+          </div>
+          <p class="text-xs text-slate-300 truncate max-w-[280px] sm:max-w-[420px]" id="hud-slide-title">Capa — Técnicas Procedimentais de Manipulação I</p>
+        </div>
+      </div>
+
+      <div class="hidden md:flex flex-col items-center flex-1 max-w-xs mx-4">
+        <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden border border-slate-700">
+          <div id="hud-progress-bar" class="h-full bg-gradient-to-r from-emerald-500 via-lime-400 to-amber-400 transition-all duration-300" style="width: 6.6%;"></div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button onclick="prevSlide()" title="Slide Anterior" class="w-8 h-8 rounded-full bg-slate-800/90 hover:bg-emerald-600 text-white flex items-center justify-center transition">
+          <i class="fa-solid fa-chevron-left text-xs"></i>
+        </button>
+        <div class="px-3 py-1 rounded-full bg-slate-900 border border-emerald-500/40 font-hud text-xs font-bold text-emerald-300 min-w-[78px] text-center" id="hud-counter">
+          01 / 15
+        </div>
+        <button onclick="nextSlide()" title="Próximo Slide" class="w-8 h-8 rounded-full bg-slate-800/90 hover:bg-emerald-600 text-white flex items-center justify-center transition">
+          <i class="fa-solid fa-chevron-right text-xs"></i>
+        </button>
+        <div class="h-4 w-[1px] bg-slate-700 mx-1"></div>
+        <button onclick="toggleDrawer()" title="Mapa dos 15 Slides (Tecla G)" class="px-3 py-1.5 rounded-full bg-emerald-600/20 hover:bg-emerald-600/40 border border-emerald-500/40 text-emerald-300 text-xs font-semibold flex items-center gap-1.5 transition">
+          <i class="fa-solid fa-table-cells-large"></i>
+          <span class="hidden sm:inline">15 Slides</span>
+        </button>
+        <button onclick="toggleLaser()" id="btn-laser" title="Apontador Laser (Tecla L)" class="w-8 h-8 rounded-full bg-slate-800/90 hover:bg-emerald-600 text-slate-300 flex items-center justify-center transition">
+          <i class="fa-solid fa-wand-magic-sparkles text-xs"></i>
+        </button>
+        <button onclick="toggleFullScreen()" title="Tela Cheia (Tecla F)" class="w-8 h-8 rounded-full bg-slate-800/90 hover:bg-emerald-600 text-slate-300 flex items-center justify-center transition">
+          <i class="fa-solid fa-expand text-xs"></i>
+        </button>
+      </div>
+    </header>
+
+    <main id="slide-deck-viewport">
+      <div class="futuristic-bg-grid"></div>
+      <canvas id="bio-particles"></canvas>
+
+      <div class="futuristic-corner-hud" id="slide-telemetry">
+        <span class="px-2.5 py-0.5 rounded-full text-[11px] font-hud font-bold tracking-wider bg-emerald-950/10 text-emerald-800 border border-emerald-700/20" id="internal-slide-num">SLIDE 01 // 15</span>
+      </div>
+
+      <div id="slide-stage-content" class="slide-enter"></div>
+
+      <footer class="grau-template-footer">
+        <div class="footer-bars-track">
+          <div class="f-seg-1"></div>
+          <div class="f-seg-2"></div>
+          <div class="f-gap-1"></div>
+          <div class="f-seg-3"></div>
+          <div class="f-seg-4"></div>
+          <div class="f-gap-2"></div>
+          <div class="f-seg-5"></div>
+        </div>
+        <div class="footer-logo-zone">
+          <svg viewBox="0 0 112 48" class="w-32 h-12 overflow-visible">
+            <use href="#grau-tecnico-logo"></use>
+          </svg>
+        </div>
+      </footer>
+    </main>
+
+    <div id="slide-drawer" class="fixed inset-0 z-50 bg-neutral-950/90 backdrop-blur-xl hidden flex-col p-6 md:p-10">
+      <div class="flex items-center justify-between max-w-7xl w-full mx-auto mb-6 pb-4 border-b border-emerald-500/30">
+        <div class="flex items-center gap-3">
+          <i class="fa-solid fa-layer-group text-2xl text-emerald-400"></i>
+          <div>
+            <h2 class="text-xl font-bold text-white font-hud">ÍNDICE INTERATIVO — AULA 08 (15 SLIDES)</h2>
+            <p class="text-xs text-slate-400">Técnicas Procedimentais Executáveis durante a Manipulação I • Turma FMC09-M</p>
+          </div>
+        </div>
+        <button onclick="toggleDrawer()" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-rose-600 text-white text-sm font-semibold flex items-center gap-2 transition">
+          <i class="fa-solid fa-xmark"></i> Fechar (ESC)
+        </button>
+      </div>
+      <div id="drawer-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 max-w-7xl w-full mx-auto overflow-y-auto pr-2"></div>
+    </div>
+  </div>
+
+  <script>
+    const slidesData = [
+      {
+        id: 1,
+        module: "AULA 08 • CAPA OFICIAL",
+        eyebrow: "CURSO TÉCNICO EM FARMÁCIA • GRAU TÉCNICO",
+        title: "Técnicas Procedimentais na Manipulação Homeopática I",
+        type: "cover"
+      },
+      {
+        id: 2,
+        module: "AULA 08 • PLANO PEDAGÓGICO",
+        eyebrow: "OPERAÇÕES UNITÁRIAS E METROLOGIA • TURMA FMC09-M",
+        title: "Objetivos da Aula 08: Precisão Técnica na Bancada (Parte I)",
+        type: "cards-grid",
+        subtitle: "Metrologia farmacêutica, leitura de menisco, alcoolometria prática, picnometria, pesagem e sucussão padronizada.",
+        cards: [
+          { tag: "METROLOGIA VOLUMÉTRICA", icon: "fa-ruler-combined", title: "Vidrarias e Leitura de Menisco", desc: "Diferenciar vidrarias volumétricas (pipetas, provetas, balões) de vidrarias graduadas e eliminar o erro de paralaxe." },
+          { tag: "GRAVIMETRIA DE PRECISÃO", icon: "fa-scale-unbalanced-flip", title: "Pesagem Analítica e Semianalítica", desc: "Operação correta da balança eletrônica: nivelamento, tara, papel manteiga inerte e pesagem de triturados e glóbulos." },
+          { tag: "ALCOOLOMETRIA E DENSIDADE", icon: "fa-temperature-low", title: "Alcoômetro e Picnômetro", desc: "Execução prática da leitura do grau alcoólico (°GL e % p/p) a 20°C e determinação da densidade relativa de tinturas." },
+          { tag: "DINAMIZAÇÃO LÍQUIDA I", icon: "fa-hand-fist", title: "Procedimento CH e DH (Fase I)", desc: "Executar o protocolo técnico das escalas Centesimal e Decimal em meio líquido sem contaminação ou perda volumétrica." }
+        ]
+      },
+      {
+        id: 3,
+        module: "AULA 08 • VIDRARIAS DO LABORATÓRIO",
+        eyebrow: "CLASSIFICAÇÃO E USO CORRETO NA BANCADA HOMEOPÁTICA",
+        title: "Vidrarias de Medição vs Vidrarias de Contenção",
+        type: "table-slide",
+        headers: ["Vidraria Laboratorial", "Classificação Metro-Lógica", "Aplicação Exata na Farmácia Homeopática"],
+        rows: [
+          ["<b>Pipeta Volumétrica e Graduada</b>", "Alta Precisão (Escoamento TD)", "Medição exata de 1 parte do Insumo Ativo (ex: 0,1 mL, 0,2 mL ou 1,0 mL de matriz ou TM)."],
+          ["<b>Proveta Graduada</b>", "Precisão Intermediária (Contenção TC)", "Medição das 99 partes (ou 9 partes) de álcool diluído e realização da leitura do Alcoômetro."],
+          ["<b>Balão Volumétrico</b>", "Altíssima Precisão (Calibrado TC)", "Preparo de soluções padrões e aferição de volumes exatos no controle de qualidade."],
+          ["<b>Cálice Graduado e Béquer</b>", "Baixa Precisão (Apenas Auxiliar)", "NUNCA usar cálice ou béquer para medir 1 parte do insumo ativo! Uso restrito a apoio e pré-misturas."],
+          ["<b>Gral e Pistilo de Porcelana</b>", "Utensílio Mecânico de Trituração", "Parede interna rugosa (sem esmalte) necessária para cisalhar e micronizar cristais de lactose e minerais."]
+        ]
+      },
+      {
+        id: 4,
+        module: "AULA 08 • TÉCNICA DE PIPETAGEM E MENISCO",
+        eyebrow: "ELIMINANDO O ERRO DE PARALAXE NA BANCADA",
+        title: "Leitura Correta do Menisco e Uso de Pipetadores",
+        type: "split-visual",
+        bullets: [
+          { icon: "fa-eye", title: "O que é o Menisco Côncavo?", text: "Soluções aquosas e hidroalcoólicas molham as paredes do vidro, formando uma curvatura côncava na superfície livre do líquido." },
+          { icon: "fa-arrows-to-eye", title: "Eliminando o Erro de Paralaxe", text: "Posicionar os olhos exatamente na MESMA LINHA HORIZONTAL da marca de aferição. A base inferior da curva do menisco deve tangenciar o traço de referência!" },
+          { icon: "fa-ban", title: "Proibição de Pipetar com a Boca", text: "Norma de biossegurança e higiene: utilizar sempre pera de sucção de borracha, pró-pipetador (pi-pump) ou micropipeta automática calibrada." },
+          { icon: "fa-droplet", title: "Escoamento Vertical (Não Soprar!)", text: "Nas pipetas calibradas 'TD' (To Deliver), encostar a ponta na parede do frasco receptor em ângulo de 45° e aguardar o escoamento livre sem soprar a última gota retida." }
+        ],
+        visualType: "svg-meniscus-reading"
+      },
+      {
+        id: 5,
+        module: "AULA 08 • TÉCNICA DE PESAGEM (GRAVIMETRIA)",
+        eyebrow: "OPERAÇÃO DA BALANÇA DE PRECISÃO",
+        title: "Procedimentos Executáveis na Pesagem Homeopática",
+        type: "process-kpis",
+        steps: [
+          { step: "PASSO 01", title: "Nivelamento e Limpeza", desc: "Verificar se a bolha de nível da balança está centralizada, limpar o prato com pincel macio e álcool 70%, fechar a capela e acionar a tecla TARA (0,000 g).", metric: "Zero Absoluto" },
+          { step: "PASSO 02", title: "Barquinha / Papel Manteiga", desc: "Nunca pesar substâncias diretamente sobre o prato metálico! Usar papel manteiga impermeável novo ou vidro de relógio inativado e tarar novamente.", metric: "Proteção Inerte" },
+          { step: "PASSO 03", title: "Espátula Exclusiva", desc: "Retirar o pó (lactose ou matriz sólida) com espátula de inox, porcelana ou chifre/plástico inerte limpa, fechar as portas laterais da balança e registrar o peso.", metric: "Sem Corrente de Ar" }
+        ],
+        kpis: [
+          { value: "0,001 g", label: "Resolução da Balança Semianalítica para Pesagem de Triturados (1 mg)", color: "emerald" },
+          { value: "30 min", label: "Tempo de Pré-Aquecimento Eletrônico da Balança antes do Uso", color: "amber" },
+          { value: "Padrão RBC", label: "Verificação Diária com Peso-Padrão Certificado antes da Rotina", color: "emerald" }
+        ]
+      },
+      {
+        id: 6,
+        module: "AULA 08 • SIMULADOR DE ALCOOLOMETRIA",
+        eyebrow: "INTERATIVO • PREPARE SOLUÇÕES HIDROALCOÓLICAS NA BANCADA",
+        title: "Simulador Prático de Diluição Alcoólica (FHB 3ª Edição)",
+        type: "interactive-alcohol"
+      },
+      {
+        id: 7,
+        module: "AULA 08 • DETERMINAÇÃO DA DENSIDADE (PICNOMETRIA)",
+        eyebrow: "CONTROLE FÍSICO-QUÍMICO DE TINTURAS-MÃE E ÁLCOOL",
+        title: "Técnica do Picnômetro de Vidro na Bancada",
+        type: "split-columns",
+        leftTitle: "O que é e Como Usar o Picnômetro?",
+        leftIcon: "fa-weight-scale",
+        leftAccent: "",
+        leftItems: [
+          "<b>Definição:</b> Frasco de vidro de volume rigorosamente calibrado com tampa esmerilhada capilar, usado para determinar a <b>densidade relativa (d)</b> de líquidos a 20°C.",
+          "<b>1ª Pesagem (M1):</b> Pesar o picnômetro vazio, limpo e totalmente seco.",
+          "<b>2ª Pesagem (M2):</b> Pesar o picnômetro cheio com Água Purificada a 20°C (enxugando o excesso que extravasa pelo capilar).",
+          "<b>3ª Pesagem (M3):</b> Pesar o picnômetro cheio com a Tintura-Mãe ou Álcool em teste a 20°C."
+        ],
+        rightTitle: "Cálculo da Densidade Relativa",
+        rightIcon: "fa-square-root-variable",
+        rightAccent: "gold-accent",
+        rightItems: [
+          "<b>Fórmula Oficial:</b> Densidade Relativa = (M3 − M1) ÷ (M2 − M1).",
+          "<b>Relação Densidade vs Teor Alcoólico:</b> Como o etanol puro é menos denso que a água (~0,789 g/mL) e a água pura tem densidade ~1,000 g/mL, quanto MAIOR o teor alcoólico, MENOR será a densidade da solução!",
+          "<b>Referência na FHB:</b> Álcool 70% p/p (77% v/v) possui densidade ~0,867 g/mL; Álcool 30% p/p (36% v/v) possui densidade ~0,954 g/mL."
+        ]
+      },
+      {
+        id: 8,
+        module: "AULA 08 • PROCEDIMENTO DE SUCUSSÃO MANUAL",
+        eyebrow: "BIOMECÂNICA E ERGONOMIA DO TÉCNICO",
+        title: "Técnica Executável da Sucussão Manual Padronizada",
+        type: "split-visual",
+        bullets: [
+          { icon: "fa-hand-holding", title: "Empunhadura Firme do Frasco", text: "Segurar o frasco âmbar (preenchido até no máximo 2/3) com a mão dominante, mantendo o polegar ou indicador sobre a tampa rosqueada." },
+          { icon: "fa-arrows-up-down", title: "Curso Vertical de 30 a 40 cm", text: "Executar movimento vertical contínuo do antebraço, descendo com força constante até chocar o fundo do frasco contra o anteparo semirrígido." },
+          { icon: "fa-drum", title: "Anteparo Elástico (Espuma / Couro)", text: "O anteparo absorve o impacto seco (evitando a quebra do vidro) e provoca uma parada elástica súbita que gera microbolhas de cavitação no líquido." },
+          { icon: "fa-gauge-high", title: "Cadência Constante (100 Impactos)", text: "Manter frequência ritmada (~2 impactos por segundo, totalizando ~50 segundos por potência), contando mentalmente sem interrupções." }
+        ],
+        visualType: "svg-succussion-arm"
+      },
+      {
+        id: 9,
+        module: "AULA 08 • USO DO DINAMIZADOR MECÂNICO",
+        eyebrow: "PADRONIZAÇÃO AUTOMATIZADA DE SUCUSSÕES",
+        title: "Operação do Dinamizador Mecânico (Braço Mecânico)",
+        type: "split-columns",
+        leftTitle: "Vantagens e Operação do Equipamento",
+        leftIcon: "fa-robot",
+        leftAccent: "",
+        leftItems: [
+          "<b>Prevenção de LER/DORT:</b> Protege o técnico em farmácia contra lesões por esforço repetitivo em dias de alta demanda de produção.",
+          "<b>Reprodutibilidade Absoluta:</b> Garante que a força, a amplitude vertical e o número exato de 100 batidas sejam idênticos em todos os lotes.",
+          "<b>Fixação do Frasco:</b> Prender o frasco firmemente nas garras acolchoadas do braço mecânico, zerar o contador digital/mecânico para 100 ciclos e acionar."
+        ],
+        rightTitle: "Cuidados de Segurança e Manutenção",
+        rightIcon: "fa-screwdriver-wrench",
+        rightAccent: "gold-accent",
+        rightItems: [
+          "<b>Vedação Prévia da Tampa:</b> Conferir se a tampa está perfeitamente rosqueada antes de ligar o aparelho para evitar vazamento sob agitação.",
+          "<b>Afastamento do Motor Elétrico:</b> Nos aparelhos modernos, o motor elétrico fica blindado e afastado da garra onde o frasco é fixado (evita campo magnético).",
+          "<b>Calibração Periódica:</b> Aferir semestralmente o contador de golpes e a frequência de batidas por minuto conforme POP."
+        ]
+      },
+      {
+        id: 10,
+        module: "AULA 08 • TÉCNICA DO MÉTODO HAHNEMANNIANO (PASSO A PASSO)",
+        eyebrow: "ROTEIRO OPERACIONAL DE BANCADA (ESCALAS CH E DH)",
+        title: "Sequência Executável: Da Matriz ao Medicamento Líquido",
+        type: "process-kpis",
+        steps: [
+          { step: "ETAPA A", title: "Enfileirar Frascos Virgens", desc: "Se você tem a matriz 3CH e precisa chegar na 6CH, enfileire 3 frascos na bancada e identifique-os previamente como '4CH', '5CH' e '6CH'.", metric: "Organização" },
+          { step: "ETAPA B", title: "Inerte nos 3 Frascos", desc: "Com a proveta/pipeta de inerte, adicione 99 partes de álcool 70% nos frascos 4CH e 5CH, e 99 partes de álcool 30% no frasco final 6CH.", metric: "Veículo Certo" },
+          { step: "ETAPA C", title: "Passagens Sucessivas", desc: "Pipete 1 parte da 3CH para o frasco 4CH -> 100 sucussões. Pipete 1 parte da 4CH pronta para o frasco 5CH -> 100 sucussões. Pipete 1 parte da 5CH para o frasco 6CH -> 100 sucussões!", metric: "300 Sucussões" }
+        ],
+        kpis: [
+          { value: "Frascos Intermediários", label: "As potências 4CH e 5CH feitas em álcool 70% podem ser guardadas no estoque!", color: "emerald" },
+          { value: "Frasco Final", label: "Feito em álcool 30% (gotas) e entregue diretamente ao paciente", color: "amber" },
+          { value: "Zero Retorno", label: "Jamais devolver sobra de líquido da pipeta para dentro do frasco da matriz!", color: "emerald" }
+        ]
+      },
+      {
+        id: 11,
+        module: "AULA 08 • CALIBRAÇÃO DE CONTA-GOTAS E BATOQUES",
+        eyebrow: "ENSAIO DE GOTEJAMENTO PADRÃO DA FARMACOPEIA",
+        title: "Padronização de Gotas na Farmacotécnica Homeopática",
+        type: "table-slide",
+        headers: ["Líquido / Veículo a 20°C", "Tensão Superficial", "Nº Aproximado de Gotas em 1,0 g (ou 1 mL)", "Regra Técnica para a Bancada"],
+        rows: [
+          ["<b>Água Purificada (Destilada)</b>", "Alta tensão superficial (gotas maiores)", "<b>20 gotas</b> = 1,0 grama (1,0 mL)", "Conta-gotas padrão oficial calibrado com água a 20°C."],
+          ["<b>Álcool Etílico 30% (p/p)</b>", "Média tensão superficial", "<b>~45 a 50 gotas</b> ≈ 1,0 mL", "Gotas menores que as da água devido à presença do etanol."],
+          ["<b>Álcool Etílico 70% a 90%</b>", "Baixa tensão superficial (gotas pequenas)", "<b>~55 a 65 gotas</b> ≈ 1,0 mL", "<b>ATENÇÃO:</b> Na escala CH e DH, medir sempre em VOLUME (mL com pipeta) e não contando gotas, exceto na escala LM onde a FHB especifica gotas!"]
+        ]
+      },
+      {
+        id: 12,
+        module: "AULA 08 • TÉCNICA DE CALIBRAÇÃO DOS GLÓBULOS INERTES",
+        eyebrow: "CLASSIFICAÇÃO POR NÚMERO E PESO MÉDIO (FHB 3ª ED.)",
+        title: "Especificação Técnica das Esferas de Sacarose (Glóbulos)",
+        type: "table-slide",
+        headers: ["Classificação da Esfera", "Peso Médio de 100 Esferas", "Peso Individual Aproximado", "Aplicação Farmacotécnica Principal"],
+        rows: [
+          ["<b>Microglóbulos (Confeitos)</b>", "100 microglóbulos = <b>0,06 g (60 mg)</b>", "0,6 mg por microglóbulo", "Uso exclusivo no preparo da <b>Escala Cinquenta Milesimal (LM)</b>."],
+          ["<b>Glóbulo Nº 3</b>", "100 glóbulos ≈ <b>3,0 g</b>", "30 mg por glóbulo", "Dispensação pediátrica e doses únicas em glóbulos."],
+          ["<b>Glóbulo Nº 5 (Mais Comum)</b>", "100 glóbulos ≈ <b>5,0 g</b>", "50 mg por glóbulo", "Padrão mais utilizado na rotina das farmácias homeopáticas brasileiras."],
+          ["<b>Glóbulo Nº 7</b>", "100 glóbulos ≈ <b>7,0 g</b>", "70 mg por glóbulo", "Dispensação para adultos e uso veterinário."]
+        ]
+      },
+      {
+        id: 13,
+        module: "AULA 08 • DOBRADURA TÉCNICA DE PAPÉIS (ENVELOPES)",
+        eyebrow: "ACONDICIONAMENTO DE DOSES EM PÓ DE LACTOSE",
+        title: "Técnica Executável de Dobradura de Papéis Homeopáticos",
+        type: "split-columns",
+        leftTitle: "Passo a Passo da Homogeneização e Divisão",
+        leftIcon: "fa-spoon",
+        leftAccent: "",
+        leftItems: [
+          "<b>1. Impregnação ou Diluição Sólida:</b> Pesar a lactose total para o número de papéis prescritos (ex: 10 papéis de 500 mg = 5,0 g de lactose).",
+          "<b>2. Incorporação no Gral:</b> Adicionar 10% (v/p) do insumo ativo em álcool ≥ 70% (0,5 mL), misturar no gral de porcelana e secar em estufa ≤ 40°C.",
+          "<b>3. Pesagem Individual:</b> Pesar 500 mg em cada retângulo de papel manteiga impermeável."
+        ],
+        rightTitle: "Dobradura Farmacêutica Hermética",
+        rightIcon: "fa-envelope",
+        rightAccent: "gold-accent",
+        rightItems: [
+          "<b>1ª Dobra (Longitudinal):</b> Unir as bordas maiores do papel manteiga e fazer duas dobras finas para cima (veda a parte superior).",
+          "<b>2ª Dobra (Abas Laterais):</b> Dobrar as duas extremidades laterais para trás em tamanhos simétricos.",
+          "<b>3ª Dobra (Encaixe ou 'Envelopamento'):</b> Encaixar uma aba lateral dentro da outra sem usar cola! Isso garante vedação perfeita e fácil abertura pelo paciente."
+        ]
+      },
+      {
+        id: 14,
+        module: "AULA 08 • PREVENÇÃO DE ERROS OPERACIONAIS NA BANCADA",
+        eyebrow: "CONTROLE EM PROCESSO DURANTE A MANIPULAÇÃO",
+        title: "Erros Operacionais Clássicos e Como Preveni-los",
+        type: "cards-grid",
+        subtitle: "Domine os pontos onde candidatos costumam errar em provas práticas de laboratório.",
+        cards: [
+          { tag: "ERRO DE PIPETAGEM", icon: "fa-eye-dropper", title: "Mergulhar Pipeta Suja no Inerte", desc: "Por isso coloca-se SEMPRE o insumo inerte primeiro nos frascos e só depois se usa outra pipeta para o insumo ativo, evitando contaminar o barrilete de álcool!" },
+          { tag: "ERRO DE VOLUME", icon: "fa-bottle-droplet", title: "Encher o Frasco até a Boca", desc: "Se o frasco de 20 mL receber 20 mL de líquido, não haverá espaço de ar (1/3) para o impacto hidrodinâmico da sucussão. Usar sempre frasco de 30 mL para 20 mL de líquido!" },
+          { tag: "ERRO DE TEMPERATURA", icon: "fa-temperature-high", title: "Secar Glóbulos acima de 50°C", desc: "Elevar a temperatura da estufa de secagem de glóbulos acima de 40°C–45°C para 'secar mais rápido' inativa termicamente o medicamento recém-impregnado!" },
+          { tag: "ERRO DE CONCENTRAÇÃO", icon: "fa-percent", title: "Confundir % p/p com % v/v", desc: "Lembrar sempre: na Farmacopeia Homeopática Brasileira, Álcool 70% p/p equivale a 77°GL (% v/v), e Álcool 30% p/p equivale a 36°GL (% v/v)." }
+        ]
+      },
+      {
+        id: 15,
+        module: "AULA 08 • PRÁTICA E FIXAÇÃO",
+        eyebrow: "INTERATIVO • ESTUDO DIRIGIDO PARA A TURMA FMC09-M",
+        title: "Desafios de Técnicas Procedimentais de Bancada I (Aula 08)",
+        type: "interactive-cases"
+      }
+    ];
+
+    const alcoholDilutionData = [
+      {
+        id: "PREPARAR ÁLCOOL 70% p/p (77% v/v)",
+        target: "1.000 mL de Etanol 77% v/v (Para Estoque de Matrizes e Impregnação)",
+        startAlcohol: "Álcool Etílico 96% v/v (96°GL) a 20°C",
+        formula: "C1 × V1 = C2 × V2  →  96 × V1 = 77 × 1.000  →  V1 = 802,1 mL de Álcool 96°GL",
+        procedure: "Medir 802 mL de Álcool 96°GL e adicionar Água Purificada em quantidade suficiente para completar 1.000 mL após resfriamento a 20°C (pela tabela de Gay-Lussac, adicionam-se ~213 mL de água devido à contração de volume).",
+        qualityCheck: "Aferir a 20°C: Alcoômetro deve marcar 77°GL (± 1°GL) e densidade relativa ~0,867 g/mL."
+      },
+      {
+        id: "PREPARAR ÁLCOOL 30% p/p (36% v/v)",
+        target: "1.000 mL de Etanol 36% v/v (Para Dispensação de Gotas Orais)",
+        startAlcohol: "Álcool Etílico 96% v/v (96°GL) a 20°C",
+        formula: "C1 × V1 = C2 × V2  →  96 × V1 = 36 × 1.000  →  V1 = 375,0 mL de Álcool 96°GL",
+        procedure: "Medir 375 mL de Álcool 96°GL e completar com Água Purificada até 1.000 mL após estabilização térmica a 20°C (pela tabela oficial, ~641 mL de água purificada).",
+        qualityCheck: "Aferir a 20°C: Alcoômetro deve marcar 36°GL (± 1°GL) e densidade relativa ~0,954 g/mL."
+      },
+      {
+        id: "PREPARAR ÁLCOOL 20% v/v (FASE 4CH)",
+        target: "100 mL de Etanol 20% v/v (Para Solubilização da 3CH Sólida na 4CH)",
+        startAlcohol: "Álcool Etílico 96% v/v (96°GL) a 20°C",
+        formula: "Proporção FHB para 4CH: 80 partes de Água Purificada + 20 partes de Álcool",
+        procedure: "Na transição do triturado 3CH para a 4CH líquida, dissolve-se primeiro 1 parte da 3CH em 80 partes de Água Purificada e só depois adicionam-se as 20 partes de álcool para não precipitar a lactose!",
+        qualityCheck: "Solução límpida após 100 sucussões; usar imediatamente para preparar a 5CH em álcool 70%."
+      }
+    ];
+
+    const aula08Cases = [
+      {
+        badge: "DESAFIO 01 • CÁLCULO DE PICNOMETRIA NA RECEPÇÃO",
+        patient: "Controle de Qualidade Físico-Químico: Você está aferindo a densidade relativa de um lote recém-preparado de Álcool 70% p/p utilizando um picnômetro de vidro de 25 mL a 20°C.",
+        lab: "Dados obtidos na balança analítica: Picnômetro vazio e seco (M1) = 18,00 g | Picnômetro com Água Purificada (M2) = 43,00 g | Picnômetro com a amostra de Álcool (M3) = 39,68 g.",
+        question: "Calcule a densidade relativa dessa amostra e informe se ela está aprovada (Referência FHB para Álcool 70% p/p: ~0,867 g/mL).",
+        answer: "CÁLCULO DA DENSIDADE: Massa da água = M2 − M1 = 43,00 − 18,00 = 25,00 g. Massa do álcool = M3 − M1 = 39,68 − 18,00 = 21,68 g. Densidade relativa = 21,68 ÷ 25,00 = 0,8672 g/mL! O lote está PERFEITAMENTE APROVADO para uso no laboratório."
+      },
+      {
+        badge: "DESAFIO 02 • ESCOLHA DA VIDRARIA CORRETA NA ESCALA CH",
+        patient: "Prova Prática de Bancada: O avaliador pede que você meça exatamente 0,15 mL da matriz de Belladonna 5CH e 14,85 mL de Álcool 30% para preparar 15 mL de Belladonna 6CH.",
+        lab: "Sobre a bancada há: (A) Um cálice graduado de 30 mL; (B) Uma proveta de 25 mL; (C) Uma pipeta graduada de 1,0 mL (divisão 1/100) e uma pipeta graduada de 20 mL.",
+        question: "Qual vidraria você deve escolher para medir os 0,15 mL da matriz ativa e por que não pode usar o cálice graduado?",
+        answer: "ESCOLHA CORRETA: Deve-se usar a PIPETA GRADUADA DE 1,0 mL (ou micropipeta calibrada de 150 µL) para medir os 0,15 mL da matriz ativa, e a pipeta de 20 mL (ou proveta) para os 14,85 mL do veículo inerte. O cálice graduado possui baixa precisão metrológica e jamais consegue medir frações de mililitro (0,15 mL) com exatidão."
+      },
+      {
+        badge: "DESAFIO 03 • PREPARO DE 12 PAPÉIS HOMEOPÁTICOS",
+        patient: "Ordem de Manipulação: 'Graphites 6CH — Dispensar 12 papéis de 500 mg cada'.",
+        lab: "Disponível na bancada: Matriz líquida de Graphites 6CH em etanol 70%, Lactose monoidratada pura, gral de porcelana e papel manteiga.",
+        question: "Quantos gramas de lactose total você deve pesar (incluindo margem técnica) e qual o volume de ativo para impregnar a 10% (v/p)?",
+        answer: "CÁLCULO PRÁTICO: 12 papéis × 500 mg (0,5 g) = 6,0 g de lactose necessária. (Na prática, pode-se preparar para 6,0 g ou 7,0 g para compensar pequenas perdas na parede do gral). Para 6,0 g de lactose, 10% (v/p) equivale a 0,6 mL de Graphites 6CH (em álcool ≥ 70%). Homogeneizar no gral, secar a ≤ 40°C, pesar 500 mg em cada um dos 12 papéis e fazer a dobradura hermética."
+      }
+    ];
+
+    let currentSlideIndex = 0;
+    let activeAlcoholIdx = 0;
+    let activeCaseIdx = 0;
+    let caseRevealed = false;
+    let laserEnabled = false;
+
+    function renderSlide(index) {
+      const slide = slidesData[index];
+      const container = document.getElementById("slide-stage-content");
+      
+      container.classList.remove("slide-enter");
+      void container.offsetWidth;
+      container.classList.add("slide-enter");
+
+      const total = slidesData.length;
+      const numStr = String(slide.id).padStart(2, "0");
+      const totalStr = String(total).padStart(2, "0");
+      document.getElementById("hud-counter").textContent = `${numStr} / ${totalStr}`;
+      document.getElementById("internal-slide-num").textContent = `SLIDE ${numStr} // ${totalStr}`;
+      document.getElementById("hud-module-badge").textContent = slide.module;
+      document.getElementById("hud-slide-title").textContent = `${numStr}. ${slide.title}`;
+      document.getElementById("hud-progress-bar").style.width = `${(slide.id / total) * 100}%`;
+
+      document.getElementById("slide-telemetry").style.display = slide.type === "cover" ? "none" : "flex";
+
+      let html = "";
+
+      if (slide.type === "cover") {
+        html = `
+          <div class="w-full h-full flex flex-col items-center justify-center text-center relative px-8">
+            <div class="absolute w-[520px] h-[520px] rounded-full border border-emerald-500/10 pointer-events-none animate-pulse"></div>
+            <div class="absolute w-[680px] h-[680px] rounded-full border border-amber-400/15 pointer-events-none"></div>
+
+            <div class="stagger-item mb-3 inline-flex items-center gap-2 px-4 py-1 rounded-full bg-emerald-950/5 border border-emerald-800/20 text-emerald-900 text-xs font-hud tracking-widest uppercase" style="animation-delay: 0.05s;">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+              GRAU TÉCNICO • FARMÁCIA • AULA 08 DE 14
+            </div>
+
+            <h1 class="cover-title-text text-[42px] leading-tight mb-3 stagger-item" style="animation-delay: 0.12s;">
+              Homeopatia
+            </h1>
+            <p class="text-2xl font-serif font-semibold text-emerald-800 mb-12 stagger-item" style="animation-delay: 0.18s;">
+              Aula 08 — Técnicas Procedimentais Executáveis na Manipulação I
+            </p>
+
+            <div class="flex flex-col items-center gap-3 text-[27px] leading-snug text-[#0d3b14] stagger-item" style="animation-delay: 0.24s;">
+              <p><span class="font-bold">Turma:</span> <span class="font-normal">FMC09-M</span></p>
+              <p><span class="font-bold">Período:</span> <span class="font-normal">23/10 a 30/11/2026</span></p>
+              <p><span class="font-bold">Foco:</span> <span class="font-normal">Metrologia, Alcoolometria, Picnometria e Sucussão</span></p>
+            </div>
+
+            <div class="mt-10 flex items-center gap-4 text-xs font-semibold text-emerald-800/70 stagger-item" style="animation-delay: 0.36s;">
+              <span class="px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center gap-2">
+                <i class="fa-solid fa-keyboard text-emerald-600"></i> Use as Setas ◀ ▶ ou Espaço para navegar
+              </span>
+              <button onclick="nextSlide()" class="px-4 py-1.5 rounded-lg bg-[#113818] hover:bg-[#00B050] text-white font-bold flex items-center gap-2 shadow-md transition">
+                Iniciar Aula 08 <i class="fa-solid fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      }
+      else if (slide.type === "cards-grid") {
+        html = `
+          ${renderSlideHeader(slide)}
+          ${slide.subtitle ? `<p class="text-slate-600 text-base -mt-2 mb-4 stagger-item" style="animation-delay:0.08s">${slide.subtitle}</p>` : ""}
+          <div class="grid grid-cols-2 gap-5 flex-1 items-stretch my-auto">
+            ${slide.cards.map((c, i) => `
+              <div class="holo-card p-6 flex flex-col justify-between stagger-item ${i % 2 === 1 ? 'gold-accent' : ''}" style="animation-delay: ${0.12 + i * 0.08}s">
+                <div>
+                  <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs font-hud font-bold tracking-wider px-2.5 py-1 rounded bg-emerald-900/10 text-emerald-800">${c.tag}</span>
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#113818] to-[#00B050] text-white flex items-center justify-center shadow-md">
+                      <i class="fa-solid ${c.icon} text-lg"></i>
+                    </div>
+                  </div>
+                  <h3 class="text-xl font-bold text-[#113818] mb-2">${c.title}</h3>
+                  <p class="text-[15.5px] text-slate-700 leading-relaxed">${c.desc}</p>
+                </div>
+                <div class="w-full h-1 bg-gradient-to-r from-emerald-500/30 via-amber-400/40 to-transparent rounded-full mt-4"></div>
+              </div>
+            `).join("")}
+          </div>
+        `;
+      }
+      else if (slide.type === "split-visual") {
+        html = `
+          ${renderSlideHeader(slide)}
+          <div class="grid grid-cols-12 gap-7 flex-1 items-center my-auto">
+            <div class="col-span-7 flex flex-col gap-3.5">
+              ${slide.bullets.map((b, i) => `
+                <div class="holo-card p-4 flex items-start gap-4 stagger-item" style="animation-delay: ${0.1 + i * 0.08}s">
+                  <div class="w-10 h-10 rounded-xl bg-emerald-900 text-amber-400 flex items-center justify-center flex-shrink-0 mt-0.5 shadow">
+                    <i class="fa-solid ${b.icon} text-base"></i>
+                  </div>
+                  <div>
+                    <h4 class="text-[17px] font-bold text-[#113818] leading-snug">${b.title}</h4>
+                    <p class="text-[14.5px] text-slate-700 leading-relaxed mt-0.5">${b.text}</p>
+                  </div>
+                </div>
+              `).join("")}
+            </div>
+            <div class="col-span-5 h-[430px] holo-card scan-box p-4 flex flex-col items-center justify-center bg-gradient-to-b from-slate-50 to-emerald-50/40 stagger-item" style="animation-delay: 0.25s">
+              ${renderVisualDiagram(slide.visualType)}
+            </div>
+          </div>
+        `;
+      }
+      else if (slide.type === "process-kpis") {
+        html = `
+          ${renderSlideHeader(slide)}
+          <div class="flex flex-col justify-between flex-1 py-2">
+            <div class="grid grid-cols-3 gap-5 items-stretch">
+              ${slide.steps.map((s, i) => `
+                <div class="holo-card p-5 flex flex-col justify-between relative stagger-item ${i === 1 ? 'gold-accent' : ''}" style="animation-delay: ${0.1 + i * 0.09}s">
+                  <div>
+                    <div class="flex items-center justify-between mb-2">
+                      <span class="text-xs font-hud font-bold text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded">${s.step}</span>
+                      <span class="text-xs font-bold text-amber-700 bg-amber-100 px-2.5 py-0.5 rounded-full">${s.metric}</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-[#113818] mb-2">${s.title}</h3>
+                    <p class="text-[15px] text-slate-700 leading-relaxed">${s.desc}</p>
+                  </div>
+                  <div class="mt-4 pt-2 border-t border-slate-200/80 flex items-center justify-between text-xs text-emerald-800 font-semibold">
+                    <span>PRECISÃO OPERACIONAL</span>
+                    <i class="fa-solid fa-circle-arrow-right text-emerald-600"></i>
+                  </div>
+                </div>
+              `).join("")}
+            </div>
+
+            <div class="grid grid-cols-3 gap-5 mt-4">
+              ${slide.kpis.map((k, i) => `
+                <div class="rounded-2xl p-5 text-center border stagger-item ${k.color === 'amber' ? 'bg-gradient-to-br from-amber-500/15 to-amber-500/5 border-amber-500/40' : 'bg-gradient-to-br from-[#113818] to-[#1e5227] text-white border-emerald-500/40 shadow-lg'}" style="animation-delay: ${0.32 + i * 0.08}s">
+                  <p class="font-hud text-3xl font-extrabold ${k.color === 'amber' ? 'text-amber-700' : 'text-[#FDB913]'} mb-1">${k.value}</p>
+                  <p class="text-xs font-semibold ${k.color === 'amber' ? 'text-slate-700' : 'text-emerald-100'}">${k.label}</p>
+                </div>
+              `).join("")}
+            </div>
+          </div>
+        `;
+      }
+      else if (slide.type === "table-slide") {
+        html = `
+          ${renderSlideHeader(slide)}
+          <div class="flex-1 flex items-center my-auto stagger-item" style="animation-delay: 0.12s">
+            <table class="futuristic-table">
+              <thead>
+                <tr>${slide.headers.map(h => `<th>${h}</th>`).join("")}</tr>
+              </thead>
+              <tbody>
+                ${slide.rows.map(row => `<tr>${row.map(cell => `<td>${cell}</td>`).join("")}</tr>`).join("")}
+              </tbody>
+            </table>
+          </div>
+        `;
+      }
+      else if (slide.type === "split-columns") {
+        html = `
+          ${renderSlideHeader(slide)}
+          <div class="grid grid-cols-2 gap-6 flex-1 items-stretch my-auto">
+            <div class="holo-card ${slide.leftAccent} p-6 flex flex-col justify-between stagger-item" style="animation-delay: 0.12s">
+              <div>
+                <div class="flex items-center gap-3 mb-4 pb-3 border-b border-slate-200">
+                  <div class="w-10 h-10 rounded-xl bg-[#113818] text-white flex items-center justify-center">
+                    <i class="fa-solid ${slide.leftIcon}"></i>
+                  </div>
+                  <h3 class="text-xl font-bold text-[#113818]">${slide.leftTitle}</h3>
+                </div>
+                <ul class="space-y-3">
+                  ${slide.leftItems.map(item => `
+                    <li class="flex items-start gap-2.5 text-[15.5px] text-slate-700 leading-relaxed">
+                      <i class="fa-solid fa-caret-right text-emerald-600 mt-1.5"></i>
+                      <span>${item}</span>
+                    </li>
+                  `).join("")}
+                </ul>
+              </div>
+            </div>
+
+            <div class="holo-card ${slide.rightAccent} p-6 flex flex-col justify-between stagger-item" style="animation-delay: 0.22s">
+              <div>
+                <div class="flex items-center gap-3 mb-4 pb-3 border-b border-slate-200">
+                  <div class="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center">
+                    <i class="fa-solid ${slide.rightIcon}"></i>
+                  </div>
+                  <h3 class="text-xl font-bold text-[#113818]">${slide.rightTitle}</h3>
+                </div>
+                <ul class="space-y-3">
+                  ${slide.rightItems.map(item => `
+                    <li class="flex items-start gap-2.5 text-[15.5px] text-slate-700 leading-relaxed">
+                      <i class="fa-solid fa-caret-right text-amber-600 mt-1.5"></i>
+                      <span>${item}</span>
+                    </li>
+                  `).join("")}
+                </ul>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+      else if (slide.type === "interactive-alcohol") {
+        const a = alcoholDilutionData[activeAlcoholIdx];
+        html = `
+          ${renderSlideHeader(slide)}
+          <div class="grid grid-cols-12 gap-6 flex-1 items-center my-auto">
+            <div class="col-span-5 flex flex-col gap-3.5">
+              ${alcoholDilutionData.map((item, idx) => `
+                <button onclick="selectAlcohol(${idx})" class="text-left p-4 rounded-xl border transition-all flex items-center justify-between ${idx === activeAlcoholIdx ? 'bg-[#113818] text-white border-emerald-500 shadow-lg scale-[1.02]' : 'bg-slate-50 hover:bg-emerald-50/70 text-slate-800 border-slate-200'}">
+                  <div>
+                    <span class="text-[10px] font-hud uppercase tracking-wider ${idx === activeAlcoholIdx ? 'text-amber-300' : 'text-emerald-700'}">FÓRMULA DE DILUIÇÃO</span>
+                    <h4 class="text-base font-bold leading-snug">${item.id}</h4>
+                  </div>
+                  <i class="fa-solid fa-chevron-right text-xs ${idx === activeAlcoholIdx ? 'text-amber-400' : 'text-slate-400'}"></i>
+                </button>
+              `).join("")}
+              <div class="p-3 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-950">
+                <b>Temperatura de Referência:</b> Toda medição alcoolométrica deve ser realizada exatamente a <b>20°C</b>!
+              </div>
+            </div>
+
+            <div class="col-span-7 holo-card gold-accent p-6 h-[425px] flex flex-col justify-between bg-gradient-to-br from-white to-emerald-50/40">
+              <div>
+                <div class="flex items-center justify-between mb-3">
+                  <span class="px-3 py-1 rounded-full bg-[#113818] text-amber-400 font-hud text-xs font-bold">${a.id}</span>
+                  <span class="text-xs font-bold text-emerald-900 bg-emerald-100 px-3 py-1 rounded-full">${a.startAlcohol}</span>
+                </div>
+                <h3 class="text-lg font-extrabold text-[#113818] mb-3">${a.target}</h3>
+                <div class="p-3 rounded-xl bg-emerald-950 text-amber-300 font-mono text-sm font-bold mb-3 text-center">
+                  ${a.formula}
+                </div>
+                <div class="p-3.5 rounded-xl bg-white border border-slate-200 shadow-sm">
+                  <h4 class="text-xs font-hud uppercase text-emerald-800 mb-1">Procedimento Executável na Proveta/Balão</h4>
+                  <p class="text-[14.5px] text-slate-800 leading-relaxed">${a.procedure}</p>
+                </div>
+              </div>
+              <div class="p-3.5 rounded-xl bg-[#113818] text-white flex items-center gap-3">
+                <i class="fa-solid fa-vial-circle-check text-amber-400 text-xl"></i>
+                <div class="text-xs leading-snug">
+                  <b class="text-amber-300 uppercase block">Critério de Aprovação no Controle de Qualidade:</b>
+                  ${a.qualityCheck}
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+      else if (slide.type === "interactive-cases") {
+        const c = aula08Cases[activeCaseIdx];
+        html = `
+          ${renderSlideHeader(slide)}
+          <div class="grid grid-cols-12 gap-6 flex-1 items-stretch my-auto">
+            <div class="col-span-4 holo-card p-5 flex flex-col justify-between bg-gradient-to-br from-[#113818] to-[#1d5426] text-white">
+              <div>
+                <span class="text-xs font-hud font-bold text-amber-400">RESUMO DA AULA 08</span>
+                <h3 class="text-2xl font-bold font-serif mt-1 mb-3">Metrologia Prática</h3>
+                <ul class="space-y-3 text-sm text-emerald-50">
+                  <li><i class="fa-solid fa-circle-check text-amber-400 mr-2"></i><b>Menisco:</b> Base inferior da curva na altura dos olhos.</li>
+                  <li><i class="fa-solid fa-circle-check text-amber-400 mr-2"></i><b>Alcoolometria:</b> Aferição sempre a 20°C após resfriar.</li>
+                  <li><i class="fa-solid fa-circle-check text-amber-400 mr-2"></i><b>Picnômetro:</b> d = (M3 − M1) / (M2 − M1).</li>
+                  <li><i class="fa-solid fa-circle-check text-amber-400 mr-2"></i><b>Ordem na Bancada:</b> Inerte primeiro, ativo depois!</li>
+                </ul>
+              </div>
+              <div class="p-3 rounded-xl bg-black/25 border border-white/10 text-xs text-emerald-200">
+                <b>Próxima Aula (Aula 09):</b> Seminários Temáticos e Estudos de Caso (Turma FMC09-M).
+              </div>
+            </div>
+
+            <div class="col-span-8 holo-card gold-accent p-6 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between mb-4">
+                  <span class="px-3 py-1 rounded-full bg-[#113818] text-amber-400 font-hud text-xs font-bold">${c.badge}</span>
+                  <div class="flex gap-2">
+                    ${aula08Cases.map((_, idx) => `
+                      <button onclick="selectCase(${idx})" class="px-3 py-1 rounded-lg text-xs font-bold transition ${idx === activeCaseIdx ? 'bg-emerald-600 text-white shadow' : 'bg-slate-200 text-slate-700 hover:bg-slate-300'}">
+                        Desafio 0${idx + 1}
+                      </button>
+                    `).join("")}
+                  </div>
+                </div>
+                <div class="p-3.5 rounded-xl bg-white border border-slate-200 mb-3">
+                  <p class="text-xs font-hud text-slate-400 uppercase">Situação de Bancada</p>
+                  <p class="text-[15px] font-semibold text-slate-800 mt-0.5">${c.patient}</p>
+                </div>
+                <div class="p-3.5 rounded-xl bg-emerald-950/5 border border-emerald-900/20 mb-4">
+                  <p class="text-xs font-hud text-emerald-800 uppercase">Dados Analíticos</p>
+                  <p class="text-[14.5px] text-slate-800 mt-0.5">${c.lab}</p>
+                </div>
+                <p class="text-base font-bold text-[#113818] mb-3"><i class="fa-solid fa-circle-question text-amber-500 mr-1.5"></i>${c.question}</p>
+              </div>
+              <div>
+                ${caseRevealed ? `
+                  <div class="p-4 rounded-xl bg-[#113818] text-white text-sm leading-relaxed">
+                    <span class="text-amber-400 font-bold block mb-1"><i class="fa-solid fa-check-double mr-1"></i>RESOLUÇÃO COMENTADA:</span>
+                    ${c.answer}
+                  </div>
+                ` : `
+                  <button onclick="revealCaseAnswer()" class="w-full py-3 rounded-xl bg-gradient-to-r from-[#113818] to-[#00B050] hover:opacity-95 text-white font-bold text-sm shadow-lg flex items-center justify-center gap-2 transition">
+                    <i class="fa-solid fa-eye"></i> Revelar Cálculo e Procedimento Correto
+                  </button>
+                `}
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      container.innerHTML = html;
+    }
+
+    function renderSlideHeader(slide) {
+      return `
+        <div class="mb-4 pb-2 border-b border-emerald-900/10 flex items-end justify-between stagger-item" style="animation-delay: 0.04s">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <span class="w-2 h-2 rounded-full bg-[#00B050]"></span>
+              <p class="text-xs font-hud font-bold tracking-wider text-[#00B050] uppercase">${slide.eyebrow}</p>
+            </div>
+            <h2 class="slide-heading-serif text-[31px] leading-tight">${slide.title}</h2>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderVisualDiagram(type) {
+      if (type === "svg-meniscus-reading") {
+        return `
+          <svg viewBox="0 0 280 310" class="w-full h-full">
+            <text x="140" y="22" font-size="11" font-weight="bold" fill="#113818" text-anchor="middle">LEITURA CORRETA DO MENISCO CÔNCAVO</text>
+            <!-- Pipette Tube -->
+            <line x1="95" y1="45" x2="95" y2="235" stroke="#113818" stroke-width="4"/>
+            <line x1="185" y1="45" x2="185" y2="235" stroke="#113818" stroke-width="4"/>
+
+            <!-- Liquid Fill with Concave Meniscus -->
+            <path d="M 97,115 Q 140,145 183,115 L 183,230 L 97,230 Z" fill="#00B050" opacity="0.35"/>
+            <path d="M 97,115 Q 140,145 183,115" fill="none" stroke="#113818" stroke-width="3"/>
+
+            <!-- Calibration Line tangent to bottom of meniscus -->
+            <line x1="50" y1="130" x2="230" y2="130" stroke="#dc2626" stroke-width="2.5" stroke-dasharray="5,3"/>
+            <circle cx="140" cy="130" r="5" fill="#dc2626"/>
+
+            <text x="45" y="126" font-size="10" font-weight="bold" fill="#dc2626" text-anchor="end">Olho 0°</text>
+            <text x="140" y="185" font-size="11" font-weight="bold" fill="#113818" text-anchor="middle">Solução Hidroalcoólica</text>
+
+            <rect x="20" y="248" width="240" height="48" rx="8" fill="#113818"/>
+            <text x="140" y="268" font-size="10" font-weight="bold" fill="#FDB913" text-anchor="middle">BASE DO MENISCO TANGENCIA O TRAÇO</text>
+            <text x="140" y="284" font-size="9.5" fill="#ffffff" text-anchor="middle">Leitura na horizontal evita erro de paralaxe</text>
+          </svg>
+        `;
+      }
+      if (type === "svg-succussion-arm") {
+        return `
+          <svg viewBox="0 0 280 310" class="w-full h-full">
+            <text x="140" y="22" font-size="11" font-weight="bold" fill="#113818" text-anchor="middle">CINEMÁTICA DAS 100 SUCUSSÕES</text>
+            <!-- Top Position Ghost -->
+            <rect x="110" y="45" width="60" height="75" rx="8" fill="none" stroke="#94a3b8" stroke-width="2" stroke-dasharray="4,3"/>
+            <text x="140" y="85" font-size="9.5" font-weight="bold" fill="#64748b" text-anchor="middle">Posição Alta</text>
+
+            <!-- Motion Arrows -->
+            <path d="M 85,75 L 85,185" stroke="#00B050" stroke-width="4"/>
+            <polygon points="85,195 78,180 92,180" fill="#00B050"/>
+            <text x="52" y="135" font-size="10" font-weight="bold" fill="#00B050" text-anchor="middle">30–40 cm</text>
+
+            <!-- Bottom Impact Vial -->
+            <rect x="110" y="145" width="60" height="85" rx="8" fill="#fef3c7" stroke="#92400e" stroke-width="3"/>
+            <rect x="114" y="175" width="52" height="51" rx="5" fill="#d97706"/>
+            <text x="140" y="205" font-size="11" font-weight="bold" fill="#fff" text-anchor="middle">IMPACTO</text>
+
+            <!-- Elastic Pad -->
+            <rect x="55" y="232" width="170" height="22" rx="6" fill="#113818"/>
+            <text x="140" y="247" font-size="9.5" font-weight="bold" fill="#FDB913" text-anchor="middle">ANTEPARO ELÁSTICO</text>
+
+            <text x="140" y="285" font-size="10.5" font-weight="bold" fill="#113818" text-anchor="middle">Frequência: ~2 batidas/seg (100 golpes)</text>
+          </svg>
+        `;
+      }
+      return "";
+    }
+
+    function selectAlcohol(idx) { activeAlcoholIdx = idx; renderSlide(currentSlideIndex); }
+    function selectCase(idx) { activeCaseIdx = idx; caseRevealed = false; renderSlide(currentSlideIndex); }
+    function revealCaseAnswer() { caseRevealed = true; renderSlide(currentSlideIndex); }
+    function nextSlide() { if (currentSlideIndex < slidesData.length - 1) { currentSlideIndex++; renderSlide(currentSlideIndex); } }
+    function prevSlide() { if (currentSlideIndex > 0) { currentSlideIndex--; renderSlide(currentSlideIndex); } }
+
+    function goToSlide(idx) {
+      currentSlideIndex = idx;
+      renderSlide(currentSlideIndex);
+      const drawer = document.getElementById("slide-drawer");
+      if (!drawer.classList.contains("hidden")) toggleDrawer();
+    }
+
+    function toggleDrawer() {
+      const drawer = document.getElementById("slide-drawer");
+      if (drawer.classList.contains("hidden")) {
+        populateDrawer();
+        drawer.classList.remove("hidden");
+        drawer.classList.add("flex");
+      } else {
+        drawer.classList.add("hidden");
+        drawer.classList.remove("flex");
+      }
+    }
+
+    function populateDrawer() {
+      const grid = document.getElementById("drawer-grid");
+      grid.innerHTML = slidesData.map((s, idx) => `
+        <button onclick="goToSlide(${idx})" class="text-left p-3.5 rounded-xl border transition-all flex flex-col justify-between ${idx === currentSlideIndex ? 'bg-emerald-900/60 border-emerald-400 ring-2 ring-emerald-400/40' : 'bg-slate-900/80 border-slate-800 hover:border-emerald-500/50 hover:bg-slate-800/70'}">
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <span class="font-hud text-xs font-bold ${idx === currentSlideIndex ? 'text-amber-400' : 'text-emerald-400'}">SLIDE ${String(s.id).padStart(2, '0')}</span>
+              <span class="text-[10px] text-slate-400 truncate max-w-[140px]">${s.module}</span>
+            </div>
+            <p class="text-sm font-bold text-white line-clamp-2 leading-snug">${s.title}</p>
+          </div>
+        </button>
+      `).join("");
+    }
+
+    function toggleLaser() {
+      laserEnabled = !laserEnabled;
+      const dot = document.getElementById("laser-dot");
+      const btn = document.getElementById("btn-laser");
+      dot.style.display = laserEnabled ? "block" : "none";
+      btn.classList.toggle("bg-emerald-600", laserEnabled);
+      btn.classList.toggle("text-white", laserEnabled);
+    }
+
+    window.addEventListener("mousemove", (e) => {
+      if (laserEnabled) {
+        const dot = document.getElementById("laser-dot");
+        dot.style.left = `${e.clientX}px`;
+        dot.style.top = `${e.clientY}px`;
+      }
+    });
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {});
+      else document.exitFullscreen().catch(() => {});
+    }
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") { e.preventDefault(); nextSlide(); }
+      else if (e.key === "ArrowLeft" || e.key === "PageUp") { e.preventDefault(); prevSlide(); }
+      else if (e.key === "Home") goToSlide(0);
+      else if (e.key === "End") goToSlide(slidesData.length - 1);
+      else if (e.key.toLowerCase() === "g") toggleDrawer();
+      else if (e.key.toLowerCase() === "l") toggleLaser();
+      else if (e.key.toLowerCase() === "f") toggleFullScreen();
+      else if (e.key === "Escape") {
+        const drawer = document.getElementById("slide-drawer");
+        if (!drawer.classList.contains("hidden")) toggleDrawer();
+      }
+    });
+
+    function fitSlideViewport() {
+      const viewport = document.getElementById("slide-deck-viewport");
+      const availableW = window.innerWidth - 36;
+      const availableH = window.innerHeight - 84;
+      const scale = Math.min(availableW / 1280, availableH / 720, 1.15);
+      viewport.style.transform = `scale(${scale})`;
+    }
+
+    window.addEventListener("resize", fitSlideViewport);
+
+    function initBioParticles() {
+      const canvas = document.getElementById("bio-particles");
+      const ctx = canvas.getContext("2d");
+      canvas.width = 1280; canvas.height = 720;
+      const particles = Array.from({ length: 28 }, (_, i) => ({
+        x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+        r: Math.random() * 4 + 2, vx: (Math.random() - 0.5) * 0.45, vy: (Math.random() - 0.5) * 0.45,
+        color: i % 3 === 0 ? "rgba(253, 185, 19, 0.22)" : "rgba(0, 176, 80, 0.16)"
+      }));
+
+      function animateParticles() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let i = 0; i < particles.length; i++) {
+          const p = particles[i];
+          p.x += p.vx; p.y += p.vy;
+          if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+          if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+          ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fillStyle = p.color; ctx.fill();
+          for (let j = i + 1; j < particles.length; j++) {
+            const p2 = particles[j];
+            const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+            if (dist < 130) {
+              ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y);
+              ctx.strokeStyle = `rgba(52, 103, 57, ${0.07 * (1 - dist / 130)})`; ctx.lineWidth = 1; ctx.stroke();
+            }
+          }
+        }
+        requestAnimationFrame(animateParticles);
+      }
+      animateParticles();
+    }
+
+    window.onload = function () {
+      fitSlideViewport();
+      initBioParticles();
+      renderSlide(0);
+    };
+  </script>
+</body>
+</html>
